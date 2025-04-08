@@ -10,11 +10,6 @@
       "url": "http://your-api-server.com"
     }
   ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
   "paths": {
     "/user/getUserDailyStatistics": {
       "post": {
@@ -86,12 +81,44 @@
               }
             }
           },
-          "400": {
-            "description": "请求参数错误",
+          "401": {
+            "description": "用户未授权，需提供有效的身份凭证。",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "UNAUTHORIZED",
+                  "message": "unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "访问被拒绝，用户许可权不足。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "FORBIDDEN",
+                  "message": "forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "请求的资源未找到，检查 URL 是否正确。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "NOT FOUND",
+                  "message": "not found"
                 }
               }
             }
@@ -180,16 +207,16 @@
       "Error": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "description": "错误码"
+          "code": {
+            "type": "string",
+            "description": "错误代码"
           },
           "message": {
             "type": "string",
             "description": "错误描述"
           }
         },
-        "required": ["error", "message"]
+        "required": ["code", "message"]
       }
     }
   }
