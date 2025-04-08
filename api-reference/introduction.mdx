@@ -1,33 +1,44 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API通用描述'
+description: 'API格式约定、支持币种及风险评分参考'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## API通用描述
 
-## Welcome
+### API格式约定
+本文档中描述的所有请求参数都是组装成 JSON 格式的请求体，使用 RSA 公钥对整个 JSON 请求体进行加密，将加密后的数据进行 Base64 编码，并将 Base64 编码后的数据作为 `data` 参数提交给 API 接口。
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+---
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+### 支持币种
+本系统主要为商户提供虚拟币支付功能，本系统不记录商户方客户的个人信息，也不会主动发起存币及提币的动作。用于归集的冷钱包由商户方自行管理好并定期检查风险，用于出款的热钱包由本系统产生。
 
-## Authentication
+目前系统主要支持的币种和链如下：
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+| 资产币种 | 链     | 状态     |
+| -------- | ------ | -------- |
+| USDT     | TRC20  | 支持     |
+|          | ERC20  | 支持     |
+|          | BEP20  | 开发中   |
+| PHT      | TRC20  | 支持     |
+|          | ERC20  | 支持     |
+| USDC     | ERC20  | 开发中   |
+|          | BEP20  | 开发中   |
+| ERC      | ERC20  | 开发中   |
+|          | BEP20  | 开发中   |
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+---
+
+### 钱包地址格式约定
+- **TRON** 的钱包地址中字母区分大小写。
+- **ETH** 的钱包地址中字母统一使用小写。
+
+---
+
+### 风险评分参考
+当前系统默认的风险分数等级如下：
+
+- **低风险**：0 ~ 30，无风险或低风险。
+- **中风险**：31 ~ 64，可能跟中高风险地址有过交易。
+- **高风险**：65 ~ 84，跟中高风险的地址有过交易，建议做隔离。
+- **严重风险**：85 ~ 100，跟高危风险的地址有过交易，建议立即做风险隔离。
