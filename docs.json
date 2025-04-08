@@ -47,7 +47,9 @@
             "group": "Endpoint Examples",
             "pages": [
               "api-reference/endpoint/getUserDailyStatistics",
-              "api-reference/endpoint/getUserAddress"
+              "api-reference/endpoint/getUserAddress",
+              "api-reference/endpoint/withdrawWithoutVerify",
+              "api-reference/endpoint/withdrawRequest"
             ]
           }
         ]
