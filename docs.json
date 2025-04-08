@@ -46,7 +46,8 @@
           {
             "group": "Endpoint Examples",
             "pages": [
-              "api-reference/endpoint/getUserDailyStatistics"
+              "api-reference/endpoint/getUserDailyStatistics",
+              "api-reference/endpoint/getUserAddress"
             ]
           }
         ]
