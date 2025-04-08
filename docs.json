@@ -11,30 +11,6 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Essentials",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "API Reference",
         "groups": [
           {
@@ -55,22 +31,31 @@
         ]
       }
     ],
-    "global": {
-      "anchors": [
+    "_comment": {
+      "removed_tabs": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "tab": "Guides",
+          "groups": [
+            {
+              "group": "Get Started",
+              "pages": [
+                "introduction",
+                "quickstart",
+                "development"
+              ]
+            },
+            {
+              "group": "Essentials",
+              "pages": [
+                "essentials/markdown",
+                "essentials/code",
+                "essentials/images",
+                "essentials/settings",
+                "essentials/navigation",
+                "essentials/reusable-snippets"
+              ]
+            }
+          ]
         }
       ]
     }
@@ -80,12 +65,14 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
+    "_comment": {
+      "removed_links": [
+        {
+          "label": "Support",
+          "href": "mailto:hi@mintlify.com"
+        }
+      ]
+    },
     "primary": {
       "type": "button",
       "label": "Dashboard",
