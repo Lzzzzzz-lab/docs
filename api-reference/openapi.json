@@ -1,16 +1,13 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "API Documentation",
+    "description": "A sample API documentation",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://your-api-server.com"
     }
   ],
   "security": [
@@ -19,54 +16,44 @@
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
+    "/user/getUserDailyStatistics": {
+      "post": {
+        "tags": ["user-controller"],
+        "summary": "获取用户每日统计",
+        "description": "提供指定租户及日期的业务日报统计数据，包含充值、提现、钱包余额等关键指标。",
+        "operationId": "getUserDailyStatistics",
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "example": "multipart/form-data"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台方分配的 API-KEY",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "每日统计请求参数（JSON 格式）",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/UserDailyStatisticsDto"
+              },
+              "example": {
+                "userId": 1308734,
+                "jobDate": "2023-10-25"
               }
             }
           },
@@ -74,17 +61,33 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "成功响应，返回每日统计结果",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/UUDailyStatisticsListVo"
+                },
+                "example": {
+                  "jobDay": "2023-10-01",
+                  "totalDepositAmount": 15000.5,
+                  "totalDepositCount": 100,
+                  "totalDepositUserCount": 50,
+                  "totalWithdrawAmount": 8000.25,
+                  "totalWithdrawCount": 80,
+                  "totalWithdrawUserCount": 40,
+                  "pendingCollectionAmount": 200.0,
+                  "collectionCount": 10,
+                  "pendingCollectionAddressCount": 5,
+                  "coldWalletBalance": 1000000.0,
+                  "hotWalletBalance": 50000.75,
+                  "additionalTransferHotWallet": 1000.0,
+                  "tenantId": 1308734
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "请求参数错误",
             "content": {
               "application/json": {
                 "schema": {
@@ -92,61 +95,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
           }
         }
       }
@@ -154,63 +102,94 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "UserDailyStatisticsDto": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "userId": {
+            "type": "integer",
+            "description": "用户的唯一标识符"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "jobDate": {
+            "type": "string",
+            "description": "需要统计的日期，格式为 YYYY-MM-DD"
+          }
+        },
+        "required": ["userId", "jobDate"]
+      },
+      "UUDailyStatisticsListVo": {
+        "type": "object",
+        "properties": {
+          "jobDay": {
+            "type": "string",
+            "description": "统计日期"
+          },
+          "totalDepositAmount": {
+            "type": "number",
+            "description": "总充值金额"
+          },
+          "totalDepositCount": {
+            "type": "integer",
+            "description": "总充值笔数"
+          },
+          "totalDepositUserCount": {
+            "type": "integer",
+            "description": "总充值用户数"
+          },
+          "totalWithdrawAmount": {
+            "type": "number",
+            "description": "总提现金额"
+          },
+          "totalWithdrawCount": {
+            "type": "integer",
+            "description": "总提现笔数"
+          },
+          "totalWithdrawUserCount": {
+            "type": "integer",
+            "description": "总提现用户数"
+          },
+          "pendingCollectionAmount": {
+            "type": "number",
+            "description": "待收款金额"
+          },
+          "collectionCount": {
+            "type": "integer",
+            "description": "收款笔数"
+          },
+          "pendingCollectionAddressCount": {
+            "type": "integer",
+            "description": "待收款地址数"
+          },
+          "coldWalletBalance": {
+            "type": "number",
+            "description": "冷钱包余额"
+          },
+          "hotWalletBalance": {
+            "type": "number",
+            "description": "热钱包余额"
+          },
+          "additionalTransferHotWallet": {
+            "type": "number",
+            "description": "额外转入热钱包的资金"
+          },
+          "tenantId": {
+            "type": "integer",
+            "description": "租户标识符"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
         "properties": {
           "error": {
             "type": "integer",
-            "format": "int32"
+            "description": "错误码"
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "description": "错误描述"
           }
-        }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+        },
+        "required": ["error", "message"]
       }
     }
   }
