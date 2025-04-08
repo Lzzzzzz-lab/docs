@@ -5,102 +5,52 @@ description: 'API格式约定、支持币种及风险评分参考'
 
 # API通用描述
 
-<Callout type="info">
-本系统主要为商户提供虚拟币支付功能，所有的请求参数通过加密提交，支持多种币种和链条，并提供风险评分机制。
+<Callout type="info" className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4">
+**本系统主要为商户提供虚拟币支付功能**。所有请求参数通过加密提交，支持多种币种和链条，并提供风险评分机制。
 </Callout>
 
 ---
 
 ## API格式约定
 
-<Badge type="info">加密说明</Badge>  
-本文档中描述的所有请求参数都是组装成 JSON 格式的请求体，使用 **RSA 公钥** 对整个 JSON 请求体进行加密，将加密后的数据进行 **Base64 编码**，并将 Base64 编码后的数据作为 `data` 参数提交给 API 接口。
+<Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
+加密说明
+</Badge>  
+所有请求参数需组装成 JSON 格式请求体，使用 **RSA 公钥** 加密后，进行 **Base64 编码**。加密后的数据提交为 `data` 参数。
 
 ---
 
 ## 支持币种
 
-以下是本系统当前支持的虚拟币种及其链的状态：
-
----
+以下是当前系统支持的币种和链条状态：
 
 ### USDT
 
 <CardList>
-  <Card icon="check-circle" title="TRC20">
-    <Badge type="success">支持</Badge>  
+  <Card icon="check-circle" title="TRC20" className="bg-green-50 border border-green-400 rounded-lg p-4 shadow-sm">
+    <Badge type="success" className="bg-green-500 text-white px-2 py-1 rounded">支持</Badge>
   </Card>
-  <Card icon="check-circle" title="ERC20">
-    <Badge type="success">支持</Badge>  
+  <Card icon="check-circle" title="ERC20" className="bg-green-50 border border-green-400 rounded-lg p-4 shadow-sm">
+    <Badge type="success" className="bg-green-500 text-white px-2 py-1 rounded">支持</Badge>
   </Card>
-  <Card icon="hourglass" title="BEP20">
-    <Badge type="warning">开发中</Badge>  
-  </Card>
-</CardList>
-
----
-
-### PHT
-
-<CardList>
-  <Card icon="check-circle" title="TRC20">
-    <Badge type="success">支持</Badge>  
-  </Card>
-  <Card icon="check-circle" title="ERC20">
-    <Badge type="success">支持</Badge>  
+  <Card icon="hourglass" title="BEP20" className="bg-yellow-50 border border-yellow-400 rounded-lg p-4 shadow-sm">
+    <Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">开发中</Badge>
   </Card>
 </CardList>
 
 ---
 
-### USDC
+### 风险评分参考
 
-<CardList>
-  <Card icon="hourglass" title="ERC20">
-    <Badge type="warning">开发中</Badge>  
-  </Card>
-  <Card icon="hourglass" title="BEP20">
-    <Badge type="warning">开发中</Badge>  
-  </Card>
-</CardList>
+<Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">风险等级</Badge>
+
+- 🟢 **低风险**：`0 ~ 30`，无风险或低风险。  
+- 🟡 **中风险**：`31 ~ 64`，可能跟中高风险地址有过交易。  
+- 🟠 **高风险**：`65 ~ 84`，建议隔离。  
+- 🔴 **严重风险**：`85 ~ 100`，建议立即隔离。
 
 ---
 
-### ERC
-
-<CardList>
-  <Card icon="hourglass" title="ERC20">
-    <Badge type="warning">开发中</Badge>  
-  </Card>
-  <Card icon="hourglass" title="BEP20">
-    <Badge type="warning">开发中</Badge>  
-  </Card>
-</CardList>
-
----
-
-## 钱包地址格式约定
-
-### **格式要求**
-
-- **TRON** 的钱包地址中字母 **区分大小写**。
-- **ETH** 的钱包地址中字母统一使用 **小写**。
-
----
-
-## 风险评分参考
-
-<Badge type="warning">风险等级</Badge>
-
-当前系统默认的风险分数等级如下：
-
-- 🟢 **低风险**：`0 ~ 30`，无风险或低风险。
-- 🟡 **中风险**：`31 ~ 64`，可能跟中高风险地址有过交易。
-- 🟠 **高风险**：`65 ~ 84`，跟中高风险的地址有过交易，建议做隔离。
-- 🔴 **严重风险**：`85 ~ 100`，跟高危风险的地址有过交易，建议立即做风险隔离。
-
----
-
-<Callout type="warning">
-请确保您定期检查冷钱包的安全性，并做好风险隔离措施。
+<Callout type="warning" className="rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
+请确保定期检查冷钱包的安全性，并做好风险隔离。
 </Callout>
