@@ -41,6 +41,7 @@
         ],
         "requestBody": {
           "description": "每日统计请求参数（JSON 格式）",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -51,8 +52,7 @@
                 "jobDate": "2023-10-25"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -82,46 +82,134 @@
             }
           },
           "401": {
-            "description": "用户未授权，需提供有效的身份凭证。",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "code": "UNAUTHORIZED",
-                  "message": "unauthorized"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
-            "description": "访问被拒绝，用户许可权不足。",
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/user/getUserAddress": {
+      "post": {
+        "tags": ["user-controller"],
+        "summary": "获取用户存币地址",
+        "description": "获取用户存币地址，若没有该用户会自动注册用户 ID 并返回钱包地址。",
+        "operationId": "getUserAddress",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型",
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台方分配的 API-KEY",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "用户参数（JSON 格式）用于获取存币地址的请求。若用户不存在，会自动注册。",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              },
+              "example": {
+                "chainName": "TRON",
+                "symbol": "USDT",
+                "tenantUserId": "tenant123",
+                "env": "",
+                "userId": 1318758,
+                "tenantType": 1
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功返回用户存币地址。",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "响应码"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tenantUserId": {
+                          "type": "string",
+                          "description": "租户用户标识"
+                        },
+                        "chainName": {
+                          "type": "string",
+                          "description": "链名称"
+                        },
+                        "address": {
+                          "type": "string",
+                          "description": "钱包地址"
+                        },
+                        "tag": {
+                          "type": "string",
+                          "description": "标签（可选）"
+                        },
+                        "state": {
+                          "type": "integer",
+                          "description": "地址状态"
+                        },
+                        "riskScore": {
+                          "type": "integer",
+                          "description": "风险评分"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "响应消息"
+                    }
+                  }
                 },
                 "example": {
-                  "code": "FORBIDDEN",
-                  "message": "forbidden"
+                  "code": 0,
+                  "data": {
+                    "tenantUserId": "tenant123",
+                    "chainName": "TRON",
+                    "address": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
+                    "tag": "",
+                    "state": 1,
+                    "riskScore": 85
+                  },
+                  "message": ""
                 }
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
           "404": {
-            "description": "请求的资源未找到，检查 URL 是否正确。",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "code": "NOT FOUND",
-                  "message": "not found"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotFoundError"
           }
         }
       }
@@ -204,19 +292,79 @@
           }
         }
       },
-      "Error": {
+      "UserDTO": {
         "type": "object",
         "properties": {
-          "code": {
+          "chainName": {
             "type": "string",
-            "description": "错误代码"
+            "description": "链名称"
           },
-          "message": {
+          "symbol": {
             "type": "string",
-            "description": "错误描述"
+            "description": "币种符号"
+          },
+          "tenantUserId": {
+            "type": "string",
+            "description": "租户用户标识"
+          },
+          "env": {
+            "type": "string",
+            "description": "环境标识"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "用户唯一标识符"
+          },
+          "tenantType": {
+            "type": "integer",
+            "description": "租户类型"
           }
         },
-        "required": ["code", "message"]
+        "required": ["chainName", "symbol", "tenantUserId"]
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "用户未授权，需提供有效的身份凭证。",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "code": "UNAUTHORIZED",
+              "message": "unauthorized"
+            }
+          }
+        }
+      },
+      "ForbiddenError": {
+        "description": "访问被拒绝，用户许可权不足。",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "code": "FORBIDDEN",
+              "message": "forbidden"
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "请求的资源未找到，检查 URL 是否正确。",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "code": "NOT FOUND",
+              "message": "not found"
+            }
+          }
+        }
       }
     }
   }
