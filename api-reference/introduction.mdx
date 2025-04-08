@@ -3,42 +3,104 @@ title: 'API通用描述'
 description: 'API格式约定、支持币种及风险评分参考'
 ---
 
-## API通用描述
+# API通用描述
 
-### API格式约定
-本文档中描述的所有请求参数都是组装成 JSON 格式的请求体，使用 RSA 公钥对整个 JSON 请求体进行加密，将加密后的数据进行 Base64 编码，并将 Base64 编码后的数据作为 `data` 参数提交给 API 接口。
-
----
-
-### 支持币种
-本系统主要为商户提供虚拟币支付功能，本系统不记录商户方客户的个人信息，也不会主动发起存币及提币的动作。用于归集的冷钱包由商户方自行管理好并定期检查风险，用于出款的热钱包由本系统产生。
-
-目前系统主要支持的币种和链如下：
-
-| 资产币种 | 链     | 状态     |
-| -------- | ------ | -------- |
-| USDT     | TRC20  | 支持     |
-|          | ERC20  | 支持     |
-|          | BEP20  | 开发中   |
-| PHT      | TRC20  | 支持     |
-|          | ERC20  | 支持     |
-| USDC     | ERC20  | 开发中   |
-|          | BEP20  | 开发中   |
-| ERC      | ERC20  | 开发中   |
-|          | BEP20  | 开发中   |
+<Callout type="info">
+本系统主要为商户提供虚拟币支付功能，所有的请求参数通过加密提交，支持多种币种和链条，并提供风险评分机制。
+</Callout>
 
 ---
 
-### 钱包地址格式约定
-- **TRON** 的钱包地址中字母区分大小写。
-- **ETH** 的钱包地址中字母统一使用小写。
+## API格式约定
+
+<Badge type="info">加密说明</Badge>  
+本文档中描述的所有请求参数都是组装成 JSON 格式的请求体，使用 **RSA 公钥** 对整个 JSON 请求体进行加密，将加密后的数据进行 **Base64 编码**，并将 Base64 编码后的数据作为 `data` 参数提交给 API 接口。
 
 ---
 
-### 风险评分参考
+## 支持币种
+
+以下是本系统当前支持的虚拟币种及其链的状态：
+
+---
+
+### USDT
+
+<CardList>
+  <Card icon="check-circle" title="TRC20">
+    <Badge type="success">支持</Badge>  
+  </Card>
+  <Card icon="check-circle" title="ERC20">
+    <Badge type="success">支持</Badge>  
+  </Card>
+  <Card icon="hourglass" title="BEP20">
+    <Badge type="warning">开发中</Badge>  
+  </Card>
+</CardList>
+
+---
+
+### PHT
+
+<CardList>
+  <Card icon="check-circle" title="TRC20">
+    <Badge type="success">支持</Badge>  
+  </Card>
+  <Card icon="check-circle" title="ERC20">
+    <Badge type="success">支持</Badge>  
+  </Card>
+</CardList>
+
+---
+
+### USDC
+
+<CardList>
+  <Card icon="hourglass" title="ERC20">
+    <Badge type="warning">开发中</Badge>  
+  </Card>
+  <Card icon="hourglass" title="BEP20">
+    <Badge type="warning">开发中</Badge>  
+  </Card>
+</CardList>
+
+---
+
+### ERC
+
+<CardList>
+  <Card icon="hourglass" title="ERC20">
+    <Badge type="warning">开发中</Badge>  
+  </Card>
+  <Card icon="hourglass" title="BEP20">
+    <Badge type="warning">开发中</Badge>  
+  </Card>
+</CardList>
+
+---
+
+## 钱包地址格式约定
+
+### **格式要求**
+
+- **TRON** 的钱包地址中字母 **区分大小写**。
+- **ETH** 的钱包地址中字母统一使用 **小写**。
+
+---
+
+## 风险评分参考
+
+<Badge type="warning">风险等级</Badge>
+
 当前系统默认的风险分数等级如下：
 
-- **低风险**：0 ~ 30，无风险或低风险。
-- **中风险**：31 ~ 64，可能跟中高风险地址有过交易。
-- **高风险**：65 ~ 84，跟中高风险的地址有过交易，建议做隔离。
-- **严重风险**：85 ~ 100，跟高危风险的地址有过交易，建议立即做风险隔离。
+- 🟢 **低风险**：`0 ~ 30`，无风险或低风险。
+- 🟡 **中风险**：`31 ~ 64`，可能跟中高风险地址有过交易。
+- 🟠 **高风险**：`65 ~ 84`，跟中高风险的地址有过交易，建议做隔离。
+- 🔴 **严重风险**：`85 ~ 100`，跟高危风险的地址有过交易，建议立即做风险隔离。
+
+---
+
+<Callout type="warning">
+请确保您定期检查冷钱包的安全性，并做好风险隔离措施。
+</Callout>
