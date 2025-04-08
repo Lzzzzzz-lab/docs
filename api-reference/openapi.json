@@ -25,7 +25,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "multipart/form-data"
+              "example": "application/json"
             }
           },
           {
@@ -56,27 +56,30 @@
         },
         "responses": {
           "200": {
-            "description": "成功响应，返回每日统计结果",
+            "description": "成功响应，返回每日统计结果（Base64 编码的加密字符串）。",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UUDailyStatisticsListVo"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "状态码（0：成功，1：失败）"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "返回的消息"
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "加密后的统计结果字符串（Base64 编码）"
+                    }
+                  }
                 },
                 "example": {
-                  "jobDay": "2023-10-01",
-                  "totalDepositAmount": 15000.5,
-                  "totalDepositCount": 100,
-                  "totalDepositUserCount": 50,
-                  "totalWithdrawAmount": 8000.25,
-                  "totalWithdrawCount": 80,
-                  "totalWithdrawUserCount": 40,
-                  "pendingCollectionAmount": 200.0,
-                  "collectionCount": 10,
-                  "pendingCollectionAddressCount": 5,
-                  "coldWalletBalance": 1000000.0,
-                  "hotWalletBalance": 50000.75,
-                  "additionalTransferHotWallet": 1000.0,
-                  "tenantId": 1308734
+                  "code": 0,
+                  "message": "",
+                  "data": "aGVsbG8gd29ybGQhIQ=="
                 }
               }
             }
@@ -146,7 +149,46 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAddressResponse"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "状态码"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tenantUserId": {
+                          "type": "string",
+                          "description": "租户用户标识"
+                        },
+                        "chainName": {
+                          "type": "string",
+                          "description": "链名称"
+                        },
+                        "address": {
+                          "type": "string",
+                          "description": "钱包地址"
+                        },
+                        "tag": {
+                          "type": "string",
+                          "description": "标签（可选）"
+                        },
+                        "state": {
+                          "type": "integer",
+                          "description": "地址状态（0：在用，1：不用）"
+                        },
+                        "riskScore": {
+                          "type": "integer",
+                          "description": "地址风险评分"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "返回消息"
+                    }
+                  }
                 },
                 "example": {
                   "code": 0,
@@ -344,6 +386,50 @@
   },
   "components": {
     "schemas": {
+      "UserDailyStatisticsDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "需要查询的租户 ID"
+          },
+          "jobDate": {
+            "type": "string",
+            "description": "统计日期（格式：yyyy-MM-dd）"
+          }
+        },
+        "required": ["userId", "jobDate"]
+      },
+      "UserDTO": {
+        "type": "object",
+        "properties": {
+          "chainName": {
+            "type": "string",
+            "description": "链名称"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "货币符号"
+          },
+          "tenantUserId": {
+            "type": "string",
+            "description": "租户用户标识"
+          },
+          "env": {
+            "type": "string",
+            "description": "环境标识"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "租户 ID"
+          },
+          "tenantType": {
+            "type": "integer",
+            "description": "租户类型"
+          }
+        },
+        "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"]
+      },
       "WithdrawRequestDto": {
         "type": "object",
         "properties": {
@@ -427,7 +513,17 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Error"
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "错误代码"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "错误描述"
+                }
+              }
             },
             "example": {
               "code": "UNAUTHORIZED",
@@ -441,7 +537,17 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Error"
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "错误代码"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "错误描述"
+                }
+              }
             },
             "example": {
               "code": "FORBIDDEN",
@@ -455,7 +561,17 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Error"
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "错误代码"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "错误描述"
+                }
+              }
             },
             "example": {
               "code": "NOT FOUND",
