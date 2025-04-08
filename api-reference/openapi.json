@@ -146,46 +146,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "响应码"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "tenantUserId": {
-                          "type": "string",
-                          "description": "租户用户标识"
-                        },
-                        "chainName": {
-                          "type": "string",
-                          "description": "链名称"
-                        },
-                        "address": {
-                          "type": "string",
-                          "description": "钱包地址"
-                        },
-                        "tag": {
-                          "type": "string",
-                          "description": "标签（可选）"
-                        },
-                        "state": {
-                          "type": "integer",
-                          "description": "地址状态"
-                        },
-                        "riskScore": {
-                          "type": "integer",
-                          "description": "风险评分"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "响应消息"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UserAddressResponse"
                 },
                 "example": {
                   "code": 0,
@@ -213,114 +174,251 @@
           }
         }
       }
+    },
+    "/api/order/withdrawRequest": {
+      "post": {
+        "tags": ["order-controller"],
+        "summary": "请求提币订单（需二次确认）",
+        "description": "商户提交需二次确认的提币订单。",
+        "operationId": "withdrawRequest",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型",
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台方分配的 API-KEY",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "提币订单请求参数（JSON 格式）。",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawRequestDto"
+              },
+              "example": {
+                "callBackId": "D782243635",
+                "userId": 1,
+                "tenantUserId": "tenant123",
+                "tenantType": 1,
+                "amount": 0.5,
+                "symbol": "TRX",
+                "chainName": "TRON",
+                "txId": "tx12345",
+                "fromAddr": "fromAddress123",
+                "toAddr": "toAddress123",
+                "tag": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功返回提币订单结果。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WithdrawResponse"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "id": "order12345",
+                    "tenantUserId": "tenant123"
+                  },
+                  "message": ""
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/order/withdrawWithoutVerify": {
+      "post": {
+        "tags": ["order-controller"],
+        "summary": "提交无需二次确认的提币单",
+        "description": "商户提交无需二次确认的提币订单。",
+        "operationId": "withdrawWithoutVerify",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型",
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台方分配的 API-KEY",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "提币订单请求参数（JSON 格式）。",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawRequestDto"
+              },
+              "example": {
+                "callBackId": "D782243635",
+                "userId": 1,
+                "tenantUserId": "tenant123",
+                "tenantType": 1,
+                "amount": 0.5,
+                "symbol": "TRX",
+                "chainName": "TRON",
+                "txId": "tx12345",
+                "fromAddr": "fromAddress123",
+                "toAddr": "toAddress123",
+                "tag": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功返回提币订单结果。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WithdrawResponse"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "id": "order12345",
+                    "tenantUserId": "tenant123"
+                  },
+                  "message": ""
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "UserDailyStatisticsDto": {
+      "WithdrawRequestDto": {
         "type": "object",
         "properties": {
+          "callBackId": {
+            "type": "string",
+            "description": "回调订单"
+          },
           "userId": {
             "type": "integer",
-            "description": "用户的唯一标识符"
-          },
-          "jobDate": {
-            "type": "string",
-            "description": "需要统计的日期，格式为 YYYY-MM-DD"
-          }
-        },
-        "required": ["userId", "jobDate"]
-      },
-      "UUDailyStatisticsListVo": {
-        "type": "object",
-        "properties": {
-          "jobDay": {
-            "type": "string",
-            "description": "统计日期"
-          },
-          "totalDepositAmount": {
-            "type": "number",
-            "description": "总充值金额"
-          },
-          "totalDepositCount": {
-            "type": "integer",
-            "description": "总充值笔数"
-          },
-          "totalDepositUserCount": {
-            "type": "integer",
-            "description": "总充值用户数"
-          },
-          "totalWithdrawAmount": {
-            "type": "number",
-            "description": "总提现金额"
-          },
-          "totalWithdrawCount": {
-            "type": "integer",
-            "description": "总提现笔数"
-          },
-          "totalWithdrawUserCount": {
-            "type": "integer",
-            "description": "总提现用户数"
-          },
-          "pendingCollectionAmount": {
-            "type": "number",
-            "description": "待收款金额"
-          },
-          "collectionCount": {
-            "type": "integer",
-            "description": "收款笔数"
-          },
-          "pendingCollectionAddressCount": {
-            "type": "integer",
-            "description": "待收款地址数"
-          },
-          "coldWalletBalance": {
-            "type": "number",
-            "description": "冷钱包余额"
-          },
-          "hotWalletBalance": {
-            "type": "number",
-            "description": "热钱包余额"
-          },
-          "additionalTransferHotWallet": {
-            "type": "number",
-            "description": "额外转入热钱包的资金"
-          },
-          "tenantId": {
-            "type": "integer",
-            "description": "租户标识符"
-          }
-        }
-      },
-      "UserDTO": {
-        "type": "object",
-        "properties": {
-          "chainName": {
-            "type": "string",
-            "description": "链名称"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "币种符号"
+            "description": "三方用户ID"
           },
           "tenantUserId": {
             "type": "string",
-            "description": "租户用户标识"
-          },
-          "env": {
-            "type": "string",
-            "description": "环境标识"
-          },
-          "userId": {
-            "type": "integer",
-            "description": "用户唯一标识符"
+            "description": "租户用户ID"
           },
           "tenantType": {
             "type": "integer",
-            "description": "租户类型"
+            "description": "三方不同业务类型 (JD专用)"
+          },
+          "amount": {
+            "type": "number",
+            "description": "提币金额"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "货币符号"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "链名"
+          },
+          "txId": {
+            "type": "string",
+            "description": "交易ID"
+          },
+          "fromAddr": {
+            "type": "string",
+            "description": "来源地址"
+          },
+          "toAddr": {
+            "type": "string",
+            "description": "目标地址"
+          },
+          "tag": {
+            "type": "string",
+            "description": "标签"
           }
         },
-        "required": ["chainName", "symbol", "tenantUserId"]
+        "required": ["txId", "tag"]
+      },
+      "WithdrawResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "状态码"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "订单ID"
+              },
+              "tenantUserId": {
+                "type": "string",
+                "description": "租户用户ID"
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "返回的消息"
+          }
+        }
       }
     },
     "responses": {
