@@ -11,8 +11,10 @@ description: 'API格式约定、支持币种及风险评分参考'
 
 ## 钱包地址格式约定
 
-- **TRON** 的钱包地址中字母 **区分大小写**。  
-- **ETH** 的钱包地址中字母统一使用 **小写**。
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+- **TRON** 的钱包地址中字母 <span className="text-blue-600 font-semibold">区分大小写</span>。  
+- **ETH** 的钱包地址中字母统一使用 <span className="text-blue-600 font-semibold">小写</span>。
+</div>
 
 ---
 
@@ -21,56 +23,54 @@ description: 'API格式约定、支持币种及风险评分参考'
 <Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
 加密说明
 </Badge>  
-所有请求参数需组装成 JSON 格式请求体，使用 **RSA 公钥** 加密后，进行 **Base64 编码**。加密后的数据提交为 `data` 参数。
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+所有请求参数需组装成 <span className="text-blue-600 font-semibold">JSON 格式请求体</span>，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密后，进行 <span className="text-blue-600 font-semibold">Base64 编码</span>。加密后的数据提交为 <code className="bg-gray-100 px-1 py-0.5 rounded">data</code> 参数。
+</div>
 
----
-
-## 支持币种
-
+```json
+{
+  "data": "Base64EncodedEncryptedString"
+}
+支持币种
 以下是本系统当前支持的虚拟币种及其链的状态：
 
----
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
 
 ### USDT
 
-- **TRC20**: ✅ 支持  
-- **ERC20**: ✅ 支持  
-- **BEP20**: ⏳ 开发中  
+TRC20: <span className="bg-green-100 text-green-800 px-2 py-1 rounded">✅ 支持</span>
+ERC20: <span className="bg-green-100 text-green-800 px-2 py-1 rounded">✅ 支持</span>
+BEP20: <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 开发中</span>
+PHT
+TRC20: <span className="bg-green-100 text-green-800 px-2 py-1 rounded">✅ 支持</span>
+ERC20: <span className="bg-green-100 text-green-800 px-2 py-1 rounded">✅ 支持</span>
+USDC
+ERC20: <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 开发中</span>
+BEP20: <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 开发中</span>
+ERC
+ERC20: <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 开发中</span>
+BEP20: <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 开发中</span>
+</div>
 
----
-
-### PHT
-
-- **TRC20**: ✅ 支持  
-- **ERC20**: ✅ 支持  
-
----
-
-### USDC
-
-- **ERC20**: ⏳ 开发中  
-- **BEP20**: ⏳ 开发中  
-
----
-
-### ERC
-
-- **ERC20**: ⏳ 开发中  
-- **BEP20**: ⏳ 开发中  
-
----
-
-## 风险评分参考
-
+风险评分参考
 <Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">风险等级</Badge>
 
-- 🟢 **低风险**：`0 ~ 30`，无风险或低风险。  
-- 🟡 **中风险**：`31 ~ 64`，可能跟中高风险地址有过交易。  
-- 🟠 **高风险**：`65 ~ 84`，建议隔离。  
-- 🔴 **严重风险**：`85 ~ 100`，建议立即隔离。
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
 
----
+- 🟢 <span className="font-semibold">低风险</span>：`0 ~ 30`，无风险或低风险。
+
+- 🟡 <span className="font-semibold">中风险</span>：`31 ~ 64`，可能跟中高风险地址有过交易。
+
+- 🟠 <span className="font-semibold">高风险</span>：`65 ~ 84`，建议隔离。
+
+- 🔴 <span className="font-semibold">严重风险</span>：`85 ~ 100`，建议立即隔离。
+
+</div>
 
 <Callout type="warning" className="rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
+
 请确保定期检查冷钱包的安全性，并做好风险隔离。
+
 </Callout>
+
+```
