@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://your-api-server.com"
+      "url": "https://waas-managerment-hk.powersafe-dev.cc/api/v1/"
     }
   ],
   "paths": {
