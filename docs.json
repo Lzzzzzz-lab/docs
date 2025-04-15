@@ -7,7 +7,7 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/uu.png",
   "navigation": {
     "tabs": [
       {
@@ -20,12 +20,21 @@
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Endpoint",
             "pages": [
-              "api-reference/endpoint/getUserDailyStatistics",
               "api-reference/endpoint/getUserAddress",
+              "api-reference/endpoint/speedUp",
               "api-reference/endpoint/withdrawWithoutVerify",
-              "api-reference/endpoint/withdrawRequest"
+              "api-reference/endpoint/withdrawRequest",
+              "api-reference/endpoint/getWithdrawOrder",
+              "api-reference/endpoint/getUserDailyStatistics"
+            ]
+          },
+          {
+            "group": "Webhook API",
+            "pages": [
+              "api-reference/webhook/webhook-callback",
+              "api-reference/webhook/withdraw-confirmation-callback"
             ]
           }
         ]
@@ -61,8 +70,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/uu.png",
+    "dark": "/logo/logo.png"
   },
   "navbar": {
     "_comment": {
@@ -72,13 +81,6 @@
           "href": "mailto:hi@mintlify.com"
         }
       ]
-    }
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
     }
   }
 }

@@ -1,0 +1,193 @@
+---
+title: 'Webhook 回调'
+openapi: false
+---
+
+<div style={{
+  borderLeft: '4px solid #2563eb',
+  backgroundColor: '#f0f7ff',
+  padding: '12px 16px',
+  borderRadius: '4px',
+  marginBottom: '16px',
+}}>
+  <strong style={{ color: '#2563eb' }}>什么是 Webhook 回调？</strong>
+  <p>
+    Webhook 回调是一种机制，当特定事件发生时，WaaS 将主动向商户系统发送通知，
+    用于异步告知某些操作的结果或状态变化。商户需提供回调 URL，并实现相关功能以接收和处理回调。
+  </p>
+</div>
+
+---
+
+## 示例场景
+
+以下为常见的回调流程示例：
+
+### 1. 存币通知流程
+
+1. 商户向 WaaS 的存币 API 提交请求。
+2. WaaS 处理存币请求。
+3. WaaS 调用商户提供的回调 URL，通知存币结果。
+4. 商户接收通知并更新状态。
+
+### 2. 提币通知流程（无二次确认）
+
+1. 商户向 WaaS 的提币 API 提交请求。
+2. WaaS 处理提币请求。
+3. WaaS 调用商户的回调 URL，通知提币结果（成功或失败）。
+4. 商户接收通知并更新状态。
+
+<Callout type="warning" title="注意">
+对于需要二次确认的提币流程，回调可能会包含额外的确认步骤，请确保回调 URL 能正确处理所有场景通知。
+</Callout>
+
+---
+
+## 接口说明
+
+回调接口用于接收 WaaS 发送的通知，商户需向 WaaS 提供回调地址，通过回调机制接收事件的处理结果。所有请求需要使用与其他接口相同的 **API-Key 机制** 进行验证，通知内容在发送前通过 **RSA 加密**，密文为 **Base64 格式**。
+
+<Callout type="info" title="主要功能">
+回调接口具有以下功能：
+- 通知商户存币单的生成。
+- 在提币单执行前请求商户确认提币信息。
+- 通知商户用户钱包地址的变更。
+- 通知商户提币单的执行结果。
+</Callout>
+
+---
+
+## 接口范例
+
+- 接口名称：`https://xxxx/api/v1/uu/notify`
+
+---
+
+### **请求方法**
+<div style={{
+  display: 'inline-block',
+  padding: '4px 12px',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  color: '#1d4ed8',
+  backgroundColor: '#e0f2fe',
+  borderRadius: '16px',
+  border: '1px solid #38bdf8',
+  fontFamily: 'monospace'
+}}>
+  POST
+</div>
+
+---
+
+### **请求头**
+
+| 名称           | 类型     | 必填 | 示例值              | 说明                       |
+|----------------|----------|------|---------------------|----------------------------|
+| `Content-Type` | `string` | 是   | `application/json`  | 请求格式，固定为 JSON。    |
+| `X-API-KEY`    | `string` | 是   | `your-api-key`      | 授权密钥，用于身份验证。    |
+
+---
+
+### **请求体参数**
+
+以下为请求体的参数模板：
+
+| 属性名          | 类型       | 必填 | 示例值                | 说明                       |
+|------------------|------------|------|-----------------------|----------------------------|
+| `tenantUserId`   | `string`   | 是   | `tenant123`           | 商户用户标识。             |
+| `requestUUID`    | `string`   | 是   | `2137890`             | 请求的唯一标识符。         |
+| `trackingId`     | `string`   | 是   | `track-4567`          | 订单追踪 ID。              |
+| `type`           | `integer`  | 是   | `2`                   | 回调类型（见下方枚举）。   |
+| `callBackId`     | `string`   | 否   | `12345`               | 回调 ID。                  |
+| `chainName`      | `string`   | 否   | `TRON`                | 区块链名称。               |
+| `symbol`         | `string`   | 否   | `USDT`                | 货币符号。                 |
+| `amount`         | `number`   | 否   | `0.5`                 | 金额。                     |
+| `txId`           | `string`   | 否   | `22e1c72076...`       | 交易 ID。                  |
+| `toAddress`      | `string`   | 否   | `TUekuiBgdk...`       | 目标地址。                 |
+| `fromAddress`    | `string`   | 否   | `TUekuiBgdk...`       | 源地址。                   |
+| `newAddress`     | `string`   | 否   | `TUekuiBgdk...`       | 新地址（仅在类型为 4 时使用）。 |
+| `riskLevelFrom`  | `integer`  | 否   | `15`                  | 存币来源地址风险评分（类型为 1 时存在）。 |
+| `riskLevelTo`    | `integer`  | 否   | `15`                  | 存币目标地址风险评分（类型为 1 时存在）。 |
+
+## 回调类型枚举
+
+以下为 `type` 参数的枚举值及其说明：
+
+| 类型值 | 名称                     | 描述                                                                 |
+|--------|--------------------------|----------------------------------------------------------------------|
+| `0`    | `NOTIFY_UNKNOWN`         | 未知通知类型，无需处理。                                             |
+| `1`    | `NOTIFY_DEPOSITED`       | WaaS 通知商户存币单的生成，需解析参数并确认结果。                   |
+| `2`    | `NOTIFY_REQUEST_WITHDRAW`| 请求商户确认提币单的详细信息（用于二次确认）。                     |
+| `3`    | `NOTIFY_WITHDRAW`        | WaaS 通知商户提币单的执行结果。                                      |
+| `4`    | `NOTIFY_ADDRESS`         | 通知用户地址变更，需解析新地址（`newAddress`）。                    |
+| `5`    | `NOTIFY_INVALID_ADDRESS` | 提币失败（地址无效），需确认结果并响应。                              |
+| `6`    | `NOTIFY_NOT_ENOUGH_MONEY`| 提币失败（余额不足），需确认结果并响应。                              |
+| `7`    | `NOTIFY_NOT_ENOUGH_HOT_MONEY` | 提币失败（gas 不足），需确认结果并响应。                              |
+
+
+### **请求示例**
+
+```json
+{
+  "tenantUserId": "tenant123",
+  "requestUUID": "2137890",
+  "trackingId": "track-4567",
+  "type": 2,
+  "callBackId": "12345",
+  "chainName": "TRON",
+  "symbol": "USDT",
+  "amount": 0.5,
+  "txId": "22e1c72076...",
+  "toAddress": "TUekuiBgdk...",
+  "fromAddress": "TUekuiBgdk...",
+  "newAddress": "TUekuiBgdk...",
+  "riskLevelFrom": 15,
+  "riskLevelTo": 15
+}
+```
+---
+## 响应参数
+
+| 属性名         | 类型       | 必填 | 示例值                | 说明                       |
+|----------------|------------|------|-----------------------|----------------------------|
+| `errCode`      | `integer`  | 是   | `0`                   | 错误码，`0` 表示成功。      |
+| `message`      | `string`   | 是   | `成功处理请求`        | 响应消息。                 |
+| `data`         | `object`   | 是   | `{...}`               | 回调数据的具体内容。       |
+
+以下为 data 参数说明：
+
+| 属性名         | 类型       | 示例值          | 说明                                   |
+|----------------|------------|-----------------|----------------------------------------|
+| `requestUUID`  | `string`   | `2137890`       | 请求的唯一标识符，用于唯一标记请求。   |
+| `userId`       | `integer`  | `1`             | 用户 ID，标识触发事件的具体用户。      |
+| `address`      | `string`   | `toAddress123`  | 目标地址，表示操作的目标地址。         |
+| `tenantUserId` | `string`   | `tenant123`     | 商户用户标识，用于区分商户用户。       |
+| `chainName`    | `string`   | `TRON`          | 区块链名称，标识交易所在的区块链。     |
+| `symbol`       | `string`   | `USDT`          | 货币符号，标识交易所涉及的代币或货币。 |
+| `callBackId`   | `string`   | `12345`         | 回调 ID，标识当前回调事件的 ID。       |
+| `amount`       | `number`   | `0.5`           | 金额，表示交易或操作的具体数额。       |
+| `type`         | `integer`  | `2`             | 回调类型，详细说明见回调类型枚举值。   |
+
+
+### **响应示例**
+
+成功处理请求：
+
+```json
+{
+  "errCode": 0,
+  "message": "成功处理请求",
+  "data": {
+    "requestUUID": "2137890",
+    "tenantUserId": "tenant123",
+    "trackingId": "track-4567",
+    "type": 2,
+    "amount": 0.5,
+    "chainName": "TRON",
+    "toAddress": "TUekuiBgdk...",
+    "txId": "22e1c72076..."
+  }
+}
+```
+---
