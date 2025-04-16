@@ -1,0 +1,211 @@
+---
+title: 'Webhook Callback '
+openapi: false
+---
+
+<div style={{
+  borderLeft: '4px solid #2563eb',
+  backgroundColor: '#f0f7ff',
+  padding: '12px 16px',
+  borderRadius: '4px',
+  marginBottom: '16px',
+}}>
+  <strong style={{ color: '#2563eb' }}>什么是 Webhook 回调？</strong>
+  <p>
+A webhook callback is a mechanism where, when specific events occur, WaaS proactively sends notifications to the merchant system to asynchronously inform about the results or status changes of certain operations.
+Merchants need to provide a callback URL and implement the necessary functionality to receive and process these callbacks.
+  </p>
+</div>
+
+---
+
+## Example Scenarios
+
+Below are examples of common callback workflows:
+
+### 1. Deposit Notification Workflow
+
+1. The merchant submits a deposit request to the WaaS deposit AP
+2. WaaS processes the deposit request.
+3. WaaS calls the callback URL provided by the merchant to notify the deposit result.
+4. The merchant receives the notification and updates the status
+
+### 2. Withdrawal Notification Workflow (No Secondary Confirmation)
+
+1. The merchant submits a withdrawal request to the WaaS withdrawal API.
+2. WaaS processes the withdrawal request.
+3. WaaS calls the merchant's callback URL to notify the withdrawal result (success or failure).
+4. The merchant receives the notification and updates the status.
+
+<div style={{
+  borderLeft: '4px solid #f59e42',
+  backgroundColor: '#fff8eb',
+  padding: '2px 16px',
+  borderRadius: '4px',
+  margin: '16px 0'
+}}>
+  <strong style={{ color: '#d97706' }}>Note:</strong>
+  <span style={{ marginLeft: '8px' }}>
+    For withdrawal workflows that require secondary confirmation, the callback may include additional confirmation steps. Please ensure that your callback URL can correctly handle all notification scenarios.
+  </span>
+</div>
+---
+
+<div style={{
+  borderLeft: '4px solid #2563eb',
+  backgroundColor: '#f0f7ff',
+  padding: '12px 16px',
+  borderRadius: '4px',
+  margin: '16px 0'
+}}>
+  <strong style={{ color: '#2563eb' }}>Main Functions</strong>
+  <div style={{ marginTop: '8px' }}>
+    The callback interface has the following functions:
+    <ul style={{ marginTop: '8px' }}>
+      <li>Notify merchants about the creation of deposit orders.</li>
+      <li>Request merchant confirmation of withdrawal details before execution.</li>
+      <li>Notify merchants about user wallet address changes.</li>
+      <li>Notify merchants of the execution results of withdrawal orders.</li>
+    </ul>
+  </div>
+</div>
+
+
+## Note：
+
+The callback interface is used to receive notifications sent by WaaS. Merchants must provide WaaS with a callback address to receive event results through the callback mechanism. All requests must use the same **API-Key mechanism** for authentication as other interfaces. The notification content is **RSA encrypted**， before being sent, and the ciphertext is in **Base64 format**。
+
+---
+
+## API Example
+
+- API Endpoint：`https://xxxx/api/v1/uu/notify`
+
+---
+
+### **Request Method**
+<div style={{
+  display: 'inline-block',
+  padding: '4px 12px',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  color: '#1d4ed8',
+  backgroundColor: '#e0f2fe',
+  borderRadius: '16px',
+  border: '1px solid #38bdf8',
+  fontFamily: 'monospace'
+}}>
+  POST
+</div>
+
+---
+
+### **Request Headers**
+
+| Name           | Type     | Required | Example Value              | Description                       |
+|----------------|----------|------|---------------------|----------------------------|
+| `Content-Type` | `string` | Yes   | `application/json`  | 	Request format, always set to JSON.    |
+| `X-API-KEY`    | `string` | Yes   | `your-api-key`      | Authorization key for authentication.    |
+
+---
+
+### **Request Body Parameters**
+
+Below is the request body parameter template:
+
+| Attribute Name          | Type       | Required | Example Value                 | Description                       |
+|------------------|------------|------|-----------------------|----------------------------|
+| `tenantUserId`   | `string`   | Yes   | `tenant123`           | Merchant user identifier             |
+| `requestUUID`    | `string`   | Yes   | `2137890`             | Unique identifier for the request.。         |
+| `trackingId`     | `string`   | Yes   | `track-4567`          | 	Order tracking ID。              |
+| `type`           | `integer`  | Yes   | `2`                   | 	Callback type (see enum values below)。   |
+| `callBackId`     | `string`   | No   | `12345`               | Callback ID。                  |
+| `chainName`      | `string`   | No   | `TRON`                | Blockchain name。               |
+| `symbol`         | `string`   | No   | `USDT`                | Currency symbol。                 |
+| `amount`         | `number`   | No   | `0.5`                 | Amount。                     |
+| `txId`           | `string`   | No   | `22e1c72076...`       | Transaction ID。                  |
+| `toAddress`      | `string`   | No   | `TUekuiBgdk...`       | Destination address。                 |
+| `fromAddress`    | `string`   | No   | `TUekuiBgdk...`       | Source address。                   |
+| `newAddress`     | `string`   | No   | `TUekuiBgdk...`       | New address (used only when type is 4)。 |
+| `riskLevelFrom`  | `integer`  | No   | `15`                  | Risk score of deposit source address (present when type is 1)。 |
+| `riskLevelTo`    | `integer`  | No   | `15`                  | 	Risk score of deposit destination address (present when type is 1)。 |
+
+## Callback Type Enum
+
+Below are the enum values for the type parameter and their descriptions:
+
+| Type  | Enum Name                     | Description                                                                 |
+|--------|--------------------------|----------------------------------------------------------------------|
+| `0`    | `NOTIFY_UNKNOWN`         | 	Unknown notification type, no action required.                                             |
+| `1`    | `NOTIFY_DEPOSITED`       | 	WaaS notifies the merchant of deposit order creation; parameters should be parsed and result confirmed.                  |
+| `2`    | `NOTIFY_REQUEST_WITHDRAW`| 	Requests merchant to confirm withdrawal order details (for secondary confirmation).                     |
+| `3`    | `NOTIFY_WITHDRAW`        |   WaaS notifies the merchant of withdrawal order execution result.                                     |
+| `4`    | `NOTIFY_ADDRESS`         | 	Notifies user address change; the new address (newAddress) should be parsed.                   |
+| `5`    | `NOTIFY_INVALID_ADDRESS` | 	Withdrawal failed (invalid address); confirmation and response required.                            |
+| `6`    | `NOTIFY_NOT_ENOUGH_MONEY`| 	Withdrawal failed (insufficient balance); confirmation and response required.                           |
+| `7`    | `NOTIFY_NOT_ENOUGH_HOT_MONEY` | Withdrawal failed (insufficient gas); confirmation and response required.                            |
+
+
+### **Request Example**
+
+```json
+{
+  "tenantUserId": "tenant123",
+  "requestUUID": "2137890",
+  "trackingId": "track-4567",
+  "type": 2,
+  "callBackId": "12345",
+  "chainName": "TRON",
+  "symbol": "USDT",
+  "amount": 0.5,
+  "txId": "22e1c72076...",
+  "toAddress": "TUekuiBgdk...",
+  "fromAddress": "TUekuiBgdk...",
+  "newAddress": "TUekuiBgdk...",
+  "riskLevelFrom": 15,
+  "riskLevelTo": 15
+}
+```
+---
+## Response Parameters
+
+| Attribute Name         | Type       | Required | Example Value                 | Description                       |
+|----------------|------------|------|-----------------------|----------------------------|
+| `errCode`      | `integer`  | Yes   | `0`                   | 	Error code, 0 indicates success.      |
+| `message`      | `string`   | Yes   | `成功处理请求`        | Response message.             |
+| `data`         | `object`   | Yes   | `{...}`               | 	The detailed content of the callback data.      |
+
+Below are the descriptions for the data parameter:
+
+| Attribute Name         | Type       | Example Value          | Description                                   |
+|----------------|------------|-----------------|----------------------------------------|
+| `requestUUID`  | `string`   | `2137890`       | Unique identifier for the request.   |
+| `userId`       | `integer`  | `1`             | User ID identifying the specific user who triggered the event.      |
+| `address`      | `string`   | `toAddress123`  | Target address, indicating the operation's destination.       |
+| `tenantUserId` | `string`   | `tenant123`     | Merchant user identifier, used to distinguish merchant users.      |
+| `chainName`    | `string`   | `TRON`          | Blockchain name, indicating which blockchain the transaction is on.    |
+| `symbol`       | `string`   | `USDT`          | Currency symbol, indicating the token or currency involved in the transaction. |
+| `callBackId`   | `string`   | `12345`         | Callback ID, identifying the current callback event.       |
+| `amount`       | `number`   | `0.5`           | Amount, specifying the exact value for the transaction or operation.       |
+| `type`         | `integer`  | `2`             | Callback type, see callback type enum for details.   |
+
+
+### **Response Example**
+
+```json
+{
+  "errCode": 0,
+  "message": "成功处理请求",
+  "data": {
+    "requestUUID": "2137890",
+    "tenantUserId": "tenant123",
+    "trackingId": "track-4567",
+    "type": 2,
+    "amount": 0.5,
+    "chainName": "TRON",
+    "toAddress": "TUekuiBgdk...",
+    "txId": "22e1c72076..."
+  }
+}
+```
+---

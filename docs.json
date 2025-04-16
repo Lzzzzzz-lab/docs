@@ -7,25 +7,63 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/uu.png",
   "navigation": {
-    "tabs": [
+    "languages": [
       {
-        "tab": "API Reference",
+        "language": "cn",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "概述",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "商户",
             "pages": [
-              "api-reference/endpoint/getUserDailyStatistics",
               "api-reference/endpoint/getUserAddress",
+              "api-reference/endpoint/speedUp",
               "api-reference/endpoint/withdrawWithoutVerify",
-              "api-reference/endpoint/withdrawRequest"
+              "api-reference/endpoint/withdrawRequest",
+              "api-reference/endpoint/getWithdrawOrder",
+              "api-reference/endpoint/getUserDailyStatistics"
+            ]
+          },
+          {
+            "group": "回调 API",
+            "pages": [
+              "api-reference/webhook/webhook-callback",
+              "api-reference/webhook/withdraw-confirmation-callback"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/en/introduction"
+            ]
+          },
+          {
+            "group": "Merchant",
+            "pages": [
+              "api-reference/endpoint/en/getUserAddress",
+              "api-reference/endpoint/en/speedUp",
+              "api-reference/endpoint/en/withdrawWithoutVerify",
+              "api-reference/endpoint/en/withdrawRequest",
+              "api-reference/endpoint/en/getWithdrawOrder",
+              "api-reference/endpoint/en/getUserDailyStatistics"
+            ]
+          },
+          {
+            "group": "Webhooks API ",
+            "pages": [
+              "api-reference/endpoint/en/webhook/webhook-callback",
+              "api-reference/endpoint/en/webhook/withdraw-confirmation-callback"
             ]
           }
         ]
@@ -61,8 +99,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/uu.png",
+    "dark": "/logo/logo.png"
   },
   "navbar": {
     "_comment": {
@@ -74,11 +112,8 @@
       ]
     }
   },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+  "appearance": {
+    "default": "light",
+    "strict": true
   }
 }

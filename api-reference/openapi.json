@@ -15,7 +15,6 @@
       "post": {
         "tags": ["user-controller"],
         "summary": "获取用户每日统计",
-        "description": "提供指定租户及日期的业务日报统计数据，包含充值、提现、钱包余额等关键指标。",
         "operationId": "getUserDailyStatistics",
         "parameters": [
           {
@@ -96,11 +95,185 @@
         }
       }
     },
+    "/api/order/speedUp": {
+      "post": {
+        "tags": ["order-controller"],
+        "summary": "提交加速存币单请求",
+        "operationId": "speedUp",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型",
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台方分配的 API-KEY",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "加速存币单请求参数（JSON 格式）。",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawRequestDto"
+              },
+              "example": {
+                "callBackId": "D782243635",
+                "userId": 1,
+                "tenantUserId": "tenant123",
+                "tenantType": 1,
+                "amount": 0.5,
+                "symbol": "TRX",
+                "chainName": "TRON",
+                "txId": "tx12345",
+                "fromAddr": "fromAddress123",
+                "toAddr": "toAddress123",
+                "tag": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功返回加速存币单结果。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WithdrawResponse"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "id": "order12345",
+                    "tenantUserId": "tenant123"
+                  },
+                  "message": ""
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/order/getWithdrawOrder": {
+      "post": {
+        "tags": ["order-controller"],
+        "summary": "获取提币单状态",
+        "operationId": "getWithdrawOrder",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型",
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台方分配的 API-KEY",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "提币单状态请求参数（JSON 格式）。",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetWithdrawOrderRequest"
+              },
+              "example": {
+                "callBackId": "12345",
+                "userId": 1,
+                "tenantUserId": "tenant123",
+                "tenantType": 1,
+                "amount": 0.5,
+                "symbol": "TRX",
+                "chainName": "TRON",
+                "txId": "tx12345",
+                "fromAddr": "fromAddress123",
+                "toAddr": "toAddress123",
+                "tag": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功返回提币单状态。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetWithdrawOrderResponse"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "orderId": null,
+                    "symbol": "USDT",
+                    "baseCurrency": null,
+                    "amount": 5,
+                    "fiatAmount": null,
+                    "executedAmount": null,
+                    "executedFiatAmount": null,
+                    "price": null,
+                    "fee": null,
+                    "feeSymbol": null,
+                    "orderType": null,
+                    "orderState": 3,
+                    "clientOrderId": "client_order_123"
+                  },
+                  "message": ""
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
     "/user/getUserAddress": {
       "post": {
         "tags": ["user-controller"],
         "summary": "获取用户存币地址",
-        "description": "获取用户存币地址，若没有该用户会自动注册用户 ID 并返回钱包地址。",
         "operationId": "getUserAddress",
         "parameters": [
           {
@@ -160,7 +333,7 @@
                       "properties": {
                         "tenantUserId": {
                           "type": "string",
-                          "description": "租户用户标识"
+                          "description": "商户用户标识"
                         },
                         "chainName": {
                           "type": "string",
@@ -221,7 +394,6 @@
       "post": {
         "tags": ["order-controller"],
         "summary": "请求提币订单（需二次确认）",
-        "description": "商户提交需二次确认的提币订单。",
         "operationId": "withdrawRequest",
         "parameters": [
           {
@@ -304,7 +476,6 @@
       "post": {
         "tags": ["order-controller"],
         "summary": "提交无需二次确认的提币单",
-        "description": "商户提交无需二次确认的提币订单。",
         "operationId": "withdrawWithoutVerify",
         "parameters": [
           {
@@ -391,7 +562,7 @@
         "properties": {
           "userId": {
             "type": "integer",
-            "description": "需要查询的租户 ID"
+            "description": "需要查询的商户 ID"
           },
           "jobDate": {
             "type": "string",
@@ -399,6 +570,97 @@
           }
         },
         "required": ["userId", "jobDate"]
+      },"GetWithdrawOrderRequest": {
+        "type": "object",
+        "properties": {
+          "callBackId": {
+            "type": "string",
+            "description": "回调订单"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "三方用户ID"
+          },
+          "tenantUserId": {
+            "type": "string",
+            "description": "商户用户ID"
+          },
+          "tenantType": {
+            "type": "integer",
+            "description": "三方不同业务类型"
+          },
+          "amount": {
+            "type": "number",
+            "description": "提币金额"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "货币符号"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "链名"
+          },
+          "txId": {
+            "type": "string",
+            "description": "交易ID"
+          },
+          "fromAddr": {
+            "type": "string",
+            "description": "来源地址"
+          },
+          "toAddr": {
+            "type": "string",
+            "description": "目标地址"
+          },
+          "tag": {
+            "type": "string",
+            "description": "标签"
+          }
+        },
+        "required": ["callBackId", "tag"]
+      },
+      "GetWithdrawOrderResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "状态码"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "orderId": {
+                "type": "string",
+                "description": "订单 ID"
+              },
+              "symbol": {
+                "type": "string",
+                "description": "货币符号"
+              },
+              "baseCurrency": {
+                "type": "string",
+                "description": "基础货币"
+              },
+              "amount": {
+                "type": "number",
+                "description": "金额"
+              },
+              "orderState": {
+                "type": "integer",
+                "description": "订单状态（0：初始化，1：待验证，2：进行中，3：完成，4：撤销，5：人工处理，6：失败）"
+              },
+              "clientOrderId": {
+                "type": "string",
+                "description": "客户端订单 ID"
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "返回的消息"
+          }
+        }
       },
       "UserDTO": {
         "type": "object",
@@ -413,7 +675,7 @@
           },
           "tenantUserId": {
             "type": "string",
-            "description": "租户用户标识"
+            "description": "商户用户标识"
           },
           "env": {
             "type": "string",
@@ -421,11 +683,11 @@
           },
           "userId": {
             "type": "integer",
-            "description": "租户 ID"
+            "description": "商户 ID"
           },
           "tenantType": {
             "type": "integer",
-            "description": "租户类型"
+            "description": "商户类型"
           }
         },
         "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"]
@@ -443,7 +705,7 @@
           },
           "tenantUserId": {
             "type": "string",
-            "description": "租户用户ID"
+            "description": "商户用户ID"
           },
           "tenantType": {
             "type": "integer",
@@ -496,7 +758,7 @@
               },
               "tenantUserId": {
                 "type": "string",
-                "description": "租户用户ID"
+                "description": "商户用户ID"
               }
             }
           },
