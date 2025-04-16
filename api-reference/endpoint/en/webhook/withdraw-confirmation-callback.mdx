@@ -1,0 +1,142 @@
+---
+title: 'Withdrawal Secondary Confirmation Callback'
+openapi: false
+---
+
+
+When a merchant uses the Request Withdrawal Order (Secondary Confirmation Required) API, the platform will call this callback interface to ask the merchant to confirm the details of the withdrawal order.
+
+<div style={{
+  borderLeft: '4px solid #2563eb',
+  backgroundColor: '#f0f7ff',
+  padding: '12px 16px',
+  borderRadius: '4px',
+  marginBottom: '16px',
+}}>
+  <strong style={{ color: '#2563eb' }}>What is a Webhook Callback?</strong>
+  <p>
+    This interface is only applicable for callback type 2（<code>NOTIFY_REQUEST_WITHDRAW</code>）。Merchants need to confirm the details of the withdrawal order based on the callback content.
+    Although it shares the same request and response parameter templates as the general Webhook callback interface, the URL for this interface is independent.
+  </p>
+</div>
+
+---
+
+## API Example
+
+- API Endpoint：`https://xxxx/api/v1/uu/withdraw/info`
+
+---
+
+## Request Information
+
+### **Request Method**
+<div style={{
+  display: 'inline-block',
+  padding: '4px 12px',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  color: '#1d4ed8',
+  backgroundColor: '#e0f2fe',
+  borderRadius: '16px',
+  border: '1px solid #38bdf8',
+  fontFamily: 'monospace'
+}}>
+  POST
+</div>
+
+---
+
+### **Request Headers**
+
+| Name           | Type     | Required | Example Value              | Description                       |
+|----------------|----------|------|---------------------|----------------------------|
+| `Content-Type` | `string` | Yes   | `application/json`  | Request format, always set to JSON.    |
+| `X-API-KEY`    | `string` | Yes   | `your-api-key`      | 	Authorization key for authentication.    |
+
+
+### **Request Body Parameters**
+
+Below is the request body parameter template:
+
+| Attribute Name          | Type       | Required | Example Value                | Description                       |
+|------------------|------------|------|-----------------------|----------------------------|
+| `tenantUserId`   | `string`   | Yes   | `tenant123`           | Merchant user identifier.             |
+| `requestUUID`    | `string`   | Yes   | `2137890`             | 	Unique identifier for the request.        |
+| `trackingId`     | `string`   | Yes   | `track-4567`          | Order tracking ID.             |
+| `type`           | `integer`  | Yes   | `2`                   | Callback type (see enum values below).   |
+| `callBackId`     | `string`   | No   | `12345`               | 	Callback ID.                  |
+| `chainName`      | `string`   | No   | `TRON`                | 	Blockchain name.               |
+| `symbol`         | `string`   | No   | `USDT`                | Currency symbol.                 |
+| `amount`         | `number`   | No   | `0.5`                 | Amount.                    |
+| `txId`           | `string`   | No   | `22e1c72076...`       | Transaction ID.                 |
+| `toAddress`      | `string`   | No   | `TUekuiBgdk...`       | Destination address.                |
+| `fromAddress`    | `string`   | No   | `TUekuiBgdk...`       | Source address.                   |
+| `newAddress`     | `string`   | No   | `TUekuiBgdk...`       | New address (only used when the type is 4). |
+| `riskLevelFrom`  | `integer`  | No   | `15`                  | Risk score of the deposit source address (present when type is 1). |
+| `riskLevelTo`    | `integer`  | No   | `15`                  | Risk score of the deposit destination address (present when type is 1). |
+
+### **Request Example**
+
+```json
+{
+  "tenantUserId": "tenant123",
+  "requestUUID": "2137890",
+  "trackingId": "track-4567",
+  "type": 2,
+  "callBackId": "12345",
+  "chainName": "TRON",
+  "symbol": "USDT",
+  "amount": 0.5,
+  "txId": "22e1c72076...",
+  "toAddress": "TUekuiBgdk...",
+  "fromAddress": "TUekuiBgdk...",
+  "newAddress": "TUekuiBgdk...",
+  "riskLevelFrom": 15,
+  "riskLevelTo": 15
+}
+```
+---
+
+
+## Response Parameters
+
+| Attribute Name         | Type       | Required | Example Value                | 	Description                       |
+|----------------|------------|------|-----------------------|----------------------------|
+| `errCode`      | `integer`  | Yes   | `0`                   | Error code. 0 indicates success.      |
+| `message`      | `string`   | Yes   | `成功处理请求`        | Response message.                |
+| `data`         | `object`   | Yes   | `{...}`               | Detailed content of the callback data.     |
+
+### **Response Example**
+
+```json
+{
+  "errCode": 0,
+  "message": "成功处理请求",
+  "data": {
+    "requestUUID": "2137890",
+    "tenantUserId": "tenant123",
+    "trackingId": "track-4567",
+    "type": 2,
+    "amount": 0.5,
+    "chainName": "TRON",
+    "toAddress": "TUekuiBgdk...",
+    "txId": "22e1c72076..."
+  }
+}
+```
+
+#### **Response Parameter — Callback Type Description**
+
+- **`type`**:
+  - Always 2, indicating the callback type is NOTIFY_REQUEST_WITHDRAW.
+  - This callback type is used for merchants to confirm the details of a withdrawal order.
+  - Merchants should confirm the withdrawal order details based on the callback content before proceeding with further processing.
+
+---
+
+### **Notes**
+
+1. Merchants must ensure that the callback interface URL can be accessed normally and returns the correct response; otherwise, the callback may fail.
+2. The platform will retry multiple times in case of callback failure. Merchants need to handle idempotency properly to ensure that the same callback request is not processed multiple times.
+3. The security of the callback interface should be verified using the X-API-KEY. Please keep your key secure to prevent unauthorized access to the interface.

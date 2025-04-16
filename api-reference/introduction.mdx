@@ -1,54 +1,98 @@
 ---
-title: 'API通用描述'
-description: 'API格式约定、支持币种及风险评分参考'
----
-
+title: 'API 通用说明'
+description: 'API 格式约定、支持的代币和风险评分参考'
 ---
 
 ## 钱包地址格式约定
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-  - TRON 的钱包地址中字母 <span className="text-black font-semibold">区分大小写</span>。
-  - ETH 的钱包地址中字母统一使用 <span className="text-black font-semibold">小写</span>。
+  - TRON 钱包地址对字母的 <span className="text-black font-semibold">大小写敏感</span>。
+  - ETH 钱包地址使用 <span className="text-black font-semibold">小写</span> 字母。
 </div>
----
 
-## API格式约定
+## API 格式约定
 
 <Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
-加密说明
-</Badge>  
+加密细节
+</Badge>
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-所有请求参数需组装成 <span className="text-blue-600 font-semibold">JSON 格式请求体</span>，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密后，进行 <span className="text-blue-600 font-semibold">Base64 编码</span>。加密后的数据提交为 <span className="text-blue-600 font-semibold"> data </span> 参数。
+所有请求参数必须以 <span className="text-blue-600 font-semibold">JSON 请求体</span> 的形式构建，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密，并以 <span className="text-blue-600 font-semibold">Base64 编码</span> 的形式提交。加密后的数据应作为 <span className="text-blue-600 font-semibold">data</span> 参数提交。
 </div>
 
+---
 
-## 支持币种
+## 支持的代币
 
-| **币种** | **链类型** | **支持状态**       |
-|----------|------------|--------------------|
-| **USDT** | TRC20      | ✅ 支持            |
-| **USDT** | ERC20      | ✅ 支持            |
-| **USDT** | BEP20      | ⏳ 开发中          |
-| **PHT**  | TRC20      | ✅ 支持            |
-| **PHT**  | ERC20      | ✅ 支持            |
-| **USDC** | ERC20      | ✅ 支持            |
-| **USDC** | BEP20      | ⏳ 开发中          |
-| **ETH**  | ERC20      | ⏳ 开发中          |
-| **ETH**  | BEP20      | ⏳ 开发中          |
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse border-spacing-2 text-center ">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="p-4 border border-gray-300 w-1/4">**代币**</th>
+        <th className="p-4 border border-gray-300 w-1/4">**链类型**</th>
+        <th className="p-4 border border-gray-300 w-1/2">**支持状态**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">USDT</td>
+        <td className="p-4 border border-gray-300">TRC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">USDT</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">USDT</td>
+        <td className="p-4 border border-gray-300">BEP20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">PHT</td>
+        <td className="p-4 border border-gray-300">TRC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">PHT</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">USDC</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">USDC</td>
+        <td className="p-4 border border-gray-300">BEP20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">ETH</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">ETH</td>
+        <td className="p-4 border border-gray-300">BEP20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+---
 
 ## 风险评分参考
 
 <Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">风险等级</Badge>
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+- 🟢 <span className="font-semibold">低风险</span>: `0 ~ 30`，无风险或低风险。
 
-- 🟢 <span className="font-semibold">低风险</span>：`0 ~ 30`，无风险或低风险。  
+- 🟡 <span className="font-semibold">中等风险</span>: `31 ~ 64`，可能与中高风险地址有交易。
 
-- 🟡 <span className="font-semibold">中风险</span>：`31 ~ 64`，可能跟中高风险地址有过交易。  
+- 🟠 <span className="font-semibold">高风险</span>: `65 ~ 84`，建议隔离。
 
-- 🟠 <span className="font-semibold">高风险</span>：`65 ~ 84`，建议隔离。  
-
-- 🔴 <span className="font-semibold">严重风险</span>：`85 ~ 100`，建议立即隔离。  
-
+- 🔴 <span className="font-semibold">严重风险</span>: `85 ~ 100`，建议立即隔离。
 </div>

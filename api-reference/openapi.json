@@ -15,7 +15,6 @@
       "post": {
         "tags": ["user-controller"],
         "summary": "获取用户每日统计",
-        "description": "提供指定租户及日期的业务日报统计数据，包含充值、提现、钱包余额等关键指标。",
         "operationId": "getUserDailyStatistics",
         "parameters": [
           {
@@ -100,7 +99,6 @@
       "post": {
         "tags": ["order-controller"],
         "summary": "提交加速存币单请求",
-        "description": "用户存币单没有在管理后台系统查到的情况，会重新抓取一次存币单。",
         "operationId": "speedUp",
         "parameters": [
           {
@@ -183,7 +181,6 @@
       "post": {
         "tags": ["order-controller"],
         "summary": "获取提币单状态",
-        "description": "获取提币单状态,用户商户需要重新确认提币单状态。",
         "operationId": "getWithdrawOrder",
         "parameters": [
           {
@@ -277,7 +274,6 @@
       "post": {
         "tags": ["user-controller"],
         "summary": "获取用户存币地址",
-        "description": "获取用户存币地址，若没有该用户会自动注册用户 ID 并返回钱包地址。",
         "operationId": "getUserAddress",
         "parameters": [
           {
@@ -337,7 +333,7 @@
                       "properties": {
                         "tenantUserId": {
                           "type": "string",
-                          "description": "租户用户标识"
+                          "description": "商户用户标识"
                         },
                         "chainName": {
                           "type": "string",
@@ -398,7 +394,6 @@
       "post": {
         "tags": ["order-controller"],
         "summary": "请求提币订单（需二次确认）",
-        "description": "商户提交需二次确认的提币订单。",
         "operationId": "withdrawRequest",
         "parameters": [
           {
@@ -481,7 +476,6 @@
       "post": {
         "tags": ["order-controller"],
         "summary": "提交无需二次确认的提币单",
-        "description": "商户提交无需二次确认的提币订单。",
         "operationId": "withdrawWithoutVerify",
         "parameters": [
           {
@@ -568,7 +562,7 @@
         "properties": {
           "userId": {
             "type": "integer",
-            "description": "需要查询的租户 ID"
+            "description": "需要查询的商户 ID"
           },
           "jobDate": {
             "type": "string",
@@ -589,7 +583,7 @@
           },
           "tenantUserId": {
             "type": "string",
-            "description": "租户用户ID"
+            "description": "商户用户ID"
           },
           "tenantType": {
             "type": "integer",
@@ -681,7 +675,7 @@
           },
           "tenantUserId": {
             "type": "string",
-            "description": "租户用户标识"
+            "description": "商户用户标识"
           },
           "env": {
             "type": "string",
@@ -689,11 +683,11 @@
           },
           "userId": {
             "type": "integer",
-            "description": "租户 ID"
+            "description": "商户 ID"
           },
           "tenantType": {
             "type": "integer",
-            "description": "租户类型"
+            "description": "商户类型"
           }
         },
         "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"]
@@ -711,7 +705,7 @@
           },
           "tenantUserId": {
             "type": "string",
-            "description": "租户用户ID"
+            "description": "商户用户ID"
           },
           "tenantType": {
             "type": "integer",
@@ -764,7 +758,7 @@
               },
               "tenantUserId": {
                 "type": "string",
-                "description": "租户用户ID"
+                "description": "商户用户ID"
               }
             }
           },

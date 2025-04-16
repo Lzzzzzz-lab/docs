@@ -41,19 +41,42 @@ openapi: false
 对于需要二次确认的提币流程，回调可能会包含额外的确认步骤，请确保回调 URL 能正确处理所有场景通知。
 </Callout>
 
+<div style={{
+  borderLeft: '4px solid #f59e42',
+  backgroundColor: '#fff8eb',
+  padding: '2px 16px',
+  borderRadius: '4px',
+  margin: '16px 0'
+}}>
+  <strong style={{ color: '#d97706' }}>Note:</strong>
+  <span style={{ marginLeft: '8px' }}>
+       对于需要二次确认的提币流程，回调可能会包含额外的确认步骤，请确保回调 URL 能正确处理所有场景通知。
+  </span>
+</div>
 ---
 
-## 接口说明
+<div style={{
+  borderLeft: '4px solid #2563eb',
+  backgroundColor: '#f0f7ff',
+  padding: '12px 16px',
+  borderRadius: '4px',
+  margin: '16px 0'
+}}>
+  <strong style={{ color: '#2563eb' }}>Main Functions</strong>
+  <div style={{ marginTop: '8px' }}>
+    回调接口具有以下功能：
+    <ul style={{ marginTop: '8px' }}>
+      <li>通知商户存币单的生成。</li>
+      <li>在提币单执行前请求商户确认提币信息。</li>
+      <li>通知商户用户钱包地址的变更。</li>
+      <li>通知商户提币单的执行结果。</li>
+    </ul>
+  </div>
+</div>
+
+## 注意：
 
 回调接口用于接收 WaaS 发送的通知，商户需向 WaaS 提供回调地址，通过回调机制接收事件的处理结果。所有请求需要使用与其他接口相同的 **API-Key 机制** 进行验证，通知内容在发送前通过 **RSA 加密**，密文为 **Base64 格式**。
-
-<Callout type="info" title="主要功能">
-回调接口具有以下功能：
-- 通知商户存币单的生成。
-- 在提币单执行前请求商户确认提币信息。
-- 通知商户用户钱包地址的变更。
-- 通知商户提币单的执行结果。
-</Callout>
 
 ---
 
