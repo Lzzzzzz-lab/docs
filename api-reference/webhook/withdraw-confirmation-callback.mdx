@@ -1,0 +1,144 @@
+---
+title: '提币二次确认回调接口'
+openapi: false
+---
+
+
+当商户使用 **请求提币订单（需二次确认）** 的接口时，平台会调用该回调接口向商户确认提币单的详细信息。
+
+<div style={{
+  borderLeft: '4px solid #2563eb',
+  backgroundColor: '#f0f7ff',
+  padding: '12px 16px',
+  borderRadius: '4px',
+  marginBottom: '16px',
+}}>
+  <strong style={{ color: '#2563eb' }}>什么是 Webhook 回调？</strong>
+  <p>
+    此接口仅适用于回调类型 2（<code>NOTIFY_REQUEST_WITHDRAW</code>）。商户需根据回调内容，确认提币单的详细信息。
+    虽与 Webhook 回调接口共用同一套请求和响应的参数模板，但此接口的 URL 是独立的。
+  </p>
+</div>
+
+---
+
+## 接口范例
+
+- 接口名称：`https://xxxx/api/v1/uu/withdraw/info`
+
+---
+
+## 请求说明
+
+### **请求方法**
+<div style={{
+  display: 'inline-block',
+  padding: '4px 12px',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  color: '#1d4ed8',
+  backgroundColor: '#e0f2fe',
+  borderRadius: '16px',
+  border: '1px solid #38bdf8',
+  fontFamily: 'monospace'
+}}>
+  POST
+</div>
+
+---
+
+### **请求头**
+
+| 名称           | 类型     | 必填 | 示例值              | 说明                       |
+|----------------|----------|------|---------------------|----------------------------|
+| `Content-Type` | `string` | 是   | `application/json`  | 请求格式，固定为 JSON。    |
+| `X-API-KEY`    | `string` | 是   | `your-api-key`      | 授权密钥，用于身份验证。    |
+
+
+### **请求体参数**
+
+以下为请求体的参数模板：
+
+| 属性名          | 类型       | 必填 | 示例值                | 说明                       |
+|------------------|------------|------|-----------------------|----------------------------|
+| `tenantUserId`   | `string`   | 是   | `tenant123`           | 商户用户标识。             |
+| `requestUUID`    | `string`   | 是   | `2137890`             | 请求的唯一标识符。         |
+| `trackingId`     | `string`   | 是   | `track-4567`          | 订单追踪 ID。              |
+| `type`           | `integer`  | 是   | `2`                   | 回调类型（见下方枚举）。   |
+| `callBackId`     | `string`   | 否   | `12345`               | 回调 ID。                  |
+| `chainName`      | `string`   | 否   | `TRON`                | 区块链名称。               |
+| `symbol`         | `string`   | 否   | `USDT`                | 货币符号。                 |
+| `amount`         | `number`   | 否   | `0.5`                 | 金额。                     |
+| `txId`           | `string`   | 否   | `22e1c72076...`       | 交易 ID。                  |
+| `toAddress`      | `string`   | 否   | `TUekuiBgdk...`       | 目标地址。                 |
+| `fromAddress`    | `string`   | 否   | `TUekuiBgdk...`       | 源地址。                   |
+| `newAddress`     | `string`   | 否   | `TUekuiBgdk...`       | 新地址（仅在类型为 4 时使用）。 |
+| `riskLevelFrom`  | `integer`  | 否   | `15`                  | 存币来源地址风险评分（类型为 1 时存在）。 |
+| `riskLevelTo`    | `integer`  | 否   | `15`                  | 存币目标地址风险评分（类型为 1 时存在）。 |
+
+### **请求示例**
+
+```json
+{
+  "tenantUserId": "tenant123",
+  "requestUUID": "2137890",
+  "trackingId": "track-4567",
+  "type": 2,
+  "callBackId": "12345",
+  "chainName": "TRON",
+  "symbol": "USDT",
+  "amount": 0.5,
+  "txId": "22e1c72076...",
+  "toAddress": "TUekuiBgdk...",
+  "fromAddress": "TUekuiBgdk...",
+  "newAddress": "TUekuiBgdk...",
+  "riskLevelFrom": 15,
+  "riskLevelTo": 15
+}
+```
+---
+
+
+## 响应参数
+
+| 属性名         | 类型       | 必填 | 示例值                | 说明                       |
+|----------------|------------|------|-----------------------|----------------------------|
+| `errCode`      | `integer`  | 是   | `0`                   | 错误码，`0` 表示成功。      |
+| `message`      | `string`   | 是   | `成功处理请求`        | 响应消息。                 |
+| `data`         | `object`   | 是   | `{...}`               | 回调数据的具体内容。       |
+
+### **响应示例**
+
+成功处理请求：
+
+```json
+{
+  "errCode": 0,
+  "message": "成功处理请求",
+  "data": {
+    "requestUUID": "2137890",
+    "tenantUserId": "tenant123",
+    "trackingId": "track-4567",
+    "type": 2,
+    "amount": 0.5,
+    "chainName": "TRON",
+    "toAddress": "TUekuiBgdk...",
+    "txId": "22e1c72076..."
+  }
+}
+```
+
+#### **响应参数-回调类型说明**
+
+- **`type`**:
+  - 固定为 `2`，表示回调类型为 `NOTIFY_REQUEST_WITHDRAW`。
+  - 此回调类型用于商户确认提币单的详细信息。
+  - 商户需根据回调内容确认提币单信息后再进行后续处理。
+
+---
+
+### **注意事项**
+
+1. 商户需确保回调接口的 URL 能正常被访问，并返回正确的响应结果，否则可能导致回调失败。
+2. 平台在回调失败时会进行多次重试，商户需妥善处理幂等问题，确保相同的回调请求不会被重复处理多次。
+3. 回调接口的安全性需通过 `X-API-KEY` 进行验证，请商户妥善保管密钥，防止未经授权的请求访问接口。

@@ -1,0 +1,98 @@
+---
+title: 'API General Description'
+description: 'API Format Conventions, Supported Tokens, and Risk Scoring Reference'
+---
+
+
+## Wallet Address Format Conventions
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+  - TRON wallet addresses are <span className="text-black font-semibold">case-sensitive</span> for letters.
+  - ETH wallet addresses use <span className="text-black font-semibold">lowercase</span> letters.
+</div>
+
+## API Format Conventions
+
+<Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
+Encryption Details
+</Badge>
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+All request parameters must be structured into a <span className="text-blue-600 font-semibold">JSON request body</span>, encrypted using an <span className="text-blue-600 font-semibold">RSA public key</span>, and then <span className="text-blue-600 font-semibold">Base64 encoded</span>. The encrypted data should be submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
+</div>
+
+
+## Supported Tokens
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse border-spacing-2 text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="p-4 border border-gray-300">**Token**</th>
+        <th className="p-4 border border-gray-300">**Chain**</th>
+        <th className="p-4 border border-gray-300">**Support Status**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">USDT</td>
+        <td className="p-4 border border-gray-300">TRC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">USDT</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">USDT</td>
+        <td className="p-4 border border-gray-300">BEP20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">PHT</td>
+        <td className="p-4 border border-gray-300">TRC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">PHT</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">USDC</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">USDC</td>
+        <td className="p-4 border border-gray-300">BEP20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="p-4 border border-gray-300 font-semibold">ETH</td>
+        <td className="p-4 border border-gray-300">ERC20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="p-4 border border-gray-300 font-semibold">ETH</td>
+        <td className="p-4 border border-gray-300">BEP20</td>
+        <td className="p-4 border border-gray-300 text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+## Risk Scoring Reference
+
+<Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">Risk Level</Badge>
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+- 🟢 <span className="font-semibold">Low Risk</span>: `0 ~ 30`, no risk or low risk.
+
+- 🟡 <span className="font-semibold">Medium Risk</span>: `31 ~ 64`, may have transactions with medium or high-risk addresses.
+
+- 🟠 <span className="font-semibold">High Risk</span>: `65 ~ 84`, recommended to isolate.
+
+- 🔴 <span className="font-semibold">Severe Risk</span>: `85 ~ 100`, immediate isolation is recommended.
+</div>
