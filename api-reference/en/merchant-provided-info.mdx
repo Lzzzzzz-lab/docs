@@ -1,0 +1,38 @@
+---
+title: 'Merchant Integration Information'
+description: 'Merchants need to provide the following information when integrating with the WaaS system:'
+---
+
+- **1、Merchant Email**
+  Used to log in to the WaaS management system and receive verification codes during merchant operations to complete identity verification.
+
+- **2、Callback URL**
+  The Callback URL is a key interface for the merchant system to receive notifications from the WaaS system, used in the following scenarios:
+  - Deposit notifications
+  - Withdrawal result callbacks
+  - Notifications for changing user wallet addresses
+
+  **Note:**
+  WaaS sends notifications to the Callback URL provided by the merchant when specific events occur, informing the merchant of operation results or status changes. Merchants must implement the callback interface according to the rules to ensure timely receipt and processing of notifications.
+
+  **Specific Functions**
+  - Notify when a deposit order is created.
+  - Request detailed information about a withdrawal order before execution.
+  - Notify when a user changes their wallet address.
+  - Notify the execution result of a withdrawal order.
+
+  **For details, see:**
+  - [Webhook Callback](/api-reference/endpoint/en/webhook/webhook-callback)
+
+- **3、Withdrawal Request URL (Optional)**
+  The purpose of the withdrawal request URL depends on whether the two-step confirmation mechanism is enabled:
+  - **Without Two-Step Confirmation**: Merchants call the `api/order/withdrawWithoutVerify` API to directly submit complete withdrawal order information to WaaS in one go.
+  - **With Two-Step Confirmation**: Merchants call the `api/order/withdrawRequest` API to notify WaaS that a user has initiated a withdrawal request. The specific withdrawal information must be provided through two-step confirmation.
+
+  The two-step confirmation mechanism can be enabled based on merchant requirements. By separating withdrawal requests from information confirmation, it enhances communication security and prevents data tampering or unauthorized operations.
+
+  **For details, see:**
+  - [Withdrawal Two-Step Confirmation Callback](/api-reference/endpoint/en/webhook/withdraw-confirmation-callback)
+
+- **4、IP Whitelist**
+  Merchants need to provide a fixed IP address for their servers to be added to the IP whitelist. Only addresses in the IP whitelist can log in to the WaaS management system, ensuring system security.

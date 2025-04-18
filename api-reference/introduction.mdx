@@ -19,6 +19,34 @@ description: 'API 格式约定、支持的代币和风险评分参考'
 所有请求参数必须以 <span className="text-blue-600 font-semibold">JSON 请求体</span> 的形式构建，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密，并以 <span className="text-blue-600 font-semibold">Base64 编码</span> 的形式提交。加密后的数据应作为 <span className="text-blue-600 font-semibold">data</span> 参数提交。
 </div>
 
+## API Request Header
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**属性名**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Required/Optional**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**型态**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/2">**描述**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">Content-Type</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">multipart/form-data</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">X-API-KEY</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">由平台方分配的 API-KEY</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 ## 支持的代币
 
