@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "WaaS Developer ",
+  "name": "WaaS Developer",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -16,11 +16,19 @@
           {
             "group": "概述",
             "pages": [
+              "api-reference/merchant-provided-info",
               "api-reference/introduction"
             ]
           },
           {
-            "group": "商户",
+            "group": "商户需提供的回调接口",
+            "pages": [
+              "api-reference/webhook/webhook-callback",
+              "api-reference/webhook/withdraw-confirmation-callback"
+            ]
+          },
+          {
+            "group": "API 列表",
             "pages": [
               "api-reference/endpoint/getUserAddress",
               "api-reference/endpoint/speedUp",
@@ -31,10 +39,13 @@
             ]
           },
           {
-            "group": "回调 API",
+            "group": "系统流程图",
             "pages": [
-              "api-reference/webhook/webhook-callback",
-              "api-reference/webhook/withdraw-confirmation-callback"
+              "system-flow/withdrawal-flow-cn",
+              "system-flow/aggregation-flow-cn",
+              "system-flow/deposit-flow-cn",
+              "system-flow/risk-notification-flow-cn",
+              "system-flow/funds-flow-cn"
             ]
           }
         ]
@@ -45,11 +56,19 @@
           {
             "group": "Overview",
             "pages": [
+              "api-reference/en/merchant-provided-info",
               "api-reference/en/introduction"
             ]
           },
           {
-            "group": "Merchant",
+            "group": "Merchant Callback API",
+            "pages": [
+              "api-reference/endpoint/en/webhook/webhook-callback",
+              "api-reference/endpoint/en/webhook/withdraw-confirmation-callback"
+            ]
+          },
+          {
+            "group": "List of API Endpoints",
             "pages": [
               "api-reference/endpoint/en/getUserAddress",
               "api-reference/endpoint/en/speedUp",
@@ -60,43 +79,18 @@
             ]
           },
           {
-            "group": "Webhooks API ",
+            "group": "System Flow Chart",
             "pages": [
-              "api-reference/endpoint/en/webhook/webhook-callback",
-              "api-reference/endpoint/en/webhook/withdraw-confirmation-callback"
+              "system-flow/withdrawal-flow-en",
+              "system-flow/aggregation-flow-en",
+              "system-flow/deposit-flow-en",
+              "system-flow/risk-notification-flow-en",
+              "system-flow/funds-flow-en"
             ]
           }
         ]
       }
-    ],
-    "_comment": {
-      "removed_tabs": [
-        {
-          "tab": "Guides",
-          "groups": [
-            {
-              "group": "Get Started",
-              "pages": [
-                "introduction",
-                "quickstart",
-                "development"
-              ]
-            },
-            {
-              "group": "Essentials",
-              "pages": [
-                "essentials/markdown",
-                "essentials/code",
-                "essentials/images",
-                "essentials/settings",
-                "essentials/navigation",
-                "essentials/reusable-snippets"
-              ]
-            }
-          ]
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/uu_wallet.png",

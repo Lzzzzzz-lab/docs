@@ -20,6 +20,34 @@ Encryption Details
 All request parameters must be structured into a <span className="text-blue-600 font-semibold">JSON request body</span>, encrypted using an <span className="text-blue-600 font-semibold">RSA public key</span>, and then <span className="text-blue-600 font-semibold">Base64 encoded</span>. The encrypted data should be submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
 </div>
 
+## API Request Header
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Attribute Name**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Required/Optional**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Type**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/2">**Description**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">Content-Type</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">multipart/form-data</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">X-API-KEY</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Assigned API-KEY by the platform.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 ## Supported Tokens
 
