@@ -55,7 +55,7 @@
         },
         "responses": {
           "200": {
-            "description": "成功响应，返回每日统计结果（Base64 编码的加密字符串）。",
+            "description": "成功响应，返回每日统计结果。",
             "content": {
               "application/json": {
                 "schema": {
@@ -70,15 +70,90 @@
                       "description": "返回的消息"
                     },
                     "data": {
-                      "type": "string",
-                      "description": "加密后的统计结果字符串（Base64 编码）"
+                      "type": "object",
+                      "description": "每日统计结果",
+                      "properties": {
+                        "jobDay": {
+                          "type": "string",
+                          "format": "date",
+                          "description": "数据统计的日期（例如：2023-10-01）"
+                        },
+                        "totalDepositAmount": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "当日用户充值总金额"
+                        },
+                        "totalDepositCount": {
+                          "type": "integer",
+                          "description": "当日充值总笔数（例如：100笔）"
+                        },
+                        "totalDepositUserCount": {
+                          "type": "integer",
+                          "description": "当日进行充值的用户数（例如：50个用户）"
+                        },
+                        "totalWithdrawAmount": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "当日用户提现总金额"
+                        },
+                        "totalWithdrawCount": {
+                          "type": "integer",
+                          "description": "当日提现总笔数（例如：80笔）"
+                        },
+                        "totalWithdrawUserCount": {
+                          "type": "integer",
+                          "description": "当日进行提现的用户数（例如：40个用户）"
+                        },
+                        "pendingCollectionAmount": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "系统中待归集的总金额"
+                        },
+                        "collectionCount": {
+                          "type": "integer",
+                          "description": "当日完成的归集操作笔数（例如：10笔）"
+                        },
+                        "pendingCollectionAddressCount": {
+                          "type": "integer",
+                          "description": "当前待归集的地址数量（例如：5个地址）"
+                        },
+                        "coldWalletBalance": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "冷钱包的余额"
+                        },
+                        "hotWalletBalance": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "热钱包的余额"
+                        },
+                        "additionalTransferHotWallet": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "当日热钱包额外转入的金额"
+                        }
+                      }
                     }
                   }
                 },
                 "example": {
                   "code": 0,
                   "message": "",
-                  "data": "aGVsbG8gd29ybGQhIQ=="
+                  "data": {
+                    "jobDay": "2023-10-01",
+                    "totalDepositAmount": 100000.50,
+                    "totalDepositCount": 100,
+                    "totalDepositUserCount": 50,
+                    "totalWithdrawAmount": 80000.75,
+                    "totalWithdrawCount": 80,
+                    "totalWithdrawUserCount": 40,
+                    "pendingCollectionAmount": 5000.25,
+                    "collectionCount": 10,
+                    "pendingCollectionAddressCount": 5,
+                    "coldWalletBalance": 200000.00,
+                    "hotWalletBalance": 150000.00,
+                    "additionalTransferHotWallet": 1000.00
+                  }
                 }
               }
             }
