@@ -24,14 +24,10 @@
           {
             "group": "收银台",
             "pages": [
-              "api-reference/checkout-page"
-            ]
-          },
-          {
-            "group": "商户需提供的回调接口",
-            "pages": [
-              "api-reference/webhook/webhook-callback",
-              "api-reference/webhook/withdraw-confirmation-callback"
+              "api-reference/checkout-page",
+              "api-reference/endpoint/getPreDepositInfo",
+              "api-reference/endpoint/getUserAddressWithCounter",
+              "api-reference/endpoint/getUserAddressIndependent"
             ]
           },
           {
@@ -39,13 +35,18 @@
             "pages": [
               "api-reference/endpoint/getUserAddress",
               "api-reference/endpoint/speedUp",
-              "api-reference/endpoint/getPreDepositInfo",
-              "api-reference/endpoint/getUserAddressWithCounter",
               "api-reference/endpoint/getDepositOrder",
               "api-reference/endpoint/withdrawWithoutVerify",
               "api-reference/endpoint/withdrawRequest",
               "api-reference/endpoint/getWithdrawOrder",
               "api-reference/endpoint/getUserDailyStatistics"
+            ]
+          },
+          {
+            "group": "商户需提供的回调接口",
+            "pages": [
+              "api-reference/webhook/webhook-callback",
+              "api-reference/webhook/withdraw-confirmation-callback"
             ]
           },
           {
@@ -75,7 +76,10 @@
           {
             "group": "Checkout",
             "pages": [
-              "api-reference/en/checkout-page"
+              "api-reference/en/checkout-page",
+              "api-reference/endpoint/en/getPreDepositInfo",
+              "api-reference/endpoint/en/getUserAddressWithCounter",
+              "api-reference/endpoint/en/getUserAddressIndependent"
             ]
           },
           {
@@ -90,8 +94,6 @@
             "pages": [
               "api-reference/endpoint/en/getUserAddress",
               "api-reference/endpoint/en/speedUp",
-              "api-reference/endpoint/en/getPreDepositInfo",
-              "api-reference/endpoint/en/getUserAddressWithCounter",
               "api-reference/endpoint/en/getDepositOrder",
               "api-reference/endpoint/en/withdrawWithoutVerify",
               "api-reference/endpoint/en/withdrawRequest",
