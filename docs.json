@@ -17,7 +17,14 @@
             "group": "概述",
             "pages": [
               "api-reference/merchant-provided-info",
+              "api-reference/deposit-modes-overview",
               "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "收银台",
+            "pages": [
+              "api-reference/checkout-page"
             ]
           },
           {
@@ -32,6 +39,9 @@
             "pages": [
               "api-reference/endpoint/getUserAddress",
               "api-reference/endpoint/speedUp",
+              "api-reference/endpoint/getPreDepositInfo",
+              "api-reference/endpoint/getUserAddressWithCounter",
+              "api-reference/endpoint/getDepositOrder",
               "api-reference/endpoint/withdrawWithoutVerify",
               "api-reference/endpoint/withdrawRequest",
               "api-reference/endpoint/getWithdrawOrder",
@@ -57,7 +67,15 @@
             "group": "Overview",
             "pages": [
               "api-reference/en/merchant-provided-info",
+              "api-reference/en/deposit-modes-overview",
               "api-reference/en/introduction"
+
+            ]
+          },
+          {
+            "group": "Checkout",
+            "pages": [
+              "api-reference/en/checkout-page"
             ]
           },
           {
@@ -72,6 +90,9 @@
             "pages": [
               "api-reference/endpoint/en/getUserAddress",
               "api-reference/endpoint/en/speedUp",
+              "api-reference/endpoint/en/getPreDepositInfo",
+              "api-reference/endpoint/en/getUserAddressWithCounter",
+              "api-reference/endpoint/en/getDepositOrder",
               "api-reference/endpoint/en/withdrawWithoutVerify",
               "api-reference/endpoint/en/withdrawRequest",
               "api-reference/endpoint/en/getWithdrawOrder",
