@@ -189,11 +189,11 @@
                     "description": "币种符号，例如 USDT"
                   },
                   "showDepositNotice": {
-                    "type": "String",
+                    "type": "boolean",
                     "description": "是否展示存币须知，可选，默认 false"
                   },
                   "showExchangeRate": {
-                    "type": "String",
+                    "type": "boolean",
                     "description": "是否展示汇率信息，可选，默认 false"
                   },
                   "showMerchantLogo": {
@@ -213,9 +213,9 @@
                 "uniqueDepositAmount": "50.25",
                 "chainName": "TRON",
                 "symbol": "USDT",
-                "showDepositNotice":"",
-                "showExchangeRate": "",
-                "showMerchantLogo": ""
+                "showDepositNotice":"true",
+                "showExchangeRate": "false",
+                "showMerchantLogo": "true"
               }
             }
           }
@@ -265,7 +265,7 @@
                           "format": "date-time",
                           "description": "存款地址的过期时间（例如半小时）。"
                         },
-                        "checkoutUrl": {
+                        "depositUrl": {
                           "type": "string",
                           "description": "收银台页面 URL。"
                         }
@@ -283,7 +283,7 @@
                     "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
                     "preDepositOrderId": "PD987654321",
                     "expirationTime": "2023-10-25T12:30:00Z",
-                    "checkoutUrl": "https://checkout.example.com/deposit/PD987654321"
+                    "depositUrl": "https://checkout.example.com/deposit/PD987654321"
                   }
                 }
               }
@@ -363,15 +363,15 @@
                     "description": "币种符号，例如 USDT"
                   },
                   "showDepositNotice": {
-                    "type": "String",
+                    "type": "boolean",
                     "description": "是否展示存币须知，可选，默认 false"
                   },
                   "showExchangeRate": {
-                    "type": "String",
+                    "type": "boolean",
                     "description": "是否展示汇率信息，可选，默认 false"
                   },
                   "showMerchantLogo": {
-                    "type": "String",
+                    "type": "boolean",
                     "description": "是否展示商户LOGO，可选，默认 false"
                   }
                 },
@@ -387,9 +387,9 @@
                 "uniqueDepositAmount": "50.25",
                 "chainName": "TRON",
                 "symbol": "USDT",
-                "showDepositNotice": "",
-                "showExchangeRate": "",
-                "showMerchantLogo": ""
+                "showDepositNotice": true,
+                "showExchangeRate": false,
+                "showMerchantLogo": true
               }
             }
           }
@@ -430,7 +430,7 @@
                           "type": "string",
                           "description": "返回的存款地址。"
                         },
-                        "checkoutUrl": {
+                        "depositUrl": {
                           "type": "string",
                           "description": "收银台页面 URL。"
                         }
@@ -446,7 +446,7 @@
                     "chainName": "TRON",
                     "symbol": "USDT",
                     "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-                    "checkoutUrl": "https://checkout.example.com/deposit/PD987654321"
+                    "depositUrl": "https://checkout.example.com/deposit/PD987654321"
                   }
                 }
               }
