@@ -1,0 +1,96 @@
+---
+title: '系统支持存款模式'
+description: '描述共享地址模式与独立地址模式的特点、适用场景及优缺点对比。在与商户合作时，需先确定其使用的存款模式。WaaS 系统支持以下两种存款模式：'
+---
+
+---
+
+### 1. 共享地址模式
+
+**描述**：
+在共享地址模式下，商户的所有客户使用同一个指定的钱包地址进行存款，存款金额可以指定或不指定。
+
+**适用场景**：
+- 收款频率较低的商户。
+- 对资金安全性要求不高的商户。
+
+**特点**：
+- 客户使用**统一的存款地址**进行充值。
+- 需要通过**充值金额的唯一性**（如小数点金额差异）来区分不同客户/订单。
+- 实现成本较低，无需为每个客户创建独立地址。
+
+---
+
+### 2. 独立地址模式
+
+**描述**：
+在独立地址模式下，商户为其每个客户分配独立的钱包地址进行存款，无需指定存款金额的唯一性。
+
+**适用场景**：
+- 收款频率较高的商户。
+- 对资金安全性要求较高的商户。
+
+**特点**：
+- 每个客户拥有**独立的钱包地址**，无需通过金额区分客户/订单。
+- 增强了资金安全性，支持更灵活的钱包管理。
+- 需要对资金进行归集操作，可能增加归集成本。
+
+---
+
+## 优缺点对比
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300">细分功能</th>
+        <th className="py-2 px-4 border border-gray-300">共享地址模式</th>
+        <th className="py-2 px-4 border border-gray-300">独立地址模式</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">资金归集操作</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> 无需归集</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 必须归集</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">客人独立钱包</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> 否，共享地址</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 是，每人独立地址</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">归集成本</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 无成本</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> 有归集成本</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">随意更换钱包</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> 不方便</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 方便</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">风险通知</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 支持</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">风险管控</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> 不支持</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">收银台支持</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 支持</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">存款便捷性</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> 不方便，需要小数金额</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> 方便，任意金额</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+---

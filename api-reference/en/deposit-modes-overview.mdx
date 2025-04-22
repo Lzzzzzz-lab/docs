@@ -1,0 +1,96 @@
+---
+title: 'Supported Deposit Modes'
+description: 'Description of the characteristics, applicable scenarios, and advantages and disadvantages of Shared Address Mode and Dedicated Address Mode. When working with merchants, it is necessary to first determine the deposit mode they will use. The WaaS system supports the following two deposit modes:'
+---
+
+---
+
+### 1. Shared Address Mode
+
+**Description**:
+In Shared Address Mode, all customers of a merchant use the same designated wallet address for deposits. The deposit amount can either be specified or unspecified.
+
+**Applicable Scenarios**:
+- Merchants with low deposit frequency.
+- Merchants with low requirements for fund security.
+
+**Characteristics**:
+- Customers use a **single deposit address** for all transactions.
+- Distinction between customers/orders is achieved through **unique deposit amounts** (e.g., differences in decimal amounts).
+- Lower implementation costs, as there is no need to create a dedicated address for each customer.
+
+---
+
+### 2. Dedicated Address Mode
+
+**Description**:
+In Dedicated Address Mode, merchants assign a unique wallet address to each of their customers for deposits. There is no need to specify unique deposit amounts.
+
+**Applicable Scenarios**:
+- Merchants with high deposit frequency.
+- Merchants with high requirements for fund security.
+
+**Characteristics**:
+- Each customer has a **dedicated wallet address**, eliminating the need to distinguish customers/orders through amounts.
+- Enhanced fund security with more flexible wallet management.
+- Requires fund aggregation operations, which may increase aggregation costs.
+
+---
+
+## Advantages and Disadvantages Comparison
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300">Feature</th>
+        <th className="py-2 px-4 border border-gray-300">Shared Address Mode</th>
+        <th className="py-2 px-4 border border-gray-300">Dedicated Address Mode</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Fund Aggregation</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> Not Required</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Required</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Customer Wallet Independence</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> No, shared address</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Yes, dedicated address per customer</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Aggregation Cost</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> No Cost</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> Costs Incurred</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Ease of Changing Wallets</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> Inconvenient</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Convenient</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Risk Notification</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Supported</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Risk Management</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> Not Supported</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Checkout Page Support</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Supported</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">Deposit Convenience</td>
+        <td className="py-2 px-4 border border-gray-300 text-red-500 font-semibold"> Inconvenient, requires unique decimal amounts</td>
+        <td className="py-2 px-4 border border-gray-300 text-green-500 font-semibold"> Convenient, supports any amount</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+---
