@@ -137,7 +137,7 @@
         }
       }
     },
-    "/api/deposit/getUserAddressWithCounter": {
+    "/api/deposit/getUserAddressShare": {
       "post": {
         "tags": ["deposit-controller"],
         "summary": "获取用户存款地址接口（含收银台页面）",
@@ -170,13 +170,52 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetUserAddressWithCounterRequest"
+                "type": "object",
+                "properties": {
+                  "preDepositOrderId": {
+                    "type": "string",
+                    "description": "预存款订单号"
+                  },
+                  "uniqueDepositAmount": {
+                    "type": "string",
+                    "description": "唯一存款金额"
+                  },
+                  "chainName": {
+                    "type": "string",
+                    "description": "链名称，例如 TRON"
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "description": "币种符号，例如 USDT"
+                  },
+                  "showDepositNotice": {
+                    "type": "String",
+                    "description": "是否展示存币须知，可选，默认 false"
+                  },
+                  "showExchangeRate": {
+                    "type": "String",
+                    "description": "是否展示汇率信息，可选，默认 false"
+                  },
+                  "showMerchantLogo": {
+                    "type": "boolean",
+                    "description": "是否展示商户LOGO，可选，默认 false"
+                  }
+                },
+                "required": [
+                  "preDepositOrderId",
+                  "uniqueDepositAmount",
+                  "chainName",
+                  "symbol"
+                ]
               },
               "example": {
                 "preDepositOrderId": "PD987654321",
                 "uniqueDepositAmount": "50.25",
                 "chainName": "TRON",
-                "symbol": "USDT"
+                "symbol": "USDT",
+                "showDepositNotice":"",
+                "showExchangeRate": "",
+                "showMerchantLogo": ""
               }
             }
           }
@@ -244,6 +283,169 @@
                     "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
                     "preDepositOrderId": "PD987654321",
                     "expirationTime": "2023-10-25T12:30:00Z",
+                    "checkoutUrl": "https://checkout.example.com/deposit/PD987654321"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "参数错误或存款金额重复。",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "INVALID_AMOUNT",
+                  "message": "提供的存款金额不是唯一的。"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },"/api/deposit/getUserAddressIndependent": {
+      "post": {
+        "tags": ["deposit-controller"],
+        "summary": "获取用户存款地址接口（含收银台页面）",
+        "operationId": "getUserAddressWithCounter",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "description": "请求内容类型。",
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台分配的 API-KEY。",
+            "schema": {
+              "type": "string",
+              "example": "your-api-key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "获取存款地址的请求参数（JSON 格式）。",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "preDepositOrderId": {
+                    "type": "string",
+                    "description": "预存款订单号"
+                  },
+                  "uniqueDepositAmount": {
+                    "type": "string",
+                    "description": "唯一存款金额"
+                  },
+                  "chainName": {
+                    "type": "string",
+                    "description": "链名称，例如 TRON"
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "description": "币种符号，例如 USDT"
+                  },
+                  "showDepositNotice": {
+                    "type": "String",
+                    "description": "是否展示存币须知，可选，默认 false"
+                  },
+                  "showExchangeRate": {
+                    "type": "String",
+                    "description": "是否展示汇率信息，可选，默认 false"
+                  },
+                  "showMerchantLogo": {
+                    "type": "String",
+                    "description": "是否展示商户LOGO，可选，默认 false"
+                  }
+                },
+                "required": [
+                  "preDepositOrderId",
+                  "uniqueDepositAmount",
+                  "chainName",
+                  "symbol"
+                ]
+              },
+              "example": {
+                "preDepositOrderId": "PD987654321",
+                "uniqueDepositAmount": "50.25",
+                "chainName": "TRON",
+                "symbol": "USDT",
+                "showDepositNotice": "",
+                "showExchangeRate": "",
+                "showMerchantLogo": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功响应，返回存款地址和支付详情。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "状态码（0：成功）。"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "返回消息。"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "存款详细信息。",
+                      "properties": {
+                        "depositAmount": {
+                          "type": "string",
+                          "description": "唯一存款金额。"
+                        },
+                        "chainName": {
+                          "type": "string",
+                          "description": "链名称，例如 TRON 等。"
+                        },
+                        "symbol": {
+                          "type": "string",
+                          "description": "币种符号，例如 USDT。"
+                        },
+                        "depositAddress": {
+                          "type": "string",
+                          "description": "返回的存款地址。"
+                        },
+                        "checkoutUrl": {
+                          "type": "string",
+                          "description": "收银台页面 URL。"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 0,
+                  "message": "success",
+                  "data": {
+                    "depositAmount": "50.25",
+                    "chainName": "TRON",
+                    "symbol": "USDT",
+                    "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
                     "checkoutUrl": "https://checkout.example.com/deposit/PD987654321"
                   }
                 }
