@@ -287,7 +287,7 @@
               "application/json": {
                 "example": {
                   "code": "INVALID_AMOUNT",
-                  "message": "提供的存款金额不是唯一的。"
+                  "message": "金额格式错误：小数点后最多六位。"
                 }
               }
             }
