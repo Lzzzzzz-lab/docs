@@ -193,7 +193,7 @@
                     "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
                     "preDepositOrderId": "PD987654321",
                     "expirationTime": "2023-10-25T12:30:00Z",
-                    "depositUrl": "https://checkout.example.com/deposit/PD987654321"
+                    "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
                   }
                 }
               }
@@ -275,7 +275,7 @@
                     "chainName": "TRON",
                     "symbol": "USDT",
                     "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-                    "depositUrl": "https://checkout.example.com/deposit/PD987654321"
+                    "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
                   }
                 }
               }
@@ -1058,21 +1058,21 @@
       "GetUserAddressIndependentRequest": {
         "type": "object",
         "properties": {
-          "depositOrderId": {
-            "type": "string",
-            "description": "存款订单号，由商户提供，需确保其唯一性。"
-          },
-          "depositAmount": {
-            "type": "string",
-            "description": "存款金额，可选参数"
-          },
           "chainName": {
             "type": "string",
-            "description": "链名称，例如 TRON"
+            "description": "链名称"
           },
           "symbol": {
             "type": "string",
-            "description": "币种符号，例如 USDT"
+            "description": "货币符号"
+          },
+          "tenantUserId": {
+            "type": "string",
+            "description": "商户用户标识"
+          },
+          "depositAmount": {
+            "type": "string",
+            "description": "存款金额"
           },
           "showDepositNotice": {
             "type": "boolean",
@@ -1089,16 +1089,12 @@
             "default": true
           }
         },
-        "required": [
-          "depositOrderId",
-          "chainName",
-          "symbol"
-        ],
+        "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"],
         "example": {
-          "depositOrderId": "PD987654321",
-          "depositAmount": "50.25",
           "chainName": "TRON",
           "symbol": "USDT",
+          "tenantUserId": "tenant123",
+          "depositAmount": "50.25",
           "showDepositNotice": true,
           "showExchangeRate": "1 USDT = 7.2 CNY",
           "showMerchantLogo": true
@@ -1150,7 +1146,7 @@
             "chainName": "TRON",
             "symbol": "USDT",
             "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-            "depositUrl": "https://checkout.example.com/deposit/PD987654321"
+            "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
           }
         }
       },
@@ -1274,7 +1270,7 @@
             "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
             "preDepositOrderId": "PD987654321",
             "expirationTime": "2023-10-25T12:30:00Z",
-            "depositUrl": "https://checkout.example.com/deposit/PD987654321"
+            "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
           }
         }
       },
