@@ -52,6 +52,7 @@
           {
             "group": "系统流程图",
             "pages": [
+              "system-flow/checkout-flow-cn",
               "system-flow/withdrawal-flow-cn",
               "system-flow/aggregation-flow-cn",
               "system-flow/deposit-flow-cn",
