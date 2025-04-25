@@ -496,7 +496,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WithdrawRequestDto"
+                "$ref": "#/components/schemas/WithdrawRequestSpeedDto"
               },
               "example": {
                 "callBackId": "D782243635",
@@ -902,7 +902,6 @@
                 "symbol": "TRX",
                 "chainName": "TRON",
                 "txId": "tx12345",
-                "fromAddr": "fromAddress123",
                 "toAddr": "toAddress123",
                 "tag": ""
               }
@@ -973,7 +972,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WithdrawRequestDto"
+                "$ref": "#/components/schemas/WithdrawRequestWithoutVerifyDto"
               },
               "example": {
                 "callBackId": "D782243635",
@@ -984,7 +983,6 @@
                 "symbol": "TRX",
                 "chainName": "TRON",
                 "txId": "tx12345",
-                "fromAddr": "fromAddress123",
                 "toAddr": "toAddress123",
                 "tag": ""
               }
@@ -1445,7 +1443,53 @@
         },
         "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"]
       },
-      "WithdrawRequestDto": {
+      "WithdrawRequestWithoutVerifyDto": {
+        "type": "object",
+        "properties": {
+          "callBackId": {
+            "type": "string",
+            "description": "回调订单"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "三方用户ID"
+          },
+          "tenantUserId": {
+            "type": "string",
+            "description": "商户用户ID"
+          },
+          "tenantType": {
+            "type": "integer",
+            "description": "三方不同业务类型 (JD专用)"
+          },
+          "amount": {
+            "type": "String",
+            "description": "提币金额,最多支持小数点后6位。"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "货币符号"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "链名"
+          },
+          "txId": {
+            "type": "string",
+            "description": "交易ID"
+          },
+          "toAddr": {
+            "type": "string",
+            "description": "目标地址"
+          },
+          "tag": {
+            "type": "string",
+            "description": "标签"
+          }
+        },
+        "required": ["txId", "tag"]
+      },
+      "WithdrawRequestSpeedDto":{
         "type": "object",
         "properties": {
           "callBackId": {
@@ -1483,6 +1527,52 @@
           "fromAddr": {
             "type": "string",
             "description": "来源地址"
+          },
+          "toAddr": {
+            "type": "string",
+            "description": "目标地址"
+          },
+          "tag": {
+            "type": "string",
+            "description": "标签"
+          }
+        },
+        "required": ["txId", "tag"]
+      },
+      "WithdrawRequestDto": {
+        "type": "object",
+        "properties": {
+          "callBackId": {
+            "type": "string",
+            "description": "回调订单"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "三方用户ID"
+          },
+          "tenantUserId": {
+            "type": "string",
+            "description": "商户用户ID"
+          },
+          "tenantType": {
+            "type": "integer",
+            "description": "三方不同业务类型 (JD专用)"
+          },
+          "amount": {
+            "type": "String",
+            "description": "提币金额,最多支持小数点后6位。"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "货币符号"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "链名"
+          },
+          "txId": {
+            "type": "string",
+            "description": "交易ID"
           },
           "toAddr": {
             "type": "string",
