@@ -1074,6 +1074,15 @@
             "type": "string",
             "description": "存款金额"
           },
+          "paymentValidity": {
+            "type": "number",
+            "description": "支付有效时间（秒），没有就不显示倒计时，只能是数字，且 >= 5",
+            "minimum": 5
+          },
+          "orderId": {
+            "type": "string",
+            "description": "商户方的订单号，没有就不显示，请商户方确保该订单号的唯一性"
+          },
           "showDepositNotice": {
             "type": "boolean",
             "description": "是否展示存币须知，可选，默认 true",
@@ -1081,7 +1090,7 @@
           },
           "showExchangeRate": {
             "type": "string",
-            "description": "展示汇率信息，例如 '1 USDT = 7.2 CNY'",
+            "description": "展示汇率信息，例如 '1 USDT = 7.2 CNY'"
           },
           "showMerchantLogo": {
             "type": "boolean",
@@ -1094,7 +1103,11 @@
           "chainName": "TRON",
           "symbol": "USDT",
           "tenantUserId": "tenant123",
+          "userId": "user456",
+          "tenantType": "merchant",
           "depositAmount": "50.25",
+          "paymentValidity": 300,
+          "orderId": "order-20250425-001",
           "showDepositNotice": true,
           "showExchangeRate": "1 USDT = 7.2 CNY",
           "showMerchantLogo": true
@@ -1176,7 +1189,7 @@
           },
           "showExchangeRate": {
             "type": "string",
-            "description": "展示汇率信息，例如 '1 USDT = 7.2 CNY'",
+            "description": "展示汇率信息，例如 '1 USDT = 7.2 CNY'"
           },
           "showMerchantLogo": {
             "type": "boolean",
