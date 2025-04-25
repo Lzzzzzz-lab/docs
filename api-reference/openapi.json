@@ -304,7 +304,7 @@
         }
       }
     },
-    "/user/getUserDailyStatistics": {
+    "/api/user/getUserDailyStatistics": {
       "post": {
         "tags": ["user-controller"],
         "summary": "获取用户每日统计",
@@ -738,7 +738,7 @@
         }
       }
     },
-    "/user/getUserAddress": {
+    "/api/user/getUserAddress": {
       "post": {
         "tags": ["user-controller"],
         "summary": "获取用户存币地址",
