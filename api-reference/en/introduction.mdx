@@ -3,7 +3,6 @@ title: 'API General Description'
 description: 'API Format Conventions, Supported Tokens, and Risk Scoring Reference'
 ---
 
-
 ## Wallet Address Format Conventions
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -16,155 +15,166 @@ description: 'API Format Conventions, Supported Tokens, and Risk Scoring Referen
 <Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
 Encryption Details
 </Badge>
-<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-All request parameters must be structured into a <span className="text-blue-600 font-semibold">JSON request body</span>, encrypted using an <span className="text-blue-600 font-semibold">RSA public key</span>, and then <span className="text-blue-600 font-semibold">Base64 encoded</span>. The encrypted data should be submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
-</div>
-
-## API Request Header
-
-<div className="overflow-x-auto">
-  <table className="table-auto w-full border-collapse text-center">
-    <thead className="bg-gray-100">
-      <tr>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**Attribute Name**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**Required/Optional**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**Type**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/2">**Description**</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300 align-middle">Content-Type</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">multipart/form-data</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300 align-middle">X-API-KEY</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">Assigned API-KEY by the platform.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-## Supported Tokens
-
-<div className="overflow-x-auto">
-  <table className="table-auto w-full border-collapse text-center">
-    <thead className="bg-gray-100">
-      <tr>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**Token**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**Chain**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/2">**Support Status**</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
-            USDT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
-            USDT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
-            USDT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ Under Development</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
-            PHT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
-            PHT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
-            USDC
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
-            USDC
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ Under Development</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
-            ETH
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
-            ETH
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ Under Development</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-## Risk Scoring Reference
-
-<Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">Risk Level</Badge>
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-- 🟢 <span className="font-semibold">Low Risk</span>: `0 ~ 30`, no risk or low risk.
+All request parameters must be constructed in the form of a <span className="text-blue-600 font-semibold">JSON request body</span>, encrypted using a <span className="text-blue-600 font-semibold">RSA public key</span>, and submitted in the form of <span className="text-blue-600 font-semibold">Base64-encoded</span> data. The encrypted data should be submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
 
-- 🟡 <span className="font-semibold">Medium Risk</span>: `31 ~ 64`, may have transactions with medium or high-risk addresses.
+Likewise, the <span className="text-blue-600 font-semibold">data</span> parameter in the response is also encrypted, and developers need to decrypt it to obtain the plaintext content.
+</div>
 
-- 🟠 <span className="font-semibold">High Risk</span>: `65 ~ 84`, recommended to isolate.
+### Request Format
 
-- 🔴 <span className="font-semibold">Severe Risk</span>: `85 ~ 100`, immediate isolation is recommended.
+```json
+{
+  "data": "EncryptedString"
+}
+```
+
+
+### Encryption Process
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+
+- Use the <span className="text-blue-600 font-semibold">RSA public key</span> provided by the platform to encrypt the request parameters.
+
+- The encrypted data must be <span className="text-blue-600 font-semibold">Base64-encoded</span> and submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
+
+</div>
+
+### Decryption Process
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+
+- After the platform receives the encrypted <span className="text-blue-600 font-semibold">data</span> parameter, it will decrypt it using the corresponding private key.
+
+- The <span className="text-blue-600 font-semibold">data</span> parameter in the response is also encrypted, and developers need to decrypt it using the public key to retrieve the plaintext.
+
+</div>
+
+---
+
+### Java Encryption Code Example
+
+Below is an example of using an **RSA public key** to encrypt data in Java:
+
+```java
+import javax.crypto.Cipher;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
+public class RSAEncrypt {
+    public static String encryptByPublicKeyForOut(String data, String publicKey) throws Exception {
+        // Decode the public key string
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicK = keyFactory.generatePublic(x509EncodedKeySpec);
+
+        // Initialize the cipher
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, publicK);
+
+        byte[] dataByte = data.getBytes();
+        int inputLen = dataByte.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] cache;
+        int i = 0;
+
+        // Encrypt in segments
+        while (inputLen - offSet > 0) {
+            if (inputLen - offSet > 117) {
+                cache = cipher.doFinal(dataByte, offSet, 117);
+            } else {
+                cache = cipher.doFinal(dataByte, offSet, inputLen - offSet);
+            }
+            out.write(cache, 0, cache.length);
+            i++;
+            offSet = i * 117;
+        }
+
+        byte[] encryptedData = out.toByteArray();
+        out.close();
+
+        // Base64-encode the encrypted result
+        return Base64.getEncoder().encodeToString(encryptedData);
+    }
+}
+```
+
+### Java Decryption Code Example
+
+Below is an example of using an **RSA public key** to decrypt response data in Java:
+
+```java
+import javax.crypto.Cipher;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
+public class RSADecrypt {
+    public static String decryptByPublicKeyForOut(String data, String publicKey) throws Exception {
+        // Decode the public key string
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicK = keyFactory.generatePublic(x509EncodedKeySpec);
+
+        // Initialize the cipher
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, publicK);
+
+        byte[] encryptedData = Base64.getDecoder().decode(data);
+        int inputLen = encryptedData.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] cache;
+        int i = 0;
+
+        // Decrypt in segments
+        while (inputLen - offSet > 0) {
+            if (inputLen - offSet > 128) {
+                cache = cipher.doFinal(encryptedData, offSet, 128);
+            } else {
+                cache = cipher.doFinal(encryptedData, offSet, inputLen - offSet);
+            }
+            out.write(cache, 0, cache.length);
+            i++;
+            offSet = i * 128;
+        }
+
+        byte[] decryptedData = out.toByteArray();
+        out.close();
+
+        // Return the decrypted plaintext
+        return new String(decryptedData);
+    }
+}
+```
+
+### Notes
+
+<div className="bg-yellow-50 p-4 rounded-lg border border-yellow-400">
+
+<ul>
+
+<li>
+
+<span className="font-semibold">Public/Private Key Management:</span>
+The platform will assign an <span className="text-blue-600 font-semibold">RSA public key</span> to each merchant. Please store it securely to prevent leaks. The private key is strictly managed by the platform, and merchants do not need to manage it.
+
+</li>
+
+<li>
+
+<span className="font-semibold">Base64 Encoding:</span>
+The results of encryption and decryption must be <span className="text-blue-600 font-semibold">Base64-encoded</span> to ensure data integrity during transmission.
+
+</li>
+
+</ul>
+
 </div>
