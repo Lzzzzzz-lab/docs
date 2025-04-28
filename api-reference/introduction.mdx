@@ -15,155 +15,161 @@ description: 'API 格式约定、支持的代币和风险评分参考'
 <Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
 加密细节
 </Badge>
+
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
 所有请求参数必须以 <span className="text-blue-600 font-semibold">JSON 请求体</span> 的形式构建，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密，并以 <span className="text-blue-600 font-semibold">Base64 编码</span> 的形式提交。加密后的数据应作为 <span className="text-blue-600 font-semibold">data</span> 参数提交。
+
+同时，响应的 <span className="text-blue-600 font-semibold">data</span> 参数也是加密的，开发者需要解密后才能获取明文内容。
 </div>
 
-## API Request Header
+### 请求格式
 
-<div className="overflow-x-auto">
-  <table className="table-auto w-full border-collapse text-center">
-    <thead className="bg-gray-100">
-      <tr>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**属性名**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**Required/Optional**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">**型态**</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/2">**描述**</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300 align-middle">Content-Type</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">multipart/form-data</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300 align-middle">X-API-KEY</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">由平台方分配的 API-KEY</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+```json
+{
+  "data": "EncryptedString"
+}
+```
 
-## 支持的代币
 
-<div className="overflow-x-auto">
-  <table className="table-auto w-full border-collapse text-center">
-    <thead className="bg-gray-100">
-      <tr>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">代币</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/4">链类型</th>
-        <th className="py-2 px-4 border border-gray-300 w-1/2">支持状态</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
-            USDT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
-            USDT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
-            USDT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
-            PHT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
-            PHT
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
-            USDC
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
-            USDC
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
-            ETH
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
-      </tr>
-      <tr className="bg-white">
-        <td className="py-2 px-4 border border-gray-300">
-          <div className="flex items-center justify-center gap-2">
-            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
-            ETH
-          </div>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
-        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-## 风险评分参考
-
-<Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">风险等级</Badge>
+### 加密过程
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-- 🟢 <span className="font-semibold">低风险</span>: `0 ~ 30`，无风险或低风险。
+  - 使用平台提供的 <span className="text-blue-600 font-semibold">RSA 公钥</span> 对请求参数进行加密。
+  - 加密后的数据需进行 <span className="text-blue-600 font-semibold">Base64 编码</span>，并作为 <span className="text-blue-600 font-semibold">data</span> 参数提交。
+</div>
 
-- 🟡 <span className="font-semibold">中等风险</span>: `31 ~ 64`，可能与中高风险地址有交易。
+### 解密过程
 
-- 🟠 <span className="font-semibold">高风险</span>: `65 ~ 84`，建议隔离。
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+  - 平台接收到加密的 <span className="text-blue-600 font-semibold">data</span> 参数后，会使用对应的私钥进行解密。
+  - 返回的响应 <span className="text-blue-600 font-semibold">data</span> 参数同样是加密后的，开发者需使用公钥解密以获得明文。
+</div>
 
-- 🔴 <span className="font-semibold">严重风险</span>: `85 ~ 100`，建议立即隔离。
+---
+
+### Java 加密代码示例
+
+以下是使用 **RSA 公钥** 对数据加密的代码示例：
+
+```java
+import javax.crypto.Cipher;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
+public class RSAEncrypt {
+    public static String encryptByPublicKeyForOut(String data, String publicKey) throws Exception {
+        // 将公钥字符串解码
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicK = keyFactory.generatePublic(x509EncodedKeySpec);
+
+        // 初始化加密器
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, publicK);
+
+        byte[] dataByte = data.getBytes();
+        int inputLen = dataByte.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] cache;
+        int i = 0;
+
+        // 分段加密
+        while (inputLen - offSet > 0) {
+            if (inputLen - offSet > 117) {
+                cache = cipher.doFinal(dataByte, offSet, 117);
+            } else {
+                cache = cipher.doFinal(dataByte, offSet, inputLen - offSet);
+            }
+            out.write(cache, 0, cache.length);
+            i++;
+            offSet = i * 117;
+        }
+
+        byte[] encryptedData = out.toByteArray();
+        out.close();
+
+        // 对加密结果进行 Base64 编码
+        return Base64.getEncoder().encodeToString(encryptedData);
+    }
+}
+```
+
+### Java 解密代码示例
+
+以下是使用 **RSA 公钥** 对响应数据解密的代码示例：
+
+```java
+import javax.crypto.Cipher;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
+public class RSADecrypt {
+    public static String decryptByPublicKeyForOut(String data, String publicKey) throws Exception {
+        // 将公钥字符串解码
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicK = keyFactory.generatePublic(x509EncodedKeySpec);
+
+        // 初始化解密器
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, publicK);
+
+        byte[] encryptedData = Base64.getDecoder().decode(data);
+        int inputLen = encryptedData.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] cache;
+        int i = 0;
+
+        // 分段解密
+        while (inputLen - offSet > 0) {
+            if (inputLen - offSet > 128) {
+                cache = cipher.doFinal(encryptedData, offSet, 128);
+            } else {
+                cache = cipher.doFinal(encryptedData, offSet, inputLen - offSet);
+            }
+            out.write(cache, 0, cache.length);
+            i++;
+            offSet = i * 128;
+        }
+
+        byte[] decryptedData = out.toByteArray();
+        out.close();
+
+        // 返回解密后的明文
+        return new String(decryptedData);
+    }
+}
+```
+
+### 注意事项
+
+<div className="bg-yellow-50 p-4 rounded-lg border border-yellow-400">
+
+<ul>
+
+<li>
+
+<span className="font-semibold">公钥/私钥管理：</span>
+平台会为每个商户分配 <span className="text-blue-600 font-semibold">RSA 公钥</span>，请妥善保存，避免泄露。私钥由平台严格保管，商户无需关心。
+
+</li>
+
+
+<li>
+
+<span className="font-semibold">Base64 编码：</span>
+加密和解密的结果需进行 <span className="text-blue-600 font-semibold">Base64 编解码</span>，确保数据在传输过程中不出问题。
+
+</li>
+
+</ul>
+
 </div>
