@@ -24,7 +24,7 @@
             "description": "请求内容类型。",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -150,7 +150,7 @@
             "description": "请求内容类型。",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -234,7 +234,7 @@
             "description": "请求内容类型。",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -317,7 +317,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -476,7 +476,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -558,7 +558,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -651,7 +651,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -751,7 +751,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -871,7 +871,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
@@ -952,7 +952,7 @@
             "description": "请求内容类型",
             "schema": {
               "type": "string",
-              "example": "application/json"
+              "example": "multipart/form-data"
             }
           },
           {
