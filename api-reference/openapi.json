@@ -901,7 +901,6 @@
                 "amount": 0.5,
                 "symbol": "TRX",
                 "chainName": "TRON",
-                "txId": "tx12345",
                 "toAddr": "toAddress123",
                 "tag": ""
               }
@@ -982,7 +981,6 @@
                 "amount": 0.5,
                 "symbol": "TRX",
                 "chainName": "TRON",
-                "txId": "tx12345",
                 "toAddr": "toAddress123",
                 "tag": ""
               }
@@ -1474,10 +1472,6 @@
             "type": "string",
             "description": "链名"
           },
-          "txId": {
-            "type": "string",
-            "description": "交易ID"
-          },
           "toAddr": {
             "type": "string",
             "description": "目标地址"
@@ -1569,10 +1563,6 @@
           "chainName": {
             "type": "string",
             "description": "链名"
-          },
-          "txId": {
-            "type": "string",
-            "description": "交易ID"
           },
           "toAddr": {
             "type": "string",
