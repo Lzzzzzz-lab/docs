@@ -22,6 +22,17 @@
             ]
           },
           {
+            "group": "系统流程图",
+            "pages": [
+              "system-flow/funds-flow-cn",
+              "system-flow/deposit-flow-cn",
+              "system-flow/withdrawal-flow-cn",
+              "system-flow/checkout-flow-cn",
+              "system-flow/aggregation-flow-cn",
+              "system-flow/risk-notification-flow-cn"
+            ]
+          },
+          {
             "group": "收银台",
             "pages": [
               "api-reference/checkout-page",
@@ -48,17 +59,6 @@
               "api-reference/webhook/webhook-callback",
               "api-reference/webhook/withdraw-confirmation-callback"
             ]
-          },
-          {
-            "group": "系统流程图",
-            "pages": [
-              "system-flow/checkout-flow-cn",
-              "system-flow/withdrawal-flow-cn",
-              "system-flow/aggregation-flow-cn",
-              "system-flow/deposit-flow-cn",
-              "system-flow/risk-notification-flow-cn",
-              "system-flow/funds-flow-cn"
-            ]
           }
         ]
       },
@@ -72,6 +72,17 @@
               "api-reference/en/deposit-modes-overview",
               "api-reference/en/introduction"
 
+            ]
+          },
+          {
+            "group": "System Flow Chart",
+            "pages": [
+              "system-flow/funds-flow-en",
+              "system-flow/deposit-flow-en",
+              "system-flow/withdrawal-flow-en",
+              "system-flow/checkout-flow-en",
+              "system-flow/aggregation-flow-en",
+              "system-flow/risk-notification-flow-en"
             ]
           },
           {
@@ -100,16 +111,6 @@
               "api-reference/endpoint/en/withdrawRequest",
               "api-reference/endpoint/en/getWithdrawOrder",
               "api-reference/endpoint/en/getUserDailyStatistics"
-            ]
-          },
-          {
-            "group": "System Flow Chart",
-            "pages": [
-              "system-flow/withdrawal-flow-en",
-              "system-flow/aggregation-flow-en",
-              "system-flow/deposit-flow-en",
-              "system-flow/risk-notification-flow-en",
-              "system-flow/funds-flow-en"
             ]
           }
         ]
