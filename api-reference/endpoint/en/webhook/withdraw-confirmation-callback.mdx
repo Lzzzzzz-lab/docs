@@ -57,22 +57,25 @@ When a merchant uses the Request Withdrawal Order (Secondary Confirmation Requir
 
 Below is the request body parameter template:
 
-| Attribute Name          | Type       | Required | Example Value                | Description                       |
+| Attribute Name          | Type       | Required | Example Value                 | Description                       |
 |------------------|------------|------|-----------------------|----------------------------|
-| `tenantUserId`   | `string`   | Yes   | `tenant123`           | Merchant user identifier.             |
-| `requestUUID`    | `string`   | Yes   | `2137890`             | 	Unique identifier for the request.        |
-| `trackingId`     | `string`   | Yes   | `track-4567`          | Order tracking ID.             |
-| `type`           | `integer`  | Yes   | `2`                   | Callback type (see enum values below).   |
-| `callBackId`     | `string`   | No   | `12345`               | 	Callback ID.                  |
-| `chainName`      | `string`   | No   | `TRON`                | 	Blockchain name.               |
-| `symbol`         | `string`   | No   | `USDT`                | Currency symbol.                 |
-| `amount`         | `number`   | No   | `0.5`                 | Amount.                    |
-| `txId`           | `string`   | No   | `22e1c72076...`       | Transaction ID.                 |
-| `toAddress`      | `string`   | No   | `TUekuiBgdk...`       | Destination address.                |
-| `fromAddress`    | `string`   | No   | `TUekuiBgdk...`       | Source address.                   |
-| `newAddress`     | `string`   | No   | `TUekuiBgdk...`       | New address (only used when the type is 4). |
-| `riskLevelFrom`  | `integer`  | No   | `15`                  | Risk score of the deposit source address (present when type is 1). |
-| `riskLevelTo`    | `integer`  | No   | `15`                  | Risk score of the deposit destination address (present when type is 1). |
+| `tenantUserId`   | `String`   | Yes   | `tenant123`           | 	Merchant user identifier.            |
+| `requestUUID`    | `String`   | Yes   | `2137890`             | Unique identifier for the request.        |
+| `trackingId`     | `String`   | Yes   | `track-4567`          | 	Order tracking ID.            |
+| `type`           | `Integer`  | Yes   | `2`                   | Callback type  |
+| `business`       | `Integer`  | Yes   | `0`                   | 	Tenant type (no actual control effect currently).   |
+| `callBackId`     | `String`   | No   | `12345`               | 	Callback ID.                |
+| `toAddress`      | `String`   | No   | `TUekuiBgdk...`       | Target address.             |
+| `chainName`      | `String`   | No   | `TRON`                | Blockchain name.              |
+| `txId`           | `String`   | No   | `22e1c72076...`       | Transaction ID.                |
+| `symbol`         | `String`   | No   | `USDT`                | Symbol                |
+| `amount`         | `String`   | No   | `0.5`                 | Amount                     |
+| `txIndex`        | `Integer`  | No   | `20`                  | 	Transaction index.                  |
+| `tag`            | `String`   | No   | `WITHDRAW_SUCCESSS`| Tag                   |
+| `fromAddress`    | `String`   | No   | `TUekuiBgdk...`       | 	Source address.                   |
+| `newAddress`     | `String`   | No   | `TUekuiBgdk...`       | 	New address (only used when type is 4). |
+| `riskLevelFrom`  | `Integer`  | No   | `15`                  | 	Risk score of the source address (exists when type is 1). |
+| `riskLevelTo`    | `Integer`  | No   | `15`                  | 	Risk score of the target address (exists when type is 1).|
 
 ### **Request Example**
 
@@ -82,12 +85,15 @@ Below is the request body parameter template:
   "requestUUID": "2137890",
   "trackingId": "track-4567",
   "type": 2,
+  "business": 0,
   "callBackId": "12345",
+  "toAddress": "TUekuiBgdk...",
   "chainName": "TRON",
+  "txId": "22e1c72076...",
   "symbol": "USDT",
   "amount": 0.5,
-  "txId": "22e1c72076...",
-  "toAddress": "TUekuiBgdk...",
+  "txIndex": 20,
+  "tag": "WITHDRAW_SUCCESSS",
   "fromAddress": "TUekuiBgdk...",
   "newAddress": "TUekuiBgdk...",
   "riskLevelFrom": 15,
@@ -99,27 +105,52 @@ Below is the request body parameter template:
 
 ## Response Parameters
 
-| Attribute Name         | Type       | Required | Example Value                | 	Description                       |
-|----------------|------------|------|-----------------------|----------------------------|
-| `errCode`      | `integer`  | Yes   | `0`                   | Error code. 0 indicates success.      |
-| `message`      | `string`   | Yes   | `成功处理请求`        | Response message.                |
-| `data`         | `object`   | Yes   | `{...}`               | Detailed content of the callback data.     |
+| Attribute Name         | Type       | Required | Example Value                 | Description                       |
+|---------------|------------|------|-----------------------|----------------------------|
+| `requestUUID` | `String`   | 是   | `2137890`                   | Unique identifier for the request.     |
+| `userId`      | `String`   | 是   | `1308764`        | 	Tenant ID.               |
+| `createBy`    | `String`   | 是   | ``               | 	Information about the creator (no actual control effect).      |
+| `message`     | `String`   | 是   | ``                   | 	Description message (no actual control effect).     |
+| `apiKey`      | `String`   | 是   | ``        | apiKey                 |
+| `errCode`     | `int`      | 是   | ``               | 	Error code: 0 indicates success; other values indicate failure.     |
+| `data`        | `String`   | 是   | ``               | 	Encrypted data using an RSA public key.     |
+
+Below are the descriptions for the data parameter:
+
+| Attribute Name         | Type       | Example Value          | Description                                   |
+|----------------|------------|-----------------|----------------------------------------|
+| `requestUUID`  | `String`   | `2137890`       | 	Unique identifier for the request, used to uniquely identify it.   |
+| `userId`       | `Integer`  | `1`             | User ID, identifies the specific user who triggered the event.      |
+| `trackingId`     | `String`   | 是   | `track-4567`          | Order tracking ID.             |
+| `address`      | `String`   | `toAddress123`  | Target address, indicates the operation's target address.         |
+| `tenantUserId` | `String`   | `tenant123`     | 	Merchant user identifier, used to differentiate merchant users.     |
+| `chainName`    | `String`   | `TRON`          | Blockchain name, identifies the blockchain where the transaction occurred.    |
+| `symbol`       | `String`   | `USDT`          | 	Currency symbol, identifies the token or currency involved in the transaction. |
+| `callBackId`   | `String`   | `12345`         | 	Callback ID, identifies the current callback event.     |
+| `amount`       | `String`   | `0.5`           | 	Amount, indicates the specific transaction or operation amount.       |
+| `type`         | `Integer`  | `2`             | Callback type, detailed explanation can be found in the callback type  |
 
 ### **Response Example**
 
 ```json
 {
-  "errCode": 0,
+  "requestUUID": "2137890" ,
+  "userId": 1,
+  "createBy":"xxxx",
   "message": "成功处理请求",
+  "apiKey": "your_api_key",
+  "errCode": 0,
   "data": {
-    "requestUUID": "2137890",
-    "tenantUserId": "tenant123",
+    "userId": 1,
     "trackingId": "track-4567",
-    "type": 2,
-    "amount": 0.5,
+    "address": "toAddress123",
+    "tenantUserId": "tenant123",
     "chainName": "TRON",
-    "toAddress": "TUekuiBgdk...",
-    "txId": "22e1c72076..."
+    "symbol":"USDT",
+    "callBackId":"12345",
+    "requestUUID": "2137890",
+    "amount": 0.5,
+    "type": 2,
   }
 }
 ```
