@@ -61,20 +61,24 @@ openapi: false
 
 | 属性名          | 类型       | 必填 | 示例值                | 说明                       |
 |------------------|------------|------|-----------------------|----------------------------|
-| `tenantUserId`   | `string`   | 是   | `tenant123`           | 商户用户标识。             |
-| `requestUUID`    | `string`   | 是   | `2137890`             | 请求的唯一标识符。         |
-| `trackingId`     | `string`   | 是   | `track-4567`          | 订单追踪 ID。              |
-| `type`           | `integer`  | 是   | `2`                   | 回调类型（见下方枚举）。   |
-| `callBackId`     | `string`   | 否   | `12345`               | 回调 ID。                  |
-| `chainName`      | `string`   | 否   | `TRON`                | 区块链名称。               |
-| `symbol`         | `string`   | 否   | `USDT`                | 货币符号。                 |
-| `amount`         | `number`   | 否   | `0.5`                 | 金额。                     |
-| `txId`           | `string`   | 否   | `22e1c72076...`       | 交易 ID。                  |
-| `toAddress`      | `string`   | 否   | `TUekuiBgdk...`       | 目标地址。                 |
-| `fromAddress`    | `string`   | 否   | `TUekuiBgdk...`       | 源地址。                   |
-| `newAddress`     | `string`   | 否   | `TUekuiBgdk...`       | 新地址（仅在类型为 4 时使用）。 |
-| `riskLevelFrom`  | `integer`  | 否   | `15`                  | 存币来源地址风险评分（类型为 1 时存在）。 |
-| `riskLevelTo`    | `integer`  | 否   | `15`                  | 存币目标地址风险评分（类型为 1 时存在）。 |
+| `tenantUserId`   | `String`   | 是   | `tenant123`           | 商户用户标识。             |
+| `requestUUID`    | `String`   | 是   | `2137890`             | 请求的唯一标识符。         |
+| `trackingId`     | `String`   | 是   | `track-4567`          | 订单追踪 ID。              |
+| `type`           | `Integer`  | 是   | `2`                   | 回调类型（见下方枚举）。   |
+| `business`       | `Integer`  | 是   | `0`                   | 所属租户类型（暂无实际控制作用）   |
+| `callBackId`     | `String`   | 否   | `12345`               | 回调 ID。                  |
+| `toAddress`      | `String`   | 否   | `TUekuiBgdk...`       | 目标地址。                 |
+| `chainName`      | `String`   | 否   | `TRON`                | 区块链名称。               |
+| `txId`           | `String`   | 否   | `22e1c72076...`       | 交易 ID。                  |
+| `symbol`         | `String`   | 否   | `USDT`                | 货币符号。                 |
+| `amount`         | `String`   | 否   | `0.5`                 | 金额。                     |
+| `txIndex`        | `Integer`  | 否   | `20`                  | 交易索引。                  |
+| `tag`            | `String`   | 否   | `WITHDRAW_SUCCESSS`| 标签。                   |
+| `fromAddress`    | `String`   | 否   | `TUekuiBgdk...`       | 源地址。                   |
+| `newAddress`     | `String`   | 否   | `TUekuiBgdk...`       | 新地址（仅在类型为 4 时使用）。 |
+| `riskLevelFrom`  | `Integer`  | 否   | `15`                  | 存币来源地址风险评分（类型为 1 时存在）。 |
+| `riskLevelTo`    | `Integer`  | 否   | `15`                  | 存币目标地址风险评分（类型为 1 时存在）。 |
+
 
 ### **请求示例**
 
@@ -84,12 +88,15 @@ openapi: false
   "requestUUID": "2137890",
   "trackingId": "track-4567",
   "type": 2,
+  "business": 0,
   "callBackId": "12345",
+  "toAddress": "TUekuiBgdk...",
   "chainName": "TRON",
+  "txId": "22e1c72076...",
   "symbol": "USDT",
   "amount": 0.5,
-  "txId": "22e1c72076...",
-  "toAddress": "TUekuiBgdk...",
+  "txIndex": 20,
+  "tag": "WITHDRAW_SUCCESSS",
   "fromAddress": "TUekuiBgdk...",
   "newAddress": "TUekuiBgdk...",
   "riskLevelFrom": 15,
@@ -102,10 +109,29 @@ openapi: false
 ## 响应参数
 
 | 属性名         | 类型       | 必填 | 示例值                | 说明                       |
-|----------------|------------|------|-----------------------|----------------------------|
-| `errCode`      | `integer`  | 是   | `0`                   | 错误码，`0` 表示成功。      |
-| `message`      | `string`   | 是   | `成功处理请求`        | 响应消息。                 |
-| `data`         | `object`   | 是   | `{...}`               | 回调数据的具体内容。       |
+|---------------|------------|------|-----------------------|----------------------------|
+| `requestUUID` | `String`   | 是   | `2137890`                   | 请求的唯一标识符     |
+| `userId`      | `String`   | 是   | `1308764`        | 租户ID               |
+| `createBy`    | `String`   | 是   | ``               | 创建者信息，无实际控制作用       |
+| `message`     | `String`   | 是   | ``                   | 信息描述，无实际控制作用     |
+| `apiKey`      | `String`   | 是   | ``        | apiKey                 |
+| `errCode`     | `int`      | 是   | ``               | 错误码，0表示成功，其它值表示失败     |
+| `data`        | `String`   | 是   | ``               | 用RSA公钥加密后的密文数据      |
+
+以下为响应中 data 参数说明：
+
+| 属性名         | 类型       | 示例值          | 说明                                   |
+|----------------|------------|-----------------|----------------------------------------|
+| `requestUUID`  | `String`   | `2137890`       | 请求的唯一标识符，用于唯一标记请求。   |
+| `userId`       | `Integer`  | `1`             | 用户 ID，标识触发事件的具体用户。      |
+| `trackingId`     | `String` |  `track-4567`          | 订单追踪 ID。              |
+| `address`      | `String`   | `toAddress123`  | 目标地址，表示操作的目标地址。         |
+| `tenantUserId` | `String`   | `tenant123`     | 商户用户标识，用于区分商户用户。       |
+| `chainName`    | `String`   | `TRON`          | 区块链名称，标识交易所在的区块链。     |
+| `symbol`       | `String`   | `USDT`          | 货币符号，标识交易所涉及的代币或货币。 |
+| `callBackId`   | `String`   | `12345`         | 回调 ID，标识当前回调事件的 ID。       |
+| `amount`       | `String`   | `0.5`           | 金额，表示交易或操作的具体数额。       |
+| `type`         | `Integer`  | `2`             | 回调类型，详细说明见回调类型枚举值。   |
 
 ### **响应示例**
 
@@ -113,17 +139,23 @@ openapi: false
 
 ```json
 {
-  "errCode": 0,
+  "requestUUID": "2137890" ,
+  "userId": 1,
+  "createBy":"xxxx",
   "message": "成功处理请求",
+  "apiKey": "your_api_key",
+  "errCode": 0,
   "data": {
-    "requestUUID": "2137890",
-    "tenantUserId": "tenant123",
+    "userId": 1,
     "trackingId": "track-4567",
-    "type": 2,
-    "amount": 0.5,
+    "address": "toAddress123",
+    "tenantUserId": "tenant123",
     "chainName": "TRON",
-    "toAddress": "TUekuiBgdk...",
-    "txId": "22e1c72076..."
+    "symbol":"USDT",
+    "callBackId":"12345",
+    "requestUUID": "2137890",
+    "amount": 0.5,
+    "type": 2,
   }
 }
 ```
