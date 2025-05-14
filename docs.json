@@ -95,13 +95,6 @@
             ]
           },
           {
-            "group": "Merchant Callback API",
-            "pages": [
-              "api-reference/endpoint/en/webhook/webhook-callback",
-              "api-reference/endpoint/en/webhook/withdraw-confirmation-callback"
-            ]
-          },
-          {
             "group": "List of API Endpoints",
             "pages": [
               "api-reference/endpoint/en/getUserAddress",
@@ -111,6 +104,13 @@
               "api-reference/endpoint/en/withdrawRequest",
               "api-reference/endpoint/en/getWithdrawOrder",
               "api-reference/endpoint/en/getUserDailyStatistics"
+            ]
+          },
+          {
+            "group": "Merchant Callback API",
+            "pages": [
+              "api-reference/endpoint/en/webhook/webhook-callback",
+              "api-reference/endpoint/en/webhook/withdraw-confirmation-callback"
             ]
           }
         ]

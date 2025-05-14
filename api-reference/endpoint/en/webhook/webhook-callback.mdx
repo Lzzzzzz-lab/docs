@@ -176,13 +176,13 @@ Below are the enum values for the type parameter and their descriptions:
 
 | Attribute Name         | Type       | Required | Example Value                 | Description                       |
 |---------------|------------|------|-----------------------|----------------------------|
-| `requestUUID` | `String`   | 是   | `2137890`                   | Unique identifier for the request.     |
-| `userId`      | `String`   | 是   | `1308764`        | 	Tenant ID.               |
-| `createBy`    | `String`   | 是   | ``               | 	Information about the creator (no actual control effect).      |
-| `message`     | `String`   | 是   | ``                   | 	Description message (no actual control effect).     |
-| `apiKey`      | `String`   | 是   | ``        | apiKey                 |
-| `errCode`     | `int`      | 是   | ``               | 	Error code: 0 indicates success; other values indicate failure.     |
-| `data`        | `String`   | 是   | ``               | 	Encrypted data using an RSA public key.     |
+| `requestUUID` | `String`   | Yes   | `2137890`                   | Unique identifier for the request.     |
+| `userId`      | `String`   | Yes   | `1308764`        | 	Tenant ID.               |
+| `createBy`    | `String`   | Yes   | ``               | 	Information about the creator (no actual control effect).      |
+| `message`     | `String`   | Yes   | ``                   | 	Description message (no actual control effect).     |
+| `apiKey`      | `String`   | Yes   | ``        | apiKey                 |
+| `errCode`     | `int`      | Yes   | ``               | 	Error code: 0 indicates success; other values indicate failure.     |
+| `data`        | `String`   | Yes   | ``               | 	Encrypted data using an RSA public key.     |
 
 Below are the descriptions for the data parameter:
 
@@ -190,7 +190,7 @@ Below are the descriptions for the data parameter:
 |----------------|------------|-----------------|----------------------------------------|
 | `requestUUID`  | `String`   | `2137890`       | 	Unique identifier for the request, used to uniquely identify it.   |
 | `userId`       | `Integer`  | `1`             | User ID, identifies the specific user who triggered the event.      |
-| `trackingId`     | `String`   | 是   | `track-4567`          | Order tracking ID.             |
+| `trackingId`     | `String` | `track-4567`          | Order tracking ID.             |
 | `address`      | `String`   | `toAddress123`  | Target address, indicates the operation's target address.         |
 | `tenantUserId` | `String`   | `tenant123`     | 	Merchant user identifier, used to differentiate merchant users.     |
 | `chainName`    | `String`   | `TRON`          | Blockchain name, identifies the blockchain where the transaction occurred.    |
