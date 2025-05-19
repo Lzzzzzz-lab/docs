@@ -10,6 +10,35 @@ description: 'API Format Conventions, Supported Tokens, and Risk Scoring Referen
   - ETH wallet addresses use <span className="text-black font-semibold">lowercase</span> letters.
 </div>
 
+## API Request Header
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Attribute Name**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Required/Optional**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Type**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/2">**Description**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">Content-Type</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">multipart/form-data</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">X-API-KEY</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Assigned API-KEY by the platform.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 ## API Format Conventions
 
 <Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
@@ -177,4 +206,126 @@ The results of encryption and decryption must be <span className="text-blue-600 
 
 </ul>
 
+</div>
+
+---
+
+## Supported Tokens
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Token**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Chain**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/2">**Support Status**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
+            USDT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
+            USDT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
+            USDT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
+            PHT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
+            PHT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
+            USDC
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ Supported</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
+            USDC
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
+            ETH
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
+            ETH
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ Under Development</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## Risk Scoring Reference
+
+<Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">Risk Level</Badge>
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+- 🟢 <span className="font-semibold">Low Risk</span>: `0 ~ 30`, no risk or low risk.
+
+- 🟡 <span className="font-semibold">Medium Risk</span>: `31 ~ 64`, may have transactions with medium or high-risk addresses.
+
+- 🟠 <span className="font-semibold">High Risk</span>: `65 ~ 84`, recommended to isolate.
+
+- 🔴 <span className="font-semibold">Severe Risk</span>: `85 ~ 100`, immediate isolation is recommended.
 </div>
