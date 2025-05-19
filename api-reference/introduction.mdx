@@ -10,6 +10,35 @@ description: 'API 格式约定、支持的代币和风险评分参考'
   - ETH 钱包地址使用 <span className="text-black font-semibold">小写</span> 字母。
 </div>
 
+## API Request Header
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**属性名**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**Required/Optional**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">**型态**</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/2">**描述**</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">Content-Type</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">multipart/form-data</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300 align-middle">X-API-KEY</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">Required</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">String</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">由平台方分配的 API-KEY</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 ## API 格式约定
 
 <Badge type="info" className="bg-blue-500 text-white px-2 py-1 rounded">
@@ -172,4 +201,126 @@ public class RSADecrypt {
 
 </ul>
 
+</div>
+
+---
+
+## 支持的代币
+
+<div className="overflow-x-auto">
+  <table className="table-auto w-full border-collapse text-center">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">代币</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/4">链类型</th>
+        <th className="py-2 px-4 border border-gray-300 w-1/2">支持状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
+            USDT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
+            USDT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDT.png" alt="USDT Logo" className="w-6 h-6" />
+            USDT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
+            PHT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">TRC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/PHT.png" alt="PHT Logo" className="w-6 h-6" />
+            PHT
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
+            USDC
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-green-600 font-semibold">✅ 已支持</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/USDC.png" alt="USDC Logo" className="w-6 h-6" />
+            USDC
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
+            ETH
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">ERC20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+      <tr className="bg-white">
+        <td className="py-2 px-4 border border-gray-300">
+          <div className="flex items-center justify-center gap-2">
+            <img src="/logo/ETH.png" alt="ETH Logo" className="w-6 h-6" />
+            ETH
+          </div>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 align-middle">BEP20</td>
+        <td className="py-2 px-4 border border-gray-300 align-middle text-yellow-500 font-semibold">⏳ 开发中</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## 风险评分参考
+
+<Badge type="warning" className="bg-yellow-500 text-white px-2 py-1 rounded">风险等级</Badge>
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+- 🟢 <span className="font-semibold">低风险</span>: `0 ~ 30`，无风险或低风险。
+
+- 🟡 <span className="font-semibold">中等风险</span>: `31 ~ 64`，可能与中高风险地址有交易。
+
+- 🟠 <span className="font-semibold">高风险</span>: `65 ~ 84`，建议隔离。
+
+- 🔴 <span className="font-semibold">严重风险</span>: `85 ~ 100`，建议立即隔离。
 </div>
