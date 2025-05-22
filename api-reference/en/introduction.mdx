@@ -46,17 +46,17 @@ Encryption Details
 </Badge>
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-All request parameters must be constructed in the form of a <span className="text-blue-600 font-semibold">JSON request body</span>, encrypted using a <span className="text-blue-600 font-semibold">RSA public key</span>, and submitted in the form of <span className="text-blue-600 font-semibold">Base64-encoded</span> data. The encrypted data should be submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
+All request parameters must be constructed in the form of <span className="text-blue-600 font-semibold">form-data</span>, encrypted using <span className="text-blue-600 font-semibold">RSA public key</span>, and submitted in <span className="text-blue-600 font-semibold">Base64 encoding</span>. The encrypted data should be submitted as the <span className="text-blue-600 font-semibold">data</span> parameter.
 
-Likewise, the <span className="text-blue-600 font-semibold">data</span> parameter in the response is also encrypted, and developers need to decrypt it to obtain the plaintext content.
+Additionally, the <span className="text-blue-600 font-semibold">data</span> parameter in the response is also encrypted, and developers need to decrypt it to obtain the plaintext content.
 </div>
 
 ### Request Format
 
-```json
-{
-  "data": "EncryptedString"
-}
+```
+Content-Disposition: form-data; name="data"
+
+U2FsdGVkX1+... (EncryptedString)
 ```
 
 

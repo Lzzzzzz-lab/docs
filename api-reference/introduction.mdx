@@ -46,17 +46,17 @@ description: 'API 格式约定、支持的代币和风险评分参考'
 </Badge>
 
 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-所有请求参数必须以 <span className="text-blue-600 font-semibold">JSON 请求体</span> 的形式构建，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密，并以 <span className="text-blue-600 font-semibold">Base64 编码</span> 的形式提交。加密后的数据应作为 <span className="text-blue-600 font-semibold">data</span> 参数提交。
+所有请求参数必须以 <span className="text-blue-600 font-semibold">form-data</span> 的形式构建，使用 <span className="text-blue-600 font-semibold">RSA 公钥</span> 加密，并以 <span className="text-blue-600 font-semibold">Base64 编码</span> 的形式提交。加密后的数据应作为 <span className="text-blue-600 font-semibold">data</span> 参数提交。
 
 同时，响应的 <span className="text-blue-600 font-semibold">data</span> 参数也是加密的，开发者需要解密后才能获取明文内容。
 </div>
 
 ### 请求格式
 
-```json
-{
-  "data": "EncryptedString"
-}
+```
+Content-Disposition: form-data; name="data"
+
+U2FsdGVkX1+... (加密后的数据)
 ```
 
 
