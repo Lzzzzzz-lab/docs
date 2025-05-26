@@ -1367,7 +1367,7 @@
             "description": "标签"
           }
         },
-        "required": ["callBackId", "tag"]
+        "required": ["userId","tenantUserId","tenantType","amount","symbol","chainName","toAddr"]
       },
       "GetWithdrawOrderResponse": {
         "type": "object",
@@ -1481,7 +1481,7 @@
             "description": "标签"
           }
         },
-        "required": ["txId", "tag"]
+        "required": ["callBackId","userId","tenantUserId","tenantType","amount","symbol","chainName","toAddr"]
       },
       "WithdrawRequestSpeedDto":{
         "type": "object",
@@ -1531,7 +1531,7 @@
             "description": "标签"
           }
         },
-        "required": ["txId", "tag"]
+        "required": ["userId","tenantUserId","tenantType","amount","symbol","chainName","toAddr"]
       },
       "WithdrawRequestDto": {
         "type": "object",
@@ -1573,7 +1573,7 @@
             "description": "标签"
           }
         },
-        "required": ["txId", "tag"]
+        "required": ["callBackId", "userId","tenantUserId","tenantType","amount","symbol","chainName","toAddr"]
       },
       "WithdrawResponse": {
         "type": "object",
