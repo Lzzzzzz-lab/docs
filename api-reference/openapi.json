@@ -1503,7 +1503,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
