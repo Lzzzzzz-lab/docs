@@ -46,7 +46,6 @@
             "pages": [
               "api-reference/endpoint/getUserAddress",
               "api-reference/endpoint/speedUp",
-              "api-reference/endpoint/getDepositOrder",
               "api-reference/endpoint/withdrawWithoutVerify",
               "api-reference/endpoint/withdrawRequest",
               "api-reference/endpoint/getWithdrawOrder",
@@ -99,7 +98,6 @@
             "pages": [
               "api-reference/endpoint/en/getUserAddress",
               "api-reference/endpoint/en/speedUp",
-              "api-reference/endpoint/en/getDepositOrder",
               "api-reference/endpoint/en/withdrawWithoutVerify",
               "api-reference/endpoint/en/withdrawRequest",
               "api-reference/endpoint/en/getWithdrawOrder",
