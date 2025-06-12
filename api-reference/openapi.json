@@ -221,7 +221,8 @@
           }
         }
       }
-    },"/api/deposit/getUserAddressIndependent": {
+    },
+    "/api/deposit/getUserAddressIndependent": {
       "post": {
         "tags": ["deposit-controller"],
         "summary": "获取用户存款地址接口（含收银台页面）",
@@ -249,7 +250,7 @@
           }
         ],
         "requestBody": {
-          "description": "获取存款地址的请求参数（JSON 格式）。",
+          "description": "获取存款地址的请求参数。",
           "required": true,
           "content": {
             "application/json": {
@@ -270,13 +271,34 @@
                 "example": {
                   "code": 0,
                   "message": "success",
-                  "data": {
-                    "depositAmount": "50.25",
-                    "chainName": "TRON",
-                    "symbol": "USDT",
-                    "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-                    "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
-                  }
+                  "data": [
+                    {
+                      "chainName": "TRON",
+                      "symbol": "USDT",
+                      "depositAmount": "50.25",
+                      "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
+                      "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0=",
+                      "expirationDate": 1750316452823,
+                      "paymentValidity": 300,
+                      "orderId": "order-20250425-001",
+                      "showDepositNotice": true,
+                      "showExchangeRate": "1 USDT = 7.2 CNY",
+                      "showMerchantLogo": true
+                    },
+                    {
+                      "chainName": "ETH",
+                      "symbol": "USDT",
+                      "depositAmount": "75.10",
+                      "depositAddress": "0xa0e0cfd25f5db034abfd69cd555cb5d8cfe91aea",
+                      "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNzUuMTAiLCJjaGFpbk5hbWUiOiXAyFpIn0=",
+                      "expirationDate": 1750316453102,
+                      "paymentValidity": 300,
+                      "orderId": "order-20250425-002",
+                      "showDepositNotice": true,
+                      "showExchangeRate": "1 USDT = 7.2 CNY",
+                      "showMerchantLogo": true
+                    }
+                  ]
                 }
               }
             }
@@ -1071,7 +1093,7 @@
             "description": "存款金额"
           },
           "paymentValidity": {
-            "type": "number",
+            "type": "integer",
             "description": "支付有效时间（秒），没有就不显示倒计时，只能是数字，且 >= 5",
             "minimum": 5
           },
@@ -1094,20 +1116,27 @@
             "default": true
           }
         },
-        "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"],
-        "example": {
-          "chainName": "TRON",
-          "symbol": "USDT",
-          "tenantUserId": "tenant123",
-          "userId": "user456",
-          "tenantType": "merchant",
-          "depositAmount": "50.25",
-          "paymentValidity": 300,
-          "orderId": "order-20250425-001",
-          "showDepositNotice": true,
-          "showExchangeRate": "1 USDT = 7.2 CNY",
-          "showMerchantLogo": true
-        }
+        "required": ["chainName", "symbol", "tenantUserId", "paymentValidity"],
+        "example": [
+          {
+            "chainName": "ETH",
+            "symbol": "USDT",
+            "tenantUserId": "999208",
+            "depositAmount": "2",
+            "paymentValidity": 300,
+            "orderId": "23123123213",
+            "showExchangeRate": "123213"
+          },
+          {
+            "chainName": "TRON",
+            "symbol": "USDT",
+            "tenantUserId": "999208",
+            "depositAmount": "2",
+            "paymentValidity": 300,
+            "orderId": "23123123213",
+            "showExchangeRate": "123213"
+          }
+        ]
       },
       "GetUserAddressIndependentResponse": {
         "type": "object",
@@ -1121,44 +1150,61 @@
             "description": "返回消息。"
           },
           "data": {
-            "type": "object",
-            "description": "存款详细信息。",
-            "properties": {
-              "depositAmount": {
-                "type": "string",
-                "description": "存款金额,如果商户在请求中提供了存款金额，响应中也将返回该参数，以实现二次确认的效果。"
+            "type": "array",
+            "description": "存款详细信息数组，每个元素包含特定链的存款信息",
+            "items": {
+              "type": "object",
+              "properties": {
+                "chainName": {
+                  "type": "string",
+                  "description": "链名称，例如 ETH、TRON 等"
+                },
+                "symbol": {
+                  "type": "string",
+                  "description": "币种符号，例如 USDT"
+                },
+                "depositAmount": {
+                  "type": "string",
+                  "description": "存款金额，如果商户在请求中提供了存款金额，响应中也将返回该参数"
+                },
+                "depositAddress": {
+                  "type": "string",
+                  "description": "返回的存款地址"
+                },
+                "depositUrl": {
+                  "type": "string",
+                  "description": "收银台页面 URL"
+                },
+                "expirationDate": {
+                  "type": "integer",
+                  "description": "过期时间戳（毫秒）",
+                  "format": "int64"
+                },
+                "paymentValidity": {
+                  "type": "integer",
+                  "description": "支付有效时间（秒）"
+                },
+                "orderId": {
+                  "type": "string",
+                  "description": "商户订单号"
+                },
+                "showDepositNotice": {
+                  "type": "boolean",
+                  "description": "是否展示存币须知"
+                },
+                "showExchangeRate": {
+                  "type": "string",
+                  "description": "展示的汇率信息"
+                },
+                "showMerchantLogo": {
+                  "type": "boolean",
+                  "description": "是否展示商户LOGO"
+                }
               },
-              "chainName": {
-                "type": "string",
-                "description": "链名称，例如 TRON 等。"
-              },
-              "symbol": {
-                "type": "string",
-                "description": "币种符号，例如 USDT。"
-              },
-              "depositAddress": {
-                "type": "string",
-                "description": "返回的存款地址。"
-              },
-              "depositUrl": {
-                "type": "string",
-                "description": "收银台页面 URL。"
-              }
+              "required": ["chainName", "symbol", "depositAddress", "depositUrl"]
             }
           }
         },
-        "example": {
-          "code": 0,
-          "message": "success",
-          "data": {
-            "depositAmount": "50.25",
-            "chainName": "TRON",
-            "symbol": "USDT",
-            "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-            "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
-          }
-        }
-      },
       "GetUserAddressShareRequest": {
         "type": "object",
         "properties": {
@@ -1339,7 +1385,7 @@
             "description": "三方不同业务类型"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
@@ -1392,7 +1438,7 @@
                 "description": "基础货币"
               },
               "amount": {
-                "type": "String",
+                "type": "string",
                 "description": "金额,最多支持小数点后6位。"
               },
               "orderState": {
@@ -1461,7 +1507,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
@@ -1553,7 +1599,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
