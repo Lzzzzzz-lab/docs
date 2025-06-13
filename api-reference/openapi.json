@@ -225,7 +225,7 @@
     "/api/deposit/getUserAddressIndependent": {
       "post": {
         "tags": ["deposit-controller"],
-        "summary": "获取用户存款地址接口（含收银台页面）",
+        "summary": "获取用户存款地址接口（含收银台页面）[支持多币种]",
         "operationId": "getUserAddressWithCounter",
         "parameters": [
           {
@@ -235,7 +235,7 @@
             "description": "请求内容类型。",
             "schema": {
               "type": "string",
-              "example": "multipart/form-data"
+              "example": "application/json"
             }
           },
           {
@@ -250,53 +250,44 @@
           }
         ],
         "requestBody": {
-          "description": "获取存款地址的请求参数。",
+          "description": "获取存款地址的请求参数列表（JSON 数组格式）",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetUserAddressIndependentRequest"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserAddressIndependentDto"
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "成功响应，返回存款地址和支付详情。",
+            "description": "成功响应，返回存款地址和支付详情列表",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserAddressIndependentResponse"
+                  "$ref": "#/components/schemas/ListUserAddressResponse"
                 },
                 "example": {
                   "code": 0,
                   "message": "success",
                   "data": [
                     {
-                      "chainName": "TRON",
-                      "symbol": "USDT",
-                      "depositAmount": "50.25",
-                      "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-                      "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0=",
-                      "expirationDate": 1750316452823,
-                      "paymentValidity": 300,
-                      "orderId": "order-20250425-001",
-                      "showDepositNotice": true,
-                      "showExchangeRate": "1 USDT = 7.2 CNY",
-                      "showMerchantLogo": true
-                    },
-                    {
                       "chainName": "ETH",
                       "symbol": "USDT",
-                      "depositAmount": "75.10",
+                      "depositAmount": "2",
                       "depositAddress": "0xa0e0cfd25f5db034abfd69cd555cb5d8cfe91aea",
-                      "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNzUuMTAiLCJjaGFpbk5hbWUiOiXAyFpIn0=",
-                      "expirationDate": 1750316453102,
-                      "paymentValidity": 300,
-                      "orderId": "order-20250425-002",
-                      "showDepositNotice": true,
-                      "showExchangeRate": "1 USDT = 7.2 CNY",
-                      "showMerchantLogo": true
+                      "depositUrl": "https://waas-payment-hk.example.com/deposit?data=eyJkYXRhIjpbeyJjaGFpbk..."
+                    },
+                    {
+                      "chainName": "TRON",
+                      "symbol": "USDT",
+                      "depositAmount": "2",
+                      "depositAddress": "TUsZTPVTqE3jj5h8x4n8YVnApU57iwfAry",
+                      "depositUrl": "https://waas-payment-hk.example.com/deposit?data=W3siY2hhaW5OYW1lIjoiVFI..."
                     }
                   ]
                 }
@@ -304,12 +295,12 @@
             }
           },
           "400": {
-            "description": "参数错误或存款金额重复。",
+            "description": "参数错误或存款金额重复",
             "content": {
               "application/json": {
                 "example": {
                   "code": "INVALID_AMOUNT",
-                  "message": "金额格式错误：小数点后最多六位。"
+                  "message": "金额格式错误：小数点后最多六位"
                 }
               }
             }
@@ -1041,6 +1032,7 @@
       }
     }
   },
+
   "components": {
     "schemas": {
       "GetDepositOrderRequest": {
@@ -1073,7 +1065,7 @@
         },
         "required": []
       },
-      "GetUserAddressIndependentRequest": {
+      "UserAddressIndependentDto": {
         "type": "object",
         "properties": {
           "chainName": {
@@ -1094,117 +1086,121 @@
           },
           "paymentValidity": {
             "type": "integer",
-            "description": "支付有效时间（秒），没有就不显示倒计时，只能是数字，且 >= 5",
-            "minimum": 5
+            "description": "支付有效时间（秒），不传则不显示倒计时",
+            "minimum": 5,
+            "example": 600
           },
           "orderId": {
             "type": "string",
-            "description": "商户方的订单号，没有就不显示，请商户方确保该订单号的唯一性"
+            "description": "商户订单号（确保唯一性）"
           },
           "showDepositNotice": {
             "type": "boolean",
-            "description": "是否展示存币须知，可选，默认 true",
+            "description": "是否展示存币须知",
             "default": true
           },
           "showExchangeRate": {
             "type": "string",
-            "description": "展示汇率信息，例如 '1 USDT = 7.2 CNY'"
+            "description": "展示汇率信息",
+            "example": "1 USDT = 7.2 CNY"
           },
           "showMerchantLogo": {
             "type": "boolean",
-            "description": "是否展示商户LOGO，可选，默认 true",
+            "description": "是否展示商户LOGO",
             "default": true
+          },
+          "language": {
+            "type": "string",
+            "description": "语言代码（如：en(英语),zh_cn(简体中文), zh_hk(繁体中文)）",
+            "example": "zh_cn"
           }
         },
-        "required": ["chainName", "symbol", "tenantUserId", "paymentValidity"],
-        "example": [
-          {
-            "chainName": "ETH",
-            "symbol": "USDT",
-            "tenantUserId": "999208",
-            "depositAmount": "2",
-            "paymentValidity": 300,
-            "orderId": "23123123213",
-            "showExchangeRate": "123213"
-          },
-          {
-            "chainName": "TRON",
-            "symbol": "USDT",
-            "tenantUserId": "999208",
-            "depositAmount": "2",
-            "paymentValidity": 300,
-            "orderId": "23123123213",
-            "showExchangeRate": "123213"
-          }
-        ]
+        "required": ["chainName", "symbol", "tenantUserId"],
+        "example": {
+          "chainName": "TRON",
+          "symbol": "USDT",
+          "tenantUserId": "tenant123",
+          "depositAmount": "50.25",
+          "paymentValidity": 300,
+          "orderId": "order-20250425-001",
+          "showDepositNotice": true,
+          "showExchangeRate": "1 USDT = 7.2 CNY",
+          "showMerchantLogo": true,
+          "language": "zh-cn"
+        }
       },
-      "GetUserAddressIndependentResponse": {
+      "UserAddressIndependentVo": {
+        "type": "object",
+        "properties": {
+          "chainName": {
+            "type": "string",
+            "description": "链名称"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "货币符号"
+          },
+          "depositAmount": {
+            "type": "string",
+            "description": "存款金额"
+          },
+          "depositAddress": {
+            "type": "string",
+            "description": "存款地址"
+          },
+          "depositUrl": {
+            "type": "string",
+            "description": "收银台页面URL"
+          }
+        },
+        "example": {
+          "chainName": "TRON",
+          "symbol": "USDT",
+          "depositAmount": "50.25",
+          "depositAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
+          "depositUrl": "https://checkout.example.com/deposit?data=eyJkZXBvc2l0QW1vdW50IjoiNTAuMjUiLCJjaGFpbk5hbWUiOiXA6MDBaIn0="
+        }
+      },
+      "ListUserAddressResponse": {
         "type": "object",
         "properties": {
           "code": {
             "type": "integer",
-            "description": "状态码（0：成功）。"
+            "description": "状态码（0：成功）"
           },
           "message": {
             "type": "string",
-            "description": "返回消息。"
+            "description": "返回消息"
           },
           "data": {
             "type": "array",
-            "description": "存款详细信息数组，每个元素包含特定链的存款信息",
+            "description": "存款详情列表",
             "items": {
-              "type": "object",
-              "properties": {
-                "chainName": {
-                  "type": "string",
-                  "description": "链名称，例如 ETH、TRON 等"
-                },
-                "symbol": {
-                  "type": "string",
-                  "description": "币种符号，例如 USDT"
-                },
-                "depositAmount": {
-                  "type": "string",
-                  "description": "存款金额，如果商户在请求中提供了存款金额，响应中也将返回该参数"
-                },
-                "depositAddress": {
-                  "type": "string",
-                  "description": "返回的存款地址"
-                },
-                "depositUrl": {
-                  "type": "string",
-                  "description": "收银台页面 URL"
-                },
-                "expirationDate": {
-                  "type": "integer",
-                  "description": "过期时间戳（毫秒）",
-                  "format": "int64"
-                },
-                "paymentValidity": {
-                  "type": "integer",
-                  "description": "支付有效时间（秒）"
-                },
-                "orderId": {
-                  "type": "string",
-                  "description": "商户订单号"
-                },
-                "showDepositNotice": {
-                  "type": "boolean",
-                  "description": "是否展示存币须知"
-                },
-                "showExchangeRate": {
-                  "type": "string",
-                  "description": "展示的汇率信息"
-                },
-                "showMerchantLogo": {
-                  "type": "boolean",
-                  "description": "是否展示商户LOGO"
-                }
-              },
-              "required": ["chainName", "symbol", "depositAddress", "depositUrl"]
+              "$ref": "#/components/schemas/UserAddressIndependentVo"
             }
           }
         },
+        "example": {
+          "code": 0,
+          "message": "success",
+          "data": [
+            {
+              "chainName": "ETH",
+              "symbol": "USDT",
+              "depositAmount": "2",
+              "depositAddress": "0xa0e0cfd25f5db034abfd69cd555cb5d8cfe91aea",
+              "depositUrl": "https://waas-payment-hk.example.com/deposit?data=eyJkYXRhIjpbeyJjaGFpbk..."
+            },
+            {
+              "chainName": "TRON",
+              "symbol": "USDT",
+              "depositAmount": "2",
+              "depositAddress": "TUsZTPVTqE3jj5h8x4n8YVnApU57iwfAry",
+              "depositUrl": "https://waas-payment-hk.example.com/deposit?data=W3siY2hhaW5OYW1lIjoiVFI..."
+            }
+          ]
+        }
+      },
       "GetUserAddressShareRequest": {
         "type": "object",
         "properties": {
@@ -1365,7 +1361,8 @@
           "chainName",
           "symbol"
         ]
-      },"GetWithdrawOrderRequest": {
+      },
+      "GetWithdrawOrderRequest": {
         "type": "object",
         "properties": {
           "callBackId": {
@@ -1385,7 +1382,7 @@
             "description": "三方不同业务类型"
           },
           "amount": {
-            "type": "string",
+            "type": "String",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
@@ -1438,7 +1435,7 @@
                 "description": "基础货币"
               },
               "amount": {
-                "type": "string",
+                "type": "String",
                 "description": "金额,最多支持小数点后6位。"
               },
               "orderState": {
@@ -1507,7 +1504,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "string",
+            "type": "String",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
@@ -1599,7 +1596,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "string",
+            "type": "String",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
