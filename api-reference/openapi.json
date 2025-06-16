@@ -281,13 +281,6 @@
                       "depositAmount": "2",
                       "depositAddress": "0xa0e0cfd25f5db034abfd69cd555cb5d8cfe91aea",
                       "depositUrl": "https://waas-payment-hk.example.com/deposit?data=eyJkYXRhIjpbeyJjaGFpbk..."
-                    },
-                    {
-                      "chainName": "TRON",
-                      "symbol": "USDT",
-                      "depositAmount": "2",
-                      "depositAddress": "TUsZTPVTqE3jj5h8x4n8YVnApU57iwfAry",
-                      "depositUrl": "https://waas-payment-hk.example.com/deposit?data=W3siY2hhaW5OYW1lIjoiVFI..."
                     }
                   ]
                 }
@@ -1185,13 +1178,6 @@
           "message": "success",
           "data": [
             {
-              "chainName": "ETH",
-              "symbol": "USDT",
-              "depositAmount": "2",
-              "depositAddress": "0xa0e0cfd25f5db034abfd69cd555cb5d8cfe91aea",
-              "depositUrl": "https://waas-payment-hk.example.com/deposit?data=eyJkYXRhIjpbeyJjaGFpbk..."
-            },
-            {
               "chainName": "TRON",
               "symbol": "USDT",
               "depositAmount": "2",
@@ -1382,7 +1368,7 @@
             "description": "三方不同业务类型"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
@@ -1435,7 +1421,7 @@
                 "description": "基础货币"
               },
               "amount": {
-                "type": "String",
+                "type": "string",
                 "description": "金额,最多支持小数点后6位。"
               },
               "orderState": {
@@ -1504,7 +1490,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
@@ -1596,7 +1582,7 @@
             "description": "三方不同业务类型 (JD专用)"
           },
           "amount": {
-            "type": "String",
+            "type": "string",
             "description": "提币金额,最多支持小数点后6位。"
           },
           "symbol": {
