@@ -168,9 +168,9 @@
             "group": "Checkout",
             "pages": [
               "api-reference/en/checkout-page",
-              "api-reference/en/endpoint/getUserAddressIndependent",
-              "api-reference/en/endpoint/getUserAddressWithCounter",
-              "api-reference/en/endpoint/getPreDepositInfo"
+              "api-reference/endpoint/en/getUserAddressIndependent",
+              "api-reference/endpoint/en/getUserAddressWithCounter",
+              "api-reference/endpoint/en/getPreDepositInfo"
             ]
           },
           {
