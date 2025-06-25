@@ -1,0 +1,174 @@
+---
+title: "JsonUtils"
+description: "Utility class for JSON serialization and deserialization"
+---
+
+## Overview
+
+`JsonUtils` is a core utility class for JSON serialization and deserialization, implemented using the Jackson library. Its main functionality is bidirectional conversion between Java objects and JSON strings, used in API communication for serializing request parameters and deserializing response data.
+
+## Code Examples
+<CodeGroup>
+
+```java JsonUtils.java
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * JSON serialization/deserialization utility class
+ * <p>
+ * Provides conversion between Java objects and JSON strings,
+ * using the Jackson library for efficient and stable serialization operations.
+ */
+public class JsonUtils {
+    // Globally shared ObjectMapper instance
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    static {
+        // Configure to ignore unknown fields
+        mapper.configure(
+            com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+            false
+        );
+    }
+
+    /**
+     * Serialize object to JSON string
+     *
+     * @param object Java object to be serialized
+     * @return JSON formatted string
+     *
+     * Usage scenario: Convert business parameter objects to JSON strings,
+     *                 preparing for subsequent encryption operations.
+     *
+     * Example:
+     * Map<String, Object> params = new HashMap<>();
+     * params.put("key", "value");
+     * String json = JsonUtils.toJson(params);
+     */
+    public static String toJson(Object object) throws Exception {
+        return mapper.writeValueAsString(object);
+    }
+
+    /**
+     * Deserialize JSON string to object
+     *
+     * @param json JSON formatted string
+     * @param clazz Target object class
+     * @return Deserialized Java object
+     *
+     * Usage scenario: Convert decrypted JSON data to business objects,
+     *                 extracting data content returned from the server.
+     *
+     * Example:
+     * AddressVO address = JsonUtils.fromJson(
+     *     jsonData,
+     *     AddressVO.class
+     * );
+     */
+    public static <T> T fromJson(String json, Class<T> clazz) throws Exception {
+        return mapper.readValue(
+            json.getBytes(StandardCharsets.UTF_8),
+            clazz
+        );
+    }
+}
+  ```
+
+  ```javascript JsonUtils.js
+class JsonUtils {
+   class JsonUtils {
+     /**
+      * Serialize object to JSON string
+      * @param {Object} object JavaScript object to be serialized
+      * @return {string} JSON formatted string
+      *
+      * Usage scenario: Convert business parameter objects to JSON strings, preparing for subsequent encryption operations
+      *
+      * Example:
+      * const params = { key: "value" };
+      * const json = JsonUtils.toJson(params);
+      */
+     static toJson(object) {
+         return JSON.stringify(object);
+     }
+
+     /**
+      * Deserialize JSON string to object
+      * @param {string} json JSON formatted string
+      * @param {Object} [reviver] Optional transformation function
+      * @return {Object} Deserialized JavaScript object
+      *
+      * Usage scenario: Convert decrypted JSON data to business objects, extracting data content returned from the server
+      *
+      * Example:
+      * const address = JsonUtils.fromJson(jsonData);
+      * // Or specify target class
+      * const address = JsonUtils.fromJson(jsonData, AddressVO);
+      */
+     static fromJson(json, reviver) {
+         if (typeof json !== 'string') {
+             throw new Error('Input must be a JSON string');
+         }
+
+         const parsed = JSON.parse(json, reviver);
+
+         // Support conversion to specific class instances
+         if (reviver && typeof reviver === 'function') {
+             const instance = Object.create(reviver.prototype);
+             return Object.assign(instance, parsed);
+         }
+
+         return parsed;
+     }
+   }
+
+  ```
+
+  ```python JsonUtils.py
+import json
+
+class JsonUtils:
+  # JSON serialization/deserialization utility class
+  # Provides conversion between Python objects and JSON strings
+  # Uses json module for efficient and stable serialization operations
+
+  @staticmethod
+  def to_json(obj) -> str:
+      # Serialize object to JSON string
+      # @param obj: Python object to be serialized
+      # @return: JSON formatted string
+      # Usage scenario: Convert business parameter objects to JSON strings, preparing for subsequent encryption operations
+      return json.dumps(obj, ensure_ascii=False)
+
+  @staticmethod
+  def from_json(json_str: str, target_class=None):
+      # Deserialize JSON string to object
+      # @param json_str: JSON formatted string
+      # @param target_class: Target class (optional)
+      # @return: Deserialized Python object
+      # Usage scenario: Convert decrypted JSON data to business objects, extracting data content returned from the server
+      data = json.loads(json_str)
+
+      # If target class is specified, convert to instance of that class
+      if target_class:
+          if not callable(target_class):
+              raise TypeError("target_class must be a callable constructor")
+
+          # Create target class instance and set attributes
+          instance = target_class()
+          if hasattr(instance, '__dict__'):
+              instance.__dict__.update(data)
+          elif hasattr(instance, '__slots__'):
+              for key, value in data.items():
+                  if key in instance.__slots__:
+                      setattr(instance, key, value)
+          else:
+              for key, value in data.items():
+                  setattr(instance, key, value)
+          return instance
+
+      return data
+  ```
+
+</CodeGroup>

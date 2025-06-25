@@ -5,4 +5,4 @@ openapi: 'POST /api/user/getUserAddress'
 
 ## API Description
 
-Retrieves the deposit address for a user. If the user does not exist, a user ID will be automatically registered, and the wallet address will be returned.
+Obtain the user's deposit address. If the user does not exist, the system will automatically register the user ID and return the wallet address. Generally, the same user will receive the same address when using different currencies (symbols) on the same chain. Therefore, when creating a unique index in the database, do not include the address to allow for the existence of the same address.

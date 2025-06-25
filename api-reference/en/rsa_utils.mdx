@@ -1,0 +1,319 @@
+---
+title: "RSAUtils"
+description: "Utility class for RSA public key encryption and decryption"
+---
+
+## Overview
+
+`RSAUtils` is a utility class that implements RSA public key encryption and decryption, using asymmetric encryption algorithms to ensure data transmission security. In API communication, it is used to encrypt sensitive business data for transmission and decrypt encrypted data returned from the server.
+
+## Code Examples
+<CodeGroup>
+
+  ```java Base64Util.java
+import javax.crypto.Cipher;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.spec.X509EncodedKeySpec;
+
+/**
+ * RSA public key encryption/decryption utility class
+ * <p>
+ * Provides asymmetric encryption and decryption based on public key,
+ * suitable for encrypted data transmission in API communication.
+ */
+public class RSAUtils {
+    // RSA encryption maximum block size (unit: bytes)
+    private static final int MAX_ENCRYPT_BLOCK = 117;
+
+    /**
+     * Encrypt data using public key
+     *
+     * @param data Original binary data
+     * @param publicKey Base64 encoded public key string
+     * @return Encrypted binary data
+     *
+     * Usage scenario: Encrypt business data before sending API requests.
+     * Automatically handles chunked encryption of large data (117 bytes/chunk).
+     *
+     * Example:
+     * byte[] encrypted = RSAUtils.encryptByPublicKey(
+     *     jsonData.getBytes(),
+     *     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+     * );
+     */
+    public static byte[] encryptByPublicKey(byte[] data, String publicKey) throws Exception {
+        // 1. Base64 decode public key
+        byte[] keyBytes = Base64Util.decodeString(publicKey);
+
+        // 2. Generate public key object
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        Key publicK = keyFactory.generatePublic(
+            new X509EncodedKeySpec(keyBytes)
+        );
+
+        // 3. Create and initialize cipher
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, publicK);
+
+        // 4. Chunked encryption for large data
+        int inputLen = data.length;
+        int offset = 0;
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+
+        while (inputLen - offset > 0) {
+            int blockSize = Math.min(inputLen - offset, MAX_ENCRYPT_BLOCK);
+            byte[] encryptedBlock = cipher.doFinal(data, offset, blockSize);
+            out.write(encryptedBlock, 0, encryptedBlock.length);
+            offset += blockSize;
+        }
+
+        return out.toByteArray();
+    }
+
+    /**
+     * Decrypt data using public key
+     *
+     * @param encryptedData Encrypted binary data
+     * @param publicKey Base64 encoded public key string
+     * @return Decrypted original binary data
+     *
+     * Usage scenario: Decrypt encrypted data returned from APIs.
+     * Suitable for one-time decryption of small data chunks.
+     *
+     * Example:
+     * byte[] decrypted = RSAUtils.decryptByPublicKey(
+     *     encryptedBytes,
+     *     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+     * );
+     */
+    public static byte[] decryptByPublicKey(byte[] encryptedData, String publicKey) throws Exception {
+        // 1. Base64 decode public key
+        byte[] keyBytes = Base64Util.decodeString(publicKey);
+
+        // 2. Generate public key object
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        Key publicK = keyFactory.generatePublic(
+            new X509Encoded极Spec(keyBytes)
+        );
+
+        // 3. Create and initialize decrypter
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, publicK);
+
+        // 4. One-time decryption (suitable for small data)
+        return cipher.doFinal(encryptedData);
+    }
+}
+  ```
+
+  ```javascript RSAUtils.js
+// Depends on previously implemented Base64Util
+const crypto = subtl;
+
+export class RSAUtils {
+  // RSA encryption maximum block size (unit: bytes)
+  static MAX_ENCRYPT_BLOCK = 117;
+
+  /**
+   * Encrypt data using public key
+   * @param {ArrayBuffer} data Original binary data
+   * @param {string} publicKey Base64 encoded public key string
+   * @returns {Promise<ArrayBuffer>} Encrypted binary data
+   *
+   * Usage scenario: Encrypt business data before sending API requests
+   * Automatically handles chunked encryption of large data (117 bytes/chunk)
+   */
+  static async encryptByPublicKey(data, publicKey) {
+      // 1. Base64 decode public key
+      const keyBytes = Base64Util.decodeString(publicKey);
+
+      // 2. Import public key
+      const publicKeyObj = await crypto.subtle.importKey(
+          "spki",
+          keyBytes,
+          {
+              name: "RSA-OAEP",
+              hash: "SHA-256"
+          },
+          true,
+          ["encrypt"]
+      );
+
+      // 3. Chunked encryption for large data
+      const blockSize = RSAUtils.MAX_ENCRYPT_BLOCK;
+      const result = new Uint8Array(data.byteLength + 256);
+      let offset = 0;
+      let totalEncrypted = 0;
+
+      while (offset < data.byteLength) {
+          const block = data.slice(offset, Math.min(offset + blockSize, data.byteLength));
+          const encryptedBlock = await crypto.subtle.encrypt(
+              { name: "RSA-OAEP" },
+              publicKeyObj,
+              block
+          );
+
+          result.set(new Uint8Array(encryptedBlock), totalEncrypted);
+          totalEncrypted += encryptedBlock.byteLength;
+          offset += block.byteLength;
+      }
+
+      return result.slice(0, totalEncrypted).buffer;
+  }
+
+  /**
+   * Decrypt data using public key
+   * @param {ArrayBuffer} encryptedData Encrypted binary data
+   * @param {string} publicKey Base64 encoded public key string
+   * @returns {Promise<ArrayBuffer>} Decrypted original binary data
+   *
+   * Usage scenario: Decrypt encrypted data returned from APIs
+   * Suitable for one-time decryption of small data chunks
+   */
+  static async decryptByPublicKey(encryptedData, publicKey) {
+      // 1. Base64 decode public key
+      const keyBytes = Base64Util.decodeString(publicKey);
+
+      // 2. Import public key
+      const publicKeyObj = await crypto.subtle.importKey(
+          "spki",
+          keyBytes,
+          {
+              name: "RSA-OAEP",
+              hash: "SHA-256"
+          },
+          true,
+          ["decrypt"]
+      );
+
+      // 3. One-time decryption
+      return crypto.subtle.decrypt(
+          { name: "RSA-OAEP" },
+          publicKeyObj,
+          encryptedData
+      );
+  }
+}
+
+// Usage example
+(async () => {
+  // Simulate a public key string
+  const publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+  // Data to encrypt
+  const data = new TextEncoder().encode("Sensitive data 12345");
+
+  try {
+      // Encryption
+      const encrypted = await RSAUtils.encryptByPublicKey(data.buffer, publicKey);
+      console.log("Encryption result:", new Uint8Array(encrypted));
+
+      // Decryption
+      const decrypted = await RSAUtils.decryptByPublicKey(encrypted, publicKey);
+      console.log("Decryption result:", new TextDecoder().decode(decrypted));
+  } catch (e) {
+      console.error("RSA operation failed:", e);
+  }
+})();
+  ```
+
+  ```python RSAUtils.py
+import base64
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.backends import default_backend
+
+class RSAUtils:
+  # RSA encryption maximum block size (unit: bytes)
+  MAX_ENCRYPT_BLOCK = 117
+
+  @staticmethod
+  def encrypt_by_public_key(data: bytes, public_key_str: str) -> bytes:
+      """
+      Encrypt data using public key
+      @param data: Original binary data
+      @param public_key_str: Base64 encoded public key string
+      @return: Encrypted binary data
+
+      Usage scenario: Encrypt business data before sending API requests
+      Automatically handles chunked encryption of large data (117 bytes/chunk)
+      """
+      # 1. Base64 decode public key
+      public_key_der = base64.b64decode(public_key_str)
+
+      # 2. Load public key object
+      public_key = serialization.load_der_public_key(
+          public_key_der,
+          backend=default_backend()
+      )
+
+      # 3. Chunked encryption
+      offset = 0
+      encrypted_chunks = []
+      while offset < len(data):
+          block = data[offset:offset + RSAUtils.MAX_ENCRYPT_BLOCK]
+          encrypted_chunk = public_key.encrypt(
+              block,
+              padding.OAEP(
+                  mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                  algorithm=hashes.SHA256(),
+                  label=None
+              )
+          )
+          encrypted_chunks.append(encrypted_chunk);
+          offset += len(block)
+
+      return b''.join(encrypted_chunks)
+
+  @staticmethod
+  def decrypt_by_public_key(encrypted_data: bytes, public_key_str: str) -> bytes:
+      """
+      Decrypt data using public key
+      @param encrypted_data: Encrypted binary data
+      @param public_key_str: Base64 encoded public key string
+      @return: Decrypted original binary data
+
+      Usage scenario: Decrypt encrypted data returned from APIs
+      Suitable for one-time decryption of small data chunks
+      """
+      # 1. Base64 decode public key
+      public_key_der = base64.b64decode(public_key_str)
+
+      # 2. Load public key object
+      public_key = serialization.load_der_public_key(
+          public_key_der,
+          backend=default_backend()
+      )
+
+      # 3. One-time decryption
+      return public_key.decrypt(
+          encrypted_data,
+          padding.OAEP(
+              mgf=padding.MGF1(algorithm=hashes.SHA256()),
+              algorithm=hashes.SHA256(),
+              label=None
+          )
+      )
+
+# Usage example
+if __name__ == "__main__":
+  # Simulate public key string
+  public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+
+  # Data to encrypt
+  data = b"Sensitive data 12345"
+
+  try:
+      # Encryption
+      encrypted = RSAUtils.encrypt_by_public_key(data, public_key)
+      print("Encryption result:", base64.b64encode(encrypted).decode())
+
+      # Decryption
+      decrypted = RSAUtils.decrypt_by_public_key(encrypted, public_key)
+      print("Decryption result:", decrypted.decode())
+  except Exception as e:
+      print("RSA operation failed:", e)
+  ```
+
+</CodeGroup>

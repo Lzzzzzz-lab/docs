@@ -1,0 +1,213 @@
+---
+title: "加密操作指南"
+description: ""
+---
+
+### i. 加密流程步骤说明
+
+以下是加密操作的步骤：
+
+1. 准备<span className="text-blue-600 font-semibold"> 业务请求参数 </span>。（所有字段定义见加密前请求参数部分）
+2. 序列化为 <span className="text-blue-600 font-semibold"> JSON </span> 字符串。
+3. 使用 WaaS 提供的<span className="text-blue-600 font-semibold"> RSA公钥 </span> 加密 JSON 数据。
+4. 对加密结果进行 <span className="text-blue-600 font-semibold"> Base64 </span> 编码。
+
+### ii. 加密代码实例
+
+以下是实现加密的代码示例：
+
+<CodeGroup>
+
+    ```java EncryptionExample.java
+    class EncryptionExample {
+        public static void main(String[] args) {
+            try {
+                // ===================== 1. 准备业务参数 =====================
+                Map<String, Object> requestParams = new HashMap<>();
+                requestParams.put("tenantUserId", "tenant_001");
+                requestParams.put("chainName", "ETH");
+                requestParams.put("symbol", "USDT");
+
+                // ===================== 2. JSON序列化 =====================
+                // 使用 JSON 工具类进行序列化，具体实现可参考相关工具类中的示例代码。
+                String jsonData = JsonUtils.toJson(requestParams);
+
+                // ===================== 3. RSA公钥加密 =====================
+                // 使用WaaS提供的公钥
+                String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+                // 使用 RSA 工具类进行加密，具体实现可以参考相关工具类中的示例代码。
+                byte[] encryptedData = RSAUtils.encryptByPublicKey(
+                    jsonData.getBytes(StandardCharsets.UTF_8),
+                    publicKey
+                );
+
+                // ===================== 4. Base64编码 =====================
+                // 使用Base64工具类进行编码，具体实现可以参考相关工具类中的示例代码。
+                String base64Data = Base64Util.encodeByte(encryptedData);
+
+                // ===================== 5. 准备HTTP请求 =====================
+                // 创建HTTP请求头
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("X-API-KEY", "MERCHANT_123456"); // 商户身份凭证
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED); // 表单格式
+
+                // 封装请求体
+                MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+                body.add("data", base64Data); // 参数名必须为"data"
+
+                // ===================== 6. 发送API请求 =====================
+                // 创建并配置RestTemplate
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+
+                // 发送请求并获取响应
+                APIResult response = restTemplate.postForObject(
+                    "https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress",
+                    new HttpEntity<>(body, headers),
+                    APIResult.class
+                );
+
+                // 处理响应，具体内容可参考响应示例。
+                System.out.println("\nAPI响应结果:");
+                System.out.println(response);
+
+            } catch (Exception e) {
+                System.err.println("\n处理过程中发生错误: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+    ```
+
+  ```javascript EncryptionExample.js
+async function main() {
+    try {
+        // ===================== 1. 准备业务参数 =====================
+        const requestParams = {
+            tenantUserId: "tenant_001",
+            chainName: "ETH",
+            symbol: "USDT"
+        };
+
+        // ===================== 2. JSON序列化 =====================
+        const jsonData = JsonUtils.toJson(requestParams);
+
+        // ===================== 3. RSA公钥加密 =====================
+        const publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+        // 将字符串转为Uint8Array
+        const textEncoder = new TextEncoder();
+        const jsonBytes = textEncoder.encode(jsonData);
+
+        // 使用RSAUtils加密
+        const encryptedData = await RSAUtils.encryptByPublicKey(
+            jsonBytes.buffer,
+            publicKey
+        );
+
+        // ===================== 4. Base64编码 =====================
+        const base64Data = Base64Util.encodeByte(new Uint8Array(encryptedData));
+
+        // ===================== 5. 准备HTTP请求 =====================
+        const headers = {
+            'X-API-KEY': 'MERCHANT_123456',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+
+        const params = new URLSearchParams();
+        params.append('data', base64Data);
+
+        // ===================== 6. 发送API请求 =====================
+        const response = await axios.post(
+            'https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress',
+            params.toString(),
+            { headers }
+        );
+
+        // ===================== 7. 处理响应结果 =====================
+        console.log('\nAPI响应结果:');
+        console.log(response.data);
+
+    } catch (error) {
+        console.error('\n处理过程中发生错误:');
+        console.error(error.message);
+        console.error(error.stack);
+    }
+}
+
+// 执行主函数
+main();
+  ```
+
+  ```python EncryptionExample.py
+import requests
+from urllib.parse import urlencode
+from JsonUtils import JsonUtils
+from RSAUtils import RSAUtils
+from Base64Util import Base64Util
+
+def main():
+    try:
+        # ===================== 1. 准备业务参数 =====================
+        request_params = {
+            "tenantUserId": "tenant_001",
+            "chainName": "ETH",
+            "symbol": "USDT"
+        }
+
+        # ===================== 2. JSON序列化 =====================
+        json_data = JsonUtils.to_json(request_params)
+
+        # ===================== 3. RSA公钥加密 =====================
+        public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+
+        # Python中的JSON数据是字符串，需要转为bytes
+        json_bytes = json_data.encode('utf-8')
+
+        # 使用RSAUtils加密
+        encrypted_data = RSAUtils.encrypt_by_public_key(
+            json_bytes,
+            public_key
+        )
+
+        # ===================== 4. Base64编码 =====================
+        base64_data = Base64Util.encode_byte(encrypted_data)
+
+        # ===================== 5. 准备HTTP请求 =====================
+        headers = {
+            'X-API-KEY': 'MERCHANT_123456',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        payload = {'data': base64_data}
+
+        # ===================== 6. 发送API请求 =====================
+        response = requests.post(
+            'https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress',
+            data=urlencode(payload),
+            headers=headers
+        )
+
+        # ===================== 7. 处理响应结果 =====================
+        # 确保API返回了有效响应
+        response.raise_for_status()
+
+        # 解析JSON响应（假设返回的是JSON格式）
+        api_result = response.json()
+
+        print('\nAPI响应结果:')
+        print(api_result)
+
+    except Exception as e:
+        print('\n处理过程中发生错误:')
+        print(str(e))
+        import traceback
+        traceback.print_exc()
+
+if __name__ == "__main__":
+    main()
+  ```
+
+</CodeGroup>
+

@@ -1,0 +1,174 @@
+---
+title: "JsonUtils"
+description: "用于JSON序列化和反序列化的工具类"
+---
+
+## 概述
+
+`JsonUtils` 是JSON序列化和反序列化的核心工具类，基于Jackson库实现。主要功能是实现Java对象与JSON字符串之间的双向转换，在API通信中用于处理请求参数和响应数据的序列化转换。
+
+
+## 代码实例
+<CodeGroup>
+
+```java JsonUtils.java
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * JSON序列化/反序列化工具类
+ * <p>
+ * 提供Java对象与JSON字符串之间的转换功能，
+ * 使用Jackson库实现高效稳定的序列化操作。
+ */
+public class JsonUtils {
+    // 全局共享的ObjectMapper实例
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    static {
+        // 配置忽略未知字段
+        mapper.configure(
+            com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+            false
+        );
+    }
+
+    /**
+     * 对象序列化为JSON字符串
+     *
+     * @param object 需要序列化的Java对象
+     * @return JSON格式字符串
+     *
+     * 使用场景：将业务参数对象转换为JSON字符串，
+     *          准备后续加密操作。
+     *
+     * 示例：
+     * Map<String, Object> params = new HashMap<>();
+     * params.put("key", "value");
+     * String json = JsonUtils.toJson(params);
+     */
+    public static String toJson(Object object) throws Exception {
+        return mapper.writeValueAsString(object);
+    }
+
+    /**
+     * JSON字符串反序列化为对象
+     *
+     * @param json JSON格式字符串
+     * @param clazz 目标对象的类
+     * @return 反序列化后的Java对象
+     *
+     * 使用场景：将解密后的JSON数据转换为业务对象，
+     *          提取服务端返回的数据内容。
+     *
+     * 示例：
+     * AddressVO address = JsonUtils.fromJson(
+     *     jsonData,
+     *     AddressVO.class
+     * );
+     */
+    public static <T> T fromJson(String json, Class<T> clazz) throws Exception {
+        return mapper.readValue(
+            json.getBytes(StandardCharsets.UTF_8),
+            clazz
+        );
+    }
+}
+  ```
+
+  ```javascript JsonUtils.js
+class JsonUtils {
+    /**
+     * 对象序列化为JSON字符串
+     * @param {Object} object 需要序列化的JavaScript对象
+     * @return {string} JSON格式字符串
+     *
+     * 使用场景：将业务参数对象转换为JSON字符串，准备后续加密操作
+     *
+     * 示例：
+     * const params = { key: "value" };
+     * const json = JsonUtils.toJson(params);
+     */
+    static toJson(object) {
+        return JSON.stringify(object);
+    }
+
+    /**
+     * JSON字符串反序列化为对象
+     * @param {string} json JSON格式字符串
+     * @param {Object} [reviver] 可选的转换函数
+     * @return {Object} 反序列化后的JavaScript对象
+     *
+     * 使用场景：将解密后的JSON数据转换为业务对象，提取服务端返回的数据内容
+     *
+     * 示例：
+     * const address = JsonUtils.fromJson(jsonData);
+     * // 或指定转换类
+     * const address = JsonUtils.fromJson(jsonData, AddressVO);
+     */
+    static fromJson(json, reviver) {
+        if (typeof json !== 'string') {
+            throw new Error('Input must be a JSON string');
+        }
+
+        const parsed = JSON.parse(json, reviver);
+
+        // 支持转换为特定类实例
+        if (reviver && typeof reviver === 'function') {
+            const instance = Object.create(reviver.prototype);
+            return Object.assign(instance, parsed);
+        }
+
+        return parsed;
+    }
+}
+
+  ```
+
+  ```python JsonUtils.py
+import json
+
+class JsonUtils:
+    # JSON序列化/反序列化工具类
+    # 提供Python对象与JSON字符串之间的转换功能
+    # 使用json模块实现高效稳定的序列化操作
+
+    @staticmethod
+    def to_json(obj) -> str:
+        # 对象序列化为JSON字符串
+        # @param obj: 需要序列化的Python对象
+        # @return: JSON格式字符串
+        # 使用场景：将业务参数对象转换为JSON字符串，准备后续加密操作
+        return json.dumps(obj, ensure_ascii=False)
+
+    @staticmethod
+    def from_json(json_str: str, target_class=None):
+        # JSON字符串反序列化为对象
+        # @param json_str: JSON格式字符串
+        # @param target_class: 目标类（可选）
+        # @return: 反序列化后的Python对象
+        # 使用场景：将解密后的JSON数据转换为业务对象，提取服务端返回的数据内容
+        data = json.loads(json_str)
+
+        # 如果指定了目标类，转换为该类的实例
+        if target_class:
+            if not callable(target_class):
+                raise TypeError("target_class must be a callable constructor")
+
+            # 创建目标类实例并设置属性
+            instance = target_class()
+            if hasattr(instance, '__dict__'):
+                instance.__dict__.update(data)
+            elif hasattr(instance, '__slots__'):
+                for key, value in data.items():
+                    if key in instance.__slots__:
+                        setattr(instance, key, value)
+            else:
+                for key, value in data.items():
+                    setattr(instance, key, value)
+            return instance
+
+        return data
+  ```
+
+</CodeGroup>

@@ -1,0 +1,32 @@
+---
+title: "Decrypted Data Structure Example"
+description: ""
+---
+
+The decrypted business request parameters (after deserialization) contain the following fields:
+
+<ResponseExample>
+````mdx Business request parameters decryption example
+{
+  "tenantUserId": "tenant_001",
+  "chainName": "ETH",
+  "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+}
+````
+</ResponseExample>
+
+
+<ResponseField name="tenantUserId" type="String" required={false}>
+Unique identifier of the user in the merchant system, identical to the tenantUserId in the request
+</ResponseField>
+
+<ResponseField name="chainName" type="String" required={false}>
+Blockchain name, consistent with the chainName in the request
+</ResponseField>
+
+<ResponseField name="address" type="String" required={false}>
+User's wallet address on this blockchain
+</ResponseField>
+
+
+

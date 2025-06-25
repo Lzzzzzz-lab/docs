@@ -1,0 +1,175 @@
+---
+title: 'Callback Integration Preparation Instructions'
+description: 'Technical specifications for merchants to handle WaaS callback requests'
+---
+
+### 1. WaaS Callback Processing Flow
+<div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+  <div className="font-bold mb-3 text-orange-800">Callback request processing flow:</div>
+
+  <div className="mb-3 p-3 bg-orange-100 rounded-lg">
+    <div className="font-semibold">⚠️ This is the request flow initiated by WaaS system to merchant's callback URL</div>
+    <div className="text-sm mt-1">Merchants need to handle callback requests received from WaaS according to the following process</div>
+  </div>
+
+  <div className="grid grid-cols-3 gap-4 mb-4">
+
+    <div className="bg-white p-3 rounded border">
+      <div className="font-semibold text-center text-orange-600 mb-2">Callback Data Encryption</div>
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <div className="bg-gray-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">1</div>
+          <div className="text-sm">WaaS prepares JSON business data</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-gray-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">2</div>
+          <div className="text-sm">WaaS encrypts with merchant private key using RSA</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-gray-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">3</div>
+          <div className="text-sm">Base64 encoding for transmission</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div className="bg-white p-3 rounded border">
+      <div className="font-semibold text-center text-blue-600 mb-2">Callback Request Validation</div>
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">A</div>
+          <div className="text-sm">WaaS carries X-API-KEY in request header</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">B</div>
+          <div className="text-sm">Merchant verifies API KEY validity</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">C</div>
+          <div className="text-sm">Return 401 Unauthorized if validation fails</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white p-3 rounded border border-green-200">
+      <div className="font-semibold text-center text-green-600 mb-2">Merchant Decrypts Callback Data</div>
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <div className="bg-green-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">α</div>
+          <div className="text-sm">Read callback data from raw input stream</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-green-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">β</div>
+          <div className="text-sm">Base64 decode to get encrypted data</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-green-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">γ</div>
+          <div className="text-sm">Merchant decrypts using RSA with public key</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="bg-blue-50 p-3 rounded border border-blue-200">
+    <div className="font-semibold">WaaS callback request example:</div>
+    <div className="text-xs mt-2 bg-gray-800 text-gray-100 p-3 rounded">
+      <span className="text-gray-400">// Request sent by WaaS to merchant's callback URL</span><br/>
+      POST /<span className="text-blue-300">your-callback-endpoint</span> HTTP/1.1<br/>
+      <span className="text-blue-300">Host: your-merchant-domain.com</span><br/>
+      <span className="text-blue-300">Content-Type: application/x-www-form-urlencoded</span><br/>
+      <span className="text-green-300">X-API-KEY: merchant_api_key_12345</span><br/>
+      <br/>
+      <span className="text-yellow-200">ew0KICAib3JkZXJJZCI6ICIxMjM0NTY3ODk...</span>
+    </div>
+  </div>
+</div>
+
+### 2. Key Points for Merchant Handling Callbacks
+<div className="grid grid-cols-2 gap-6 mt-5">
+  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+    <div className="font-semibold mb-3">Callback API Key Validation:</div>
+    <div className="mb-2 text-sm text-blue-700">When handling callback requests from WaaS:</div>
+    <ul className="list-disc pl-5 space-y-1 text-sm">
+      <li>Obtain key provided by WaaS from HTTP header <code>X-API-KEY</code></li>
+      <li>Verify whether key is valid and within validity period</li>
+      <li>Return <code>401 Unauthorized</code> if validation fails</li>
+    </ul>
+    <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
+      Note: This API Key is different from the key used by merchants to call WaaS APIs
+    </div>
+  </div>
+
+  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+    <div className="font-semibold mb-3">Callback Data Decryption Specifications:</div>
+    <div className="mb-2 text-sm text-green-700">Notes for handling WaaS callback data:</div>
+    <ul className="list-disc pl-5 space-y-1 text-sm">
+      <li>Must use <code>HttpServletRequest</code> raw input stream for reading</li>
+      <li>Base64 decode to obtain encrypted byte data</li>
+      <li>RSA decrypt using merchant public key</li>
+    </ul>
+    <div className="mt-3 p-2 bg-green-100 rounded text-xs">
+      Common error: Misusing <code>request.getParameter("data")</code> will return null
+    </div>
+  </div>
+</div>
+
+<div className="mt-4 p-3 bg-gray-100 rounded border">
+  <div className="font-semibold text-gray-700">Callback Handling Instructions:</div>
+  <p className="text-sm mt-1">
+    The WaaS system sends event notifications to the callback URL configured by the merchant.
+    Merchants need to correctly handle these callback requests.
+    The encryption/decryption process is the same as when merchants call WaaS APIs,
+    the main difference is in the way callback data is read.
+  </p>
+</div>
+
+#### 3. Callback Idempotency Handling
+<div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+  <div className="font-bold mb-3">Callback Idempotency Requirements:</div>
+
+  <div className="mb-3 p-3 bg-purple-100 rounded-lg">
+    <div className="font-semibold">WaaS may resend identical event callbacks</div>
+    <div className="text-sm">Merchants must ensure identical events are processed only once</div>
+  </div>
+
+  <div className="overflow-x-auto">
+    <table className="w-full border-collapse">
+      <thead>
+        <tr className="bg-purple-100">
+          <th className="border p-2">Callback Type</th>
+          <th className="border p-2">Idempotency Key Composition</th>
+          <th className="border p-2">Explanation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className="border p-2 font-semibold">Deposit Callback</td>
+          <td className="border p-2">(txid, chain, symbol, toAddress) combined hash</td>
+          <td className="border p-2 text-sm">Resolves wrapped contract duplicate deposit issues</td>
+        </tr>
+        <tr>
+          <td className="border p-2 font-semibold">Withdrawal Callback</td>
+          <td className="border p-2">txid</td>
+          <td className="border p-2 text-sm">Globally unique transaction ID controlled by WaaS</td>
+        </tr>
+        <tr>
+          <td className="border p-2 font-semibold">Other Callbacks</td>
+          <td className="border p-2">(type, trackingId, callBackId....)</td>
+          <td className="border p-2 text-sm">All callback types must implement idempotency</td>
+        </tr>
+      </tbody>
+    </table>
+    <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-600">
+      WaaS Tip: Do not use requestUUID that changes each time as idempotency key
+    </div>
+  </div>
+
+  <div className="mt-4 p-3 bg-white rounded border">
+    <div className="font-semibold mb-2">Callback Processing Principles:</div>
+    <ul className="list-disc pl-5 space-y-1">
+      <li>Store unique identifiers of processed callback events</li>
+      <li>Return success status directly for duplicate callbacks (without repeating business processing)</li>
+      <li>WaaS will retry callback only when callback processing fails (only when errCode=0 is considered successful by WaaS)</li>
+    </ul>
+  </div>
+</div>

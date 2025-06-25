@@ -1,0 +1,110 @@
+---
+title: 'Callback Enumeration Types Explanation'
+description: ''
+---
+
+### Callback Event Enumeration Values and Their Business Meanings
+<div className="overflow-x-auto">
+  <table className="min-w-full divide-y divide-gray-300 border border-gray-300 rounded-lg shadow-sm">
+    <thead className="bg-gray-50">
+      <tr>
+        <th scope="col" className="px-6 py-4 text-left text-base font-bold text-gray-900 tracking-wider whitespace-nowrap">
+          Enumeration Type
+        </th>
+        <th scope="col" className="px-6 py-4 text-left text-base font-bold text-gray-900 tracking-wider whitespace-nowrap min-w-[120px]">
+          Enum Value
+        </th>
+        <th scope="col" className="px-6 py-4 text-left text-base font-bold text-gray-900 tracking-wider">
+          Description
+        </th>
+      </tr>
+    </thead>
+    <tbody className="bg-white divide-y divide-gray-200">
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_UNKNOWN</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">0</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          Merchants do not need to handle this notification type and should not respond.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_DEPOSITED</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">1</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          WaaS notifies merchant of a successful deposit order. Merchant needs to parse parameters and respond.
+          Merchant is responsible for secondary verification on blockchain and returning response results to WaaS.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_REQUEST_WITHDRAW</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">2</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          Merchant needs to parse withdrawal order and respond with detailed information to WaaS. Used only for merchant's withdrawal secondary confirmation interface.
+          Although this interface shares the same request/response parameter template as the Webhook callback, it uses a separate URL.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_WITHDRAW</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">3</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          WaaS notifies merchant of successful withdrawal order. Merchant needs to parse parameters and respond.
+          Merchant is responsible for secondary verification on blockchain and returning response results to WaaS.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_ADDRESS</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">4</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          Notification of user address change. Merchant needs to parse the new address in parameters and update user address information in system.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_INVALID_ADDRESS</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">5</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          Withdrawal failed (invalid address). In this case, the withdrawal order is terminated as failed. Merchant can safely unfreeze funds and return to customer.
+          Other situations requiring termination of withdrawal order and fund return also use this callback enum, not necessarily address error.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_NOT_ENOUGH_MONEY</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">6</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          Withdrawal temporarily failed (insufficient balance). Merchant needs to parse withdrawal order parameters and respond.
+          Withdrawal can still succeed after balance is replenished.
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_NOT_ENOUGH_HOT_MONEY</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">7</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          Withdrawal temporarily failed (insufficient gas). Merchant needs to parse withdrawal order parameters and respond.
+          Withdrawal can still succeed after hot wallet balance is replenished.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

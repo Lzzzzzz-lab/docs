@@ -1,0 +1,53 @@
+---
+title: 'Callback Data Decryption Implementation'
+description: ''
+---
+
+#### Correct Method to Decrypt WaaS Callback Data Using Merchant's Public Key
+
+```java
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Base64;
+
+public APIResult handleFormData(HttpServletRequest request) {
+    try {
+        // 1. Read raw encrypted data from request input stream
+        StringBuilder encryptedBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(request.getInputStream())
+        )) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                encryptedBuilder.append(line);
+            }
+        }
+        String base64Encrypted = encryptedBuilder.toString();
+
+        // 2. Base64 decode to obtain encrypted byte data
+        byte[] encryptedBytes = Base64.decodeString(base64Encrypted);
+
+        // 3. Get merchant public key (hardcoded in example; should be obtained from secure source in production)
+        String merchantPublicKey = "-----BEGIN PUBLIC KEY-----\n"
+            + "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKcQ3Z+7wZ3nP1gX2tRl\n"
+            + "Y7t6mGjRk1p0lK1q7e2k8X8jfQ1zW6qZ3d1VkKJyDkF2aE8m0J3bGxO2BQ7S7n5x7\n"
+            + "d9XlJf6gKjq7cQb3t7pYjzQ0N8sQa4i5dLZzX9YyKt0P7o9UYxQ5yW极3mIj0hGpFq\n"
+            + "yVg2GXv8sZ1F7Gd5jC5s0e3kZdJj3JkLwIDAQAB\n"
+            + "-----END PUBLIC KEY-----";
+
+        // 4. Decrypt data using merchant public key
+        byte[] decryptedBytes = RSAUtils.decryptByPublicKey(
+            encryptedBytes,
+            merchantPublicKey
+        );
+
+        // 5. Convert decrypted data to string
+        String jsonData = new String(decryptedBytes);
+
+        // 6. Return decryption result
+        return APIResult.newSuccessResult(jsonData);
+    } catch (Exception e) {
+        return APIResult.newErrorResult("DECRYPT_FAILED");
+    }
+}

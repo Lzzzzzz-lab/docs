@@ -1,0 +1,178 @@
+---
+title: '风险评分参考说明'
+description: ''
+---
+#### 评分说明
+
+> **重要提示**：风险评分基于集成多个KYA（Know Your Address）和KYT（Know Your Transaction）API的数据分析结果，属于**概率性评估**，不代表交易绝对安全。所有交易决策及后果均由商户自行承担，WaaS仅提供分析参考，不提供任何担保或责任承担。
+
+<div className="flex flex-col gap-5 mt-4">
+
+  {/* 低风险卡片 */}
+  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🟢 低风险 (0 ~ 30 分)</div>
+        <div className="text-sm text-gray-600">系统分析显示各项安全指标处于正常范围</div>
+      </div>
+      <div className="bg-green-100 text-green-800 px-2 py-1 rounded-md">常规监控</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">分析摘要：</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>地址交易模式正常，无可疑行为关联</li>
+        <li>历史交易中无高风险实体接触记录</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">✅ 建议措施：</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>维持正常交易流程</span>
+          </li>
+          <li className="flex items-start">
+            <span>执行标准风控监控</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* 中等风险卡片 */}
+  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🟡 中等风险 (31 ~ 64 分)</div>
+        <div className="text-sm text-gray-600">检测到潜在异常信号需关注</div>
+      </div>
+      <div className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md">加强监管</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">分析摘要：</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>与中高风险地址存在交易往来</li>
+        <li>检测到少量非常规交易模式</li>
+        <li>地址行为模式超出正常波动范围</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">⚠️ 建议措施：</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>限制单笔交易金额</span>
+          </li>
+          <li className="flex items-start">
+            <span>人工复核可疑交易</span>
+          </li>
+          <li className="flex items-start">
+            <span>设置交易频率限制</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* 高风险卡片 */}
+  <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🟠 高风险 (65 ~ 84 分)</div>
+        <div className="text-sm text-gray-600">发现明确风险特征需立即响应</div>
+      </div>
+      <div className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md">立即隔离</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">分析摘要：</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>关联多个已知高风险实体</li>
+        <li>交易模式符合欺诈行为特征</li>
+        <li>地址风险指标持续处于高位</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">⛔ 建议措施：</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>暂停所有交易往来</span>
+          </li>
+          <li className="flex items-start">
+            <span>启动全面账户调查</span>
+          </li>
+          <li className="flex items-start">
+            <span>实施实时监控警报</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* 严重风险卡片 */}
+  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🔴 严重风险 (85 ~ 100 分)</div>
+        <div className="text-sm text-gray-600">确认存在重大安全威胁</div>
+      </div>
+      <div className="bg-red-100 text-red-800 px-2 py-1 rounded-md">紧急处置</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">分析摘要：</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>直接关联反洗钱黑名单</li>
+        <li>检测到复杂资金分层行为</li>
+        <li>地址特征匹配已知犯罪模式</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">❗ 紧急措施：</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>完全终止所有交易</span>
+          </li>
+          <li className="flex items-start">
+            <span>实施账户完全隔离</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+#### 技术支持
+
+<div className="mt-6 p-4 bg-gray-50 rounded-lg">
+  <p className="font-medium">分析方法：</p>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+    <div className="bg-white p-3 rounded border">
+      <p className="font-medium">🔍 KYA (Know Your Address)</p>
+      <ul className="list-disc pl-5 mt-1">
+        <li>地址历史行为分析</li>
+        <li>网络关系图谱绘制</li>
+        <li>实体关联度评估</li>
+      </ul>
+    </div>
+    <div className="bg-white p-3 rounded border">
+      <p className="font-medium">📊 KYT (Know Your Transaction)</p>
+      <ul className="list-disc pl-5 mt-1">
+        <li>交易流水分层追踪</li>
+        <li>异常模式识别</li>
+        <li>资金流向分析</li>
+      </ul>
+    </div>
+  </div>
+   <p className="mt-4">
+      <span className="font-semibold">数据来源：</span>
+      整合多个链上数据分析API，包括Chainalysis、Elliptic、SlowMist、TRM Labs等合规数据提供商。
+   </p>
+</div>
+
+
+### 免责声明
+
+<div className="mt-6 p-4 bg-gray-100 rounded-lg border border-red-200">
+  <p className="text-sm">风险评分仅为专业工具分析结果，不构成任何交易建议或安全保证。即使低风险评分地址，仍可能存在未知风险因素。商户需自行承担所有交易决策责任。</p>
+</div>

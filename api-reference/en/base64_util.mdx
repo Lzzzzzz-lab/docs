@@ -1,0 +1,116 @@
+---
+title: "Base64Util"
+description: "Utility class for conversion between binary data and Base64 strings"
+---
+
+## Overview
+
+`Base64Util` is a core encoding/decoding tool in encrypted communication, primarily implementing mutual conversion between binary data and Base64 text. In API communication, Base64 encoding ensures encrypted binary data can be safely transmitted via HTTP protocol.
+
+## Code Examples
+<CodeGroup>
+
+  ```java Base64Util.java
+import java.util.Base64;
+
+public class Base64Util {
+    /**
+        * Encodes byte array to Base64 string
+        *
+        * @param bytes Original binary data
+        * @return Base64 encoded string
+        *
+        * Usage scenario: Convert encrypted binary data to safely transmittable text format,
+        *                suitable for HTTP request parameter encapsulation.
+        */
+        public static String encodeByte(byte[] bytes) {
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        /**
+        * Decodes Base64 string to byte array
+        *
+        * @param str Base64 encoded string
+        * @return Decoded original binary data
+        *
+        * Usage scenario: Convert Base64 data from API responses to binary,
+        *                preparing for subsequent decryption operations.
+        */
+        public static byte[] decodeString(String str) {
+            return Base64.getDecoder().decode(str);
+        }
+    }
+  ```
+
+  ```javascript Base64Util.js
+class Base64Util {
+  /**
+  * Encodes Uint8Array byte array to Base64 string
+  * @param {Uint8Array} bytes Original binary data
+  * @returns {string} Base64 encoded string
+  */
+      static encodeByte(bytes) {
+          const CHUNK_SIZE = 0x8000; // 32KB chunk processing (avoid stack overflow)
+          let output = '';
+
+          for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+          const chunk = bytes.subarray(i, i + CHUNK_SIZE);
+          output += String.fromCharCode.apply(null, chunk);
+          }
+          return btoa(output);
+      }
+
+      /**
+      * Decodes Base64 string to Uint8Array byte array
+      * @param {string} str Base64 encoded string
+      * @returns {Uint8Array} Decoded original binary data
+      */
+      static decodeString(str) {
+          const raw = atob(str);
+          const result = new Uint8Array(raw.length);
+
+          for (let i = 0; i < raw.length; i++) {
+          result[i] = raw.charCodeAt(i);
+          }
+          return result;
+      }
+  }
+
+
+  ```
+
+  ```python Base64Util.py
+import base64
+
+class Base64Util:
+  # Base64 encoding/decoding utility class
+
+  @staticmethod
+  def encodeByte(data: bytes) -> str:
+      # Encodes byte data to Base64 string
+      # Parameters: data - original binary data (bytes type)
+      # Returns: Base64 encoded string
+      # Usage scenario: Convert encrypted binary data to safely transmittable text format
+      return base64.b64encode(data).decode('utf-8')
+
+  @staticmethod
+  def decodeString(encoded_str: str) -> bytes:
+      # Decodes Base64 string to byte data
+      # Parameters: encoded_str - Base64 encoded string
+      # Returns: Decoded original binary data (bytes type)
+      # Usage scenario: Convert Base64 data from API responses to binary
+      return base64.b64decode(encoded_str.encode('utf-8'))
+
+# Usage example
+if __name__ == "__main__":
+  # Encoding example
+  binary_data = b"Hello Base64!"
+  encoded = Base64Util.encodeByte(binary_data)
+  print(f"Encoded result: {encoded}")
+
+  # Decoding example
+  decoded = Base64Util.decodeString(encoded)
+  print(f"Decoded result: {decoded}")
+  print(f"Consistency verification: {binary_data == decoded}")
+  ```
+
+</CodeGroup>

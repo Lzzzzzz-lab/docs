@@ -1,0 +1,41 @@
+---
+title: "常见问题解答"
+description: ""
+---
+
+<AccordionGroup>
+  <Accordion title="1. 为什么使用1024位RSA而不是更长的密钥？">
+    - 基于性能与安全性的平衡，1024位RSA提供足够的安全性同时保证API响应速度。如有更高安全需求可联系升级
+  </Accordion>
+
+  <Accordion title="2. 公钥遗失怎么办？">
+    - 联系WaaS技术支持重新生成密钥对
+  </Accordion>
+
+  <Accordion title="3. 响应解密失败如何处理？" defaultOpen={true}>
+    - 确认响应状态:检查code值，非0时无需解密，直接处理业务错误
+
+    - 验证数据格式:确保data是有效Base64字符串（字母/数字/+//=组合）
+
+    - 核对公钥一致性:确认使用与请求加密相同的公钥（测试/生产环境区分）
+
+    - 检查公钥处理方式：必须先将Base64编码的公钥字符串解码为字节数组，再用于解密，不可直接使用Base64字符串进行解密操作。
+  </Accordion>
+
+  <Accordion title="4. 为什么收到 (Data must not be longer than 128 bytes;) 错误？" defaultOpen={true}>
+    - 该错误是由于尝试解密超过128字节的数据所引起的,为避免此错误，请采用分段解密的方法,具体可以参考 RSA 工具类中的代码示例。
+  </Accordion>
+
+  <Accordion title="5. 为什么收到 (message: &quot;Decryption failed&quot;,code:1005, data:null) 错误？">
+    通常由以下原因引起：
+
+    - 🚫 商户使用了错误的RSA公钥加密请求数据（与WaaS提供的公钥不一致）。
+
+    - 🔄 商户在加密前没有正确对WaaS提供的公钥进行Base64解码（注意：WaaS提供的公钥是Base64编码的，但在使用时需要先进行Base64解码）。
+
+    - 💾 请求数据在序列化过程中出现问题（如包含了非UTF-8字符，或者序列化后的JSON格式不正确）。
+
+    - 🧩 加密过程中使用的填充模式或算法与WaaS不匹配（WaaS使用的是RSA/ECB/PKCS1Padding）。
+  </Accordion>
+
+</AccordionGroup>

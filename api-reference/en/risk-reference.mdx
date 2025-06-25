@@ -1,0 +1,178 @@
+---
+title: 'Risk Score Reference Guide'
+description: ''
+---
+#### Score Explanation
+
+> **Important Note**: The risk score is based on integrated data analysis from multiple KYA (Know Your Address) and KYT (Know Your Transaction) APIs, and is a **probabilistic assessment** that does not represent absolute transaction safety. All transaction decisions and consequences are solely the responsibility of the merchant. WaaS only provides analytical reference and does not offer any guarantees or assume any liabilities.
+
+<div className="flex flex-col gap-5 mt-4">
+
+  {/* Low Risk Card */}
+  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🟢 Low Risk (0 ~ 30 points)</div>
+        <div className="text-sm text-gray-600">System analysis indicates all safety metrics are within normal ranges</div>
+      </div>
+      <div className="bg-green-100 text-green-800 px-2 py-1 rounded-md">Routine Monitoring</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">Analysis Summary:</p>
+      <ul className="list-disc pl-5 mt-1 space极y-1">
+        <li>Normal address transaction patterns, no suspicious behavior associations</li>
+        <li>No high-risk entity contact records in transaction history</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">✅ Recommended Actions:</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>Maintain normal transaction processes</span>
+          </li>
+          <li className="flex items-start">
+            <span>Execute standard risk control monitoring</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* Medium Risk Card */}
+  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🟡 Medium Risk (31 ~ 64 points)</div>
+        <div className="text-sm text-gray-600">Potential abnormal signals detected requiring attention</div>
+      </div>
+      <div className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md">Enhanced Oversight</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">Analysis Summary:</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>Transaction interactions with medium/high-risk addresses</li>
+        <li>Small number of unconventional transaction patterns detected</li>
+        <li>Address behavior patterns exceed normal fluctuation ranges</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">⚠️ Recommended Actions:</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>Limit single transaction amounts</span>
+          </li>
+          <li className="flex items-start">
+            <span>Manual review of suspicious transactions</span>
+          </li>
+          <li className="flex items-start">
+            <span>Set transaction frequency limits</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* High Risk Card */}
+  <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🟠 High Risk (65 ~ 84 points)</div>
+        <div className="text-sm text-gray-600">Clear risk characteristics identified requiring immediate response</div>
+      </div>
+      <div className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md">Immediate Isolation</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">Analysis Summary:</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>Linked to multiple known high-risk entities</li>
+        <li>Transaction patterns match fraud characteristics</li>
+        <li>Address risk metrics persistently at high levels</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">⛔ Recommended Actions:</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>Suspend all transaction interactions</span>
+          </li>
+          <li className="flex items-start">
+            <span>Initiate comprehensive account investigation</span>
+          </li>
+          <li className="flex items-start">
+            <span>Implement real-time monitoring alerts</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {/* Critical Risk Card */}
+  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+    <div className="flex justify-between items-start">
+      <div>
+        <div className="font-bold text-lg">🔴 Critical Risk (85 ~ 100 points)</div>
+        <div className="text-sm text-gray-600">Confirmed major security threat exists</div>
+      </div>
+      <div className="bg-red-100 text-red-800 px-2 py-1 rounded-md">Emergency Handling</div>
+    </div>
+
+    <div className="mt-3">
+      <p className="font-medium">Analysis Summary:</p>
+      <ul className="list-disc pl-5 mt-1 space-y-1">
+        <li>Directly linked to AML blacklists</li>
+        <li>Detected complex fund layering behavior</li>
+        <li>Address characteristics match known criminal patterns</li>
+      </ul>
+
+      <div className="mt-3 bg-white p-3 rounded border">
+        <span className="font-medium">❗ Emergency Measures:</span>
+        <ul className="list-none pl-0 mt-2 space-y-1">
+          <li className="flex items-start">
+            <span>Completely terminate all transactions</span>
+          </li>
+          <li className="flex items-start">
+            <span>Implement complete account isolation</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+#### Technical Support
+
+<div className="mt-6 p-4 bg-gray-50 rounded-lg">
+  <p className="font-medium">Analytical Methods:</p>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+    <div className="bg-white p-3 rounded border">
+      <p className="font-medium">🔍 KYA (Know Your Address)</p>
+      <ul className="list-disc pl-5 mt-1">
+        <li>Historical behavior analysis of addresses</li>
+        <li>Network relationship graph mapping</li>
+        <li>Entity association degree assessment</li>
+      </ul>
+    </div>
+    <div className="bg-white p-3 rounded border">
+      <p className="font-medium">📊 KYT (Know Your Transaction)</p>
+      <ul className="list-disc pl-5 mt-1">
+        <li>Transaction flow layering tracking</li>
+        <li>Abnormal pattern recognition</li>
+        <li>Fund flow analysis</li>
+      </ul>
+    </div>
+  </div>
+   <p className="mt-4">
+      <span className="font-semibold">Data Sources:</span>
+      Integrated multiple on-chain data analysis APIs, including compliant data providers such as Chainalysis, Elliptic, SlowMist, TRM Labs, etc.
+   </p>
+</div>
+
+
+### Disclaimer
+
+<div className="mt-6 p-4 bg-gray-100 rounded-lg border border-red-200">
+  <p className="text-sm">The risk score is only the result of professional tool analysis and does not constitute any transaction advice or security guarantee. Even low-risk addresses may still have unknown risk factors. Merchants are solely responsible for all transaction decisions.</p>
+</div>

@@ -1,0 +1,33 @@
+---
+title: "Pre-encryption Request Parameters"
+description: ""
+---
+
+
+Refer to the business request parameter format definition of each interface for specific formats. Example reference:
+
+### Request Parameter Explanation
+<RequestExample>
+````mdx Original business request parameters before encryption
+{
+  "tenantUserId": "tenant_001",
+  "chainName": "ETH",
+  "symbol": "USDT"
+}
+````
+</RequestExample>
+
+
+<ParamField path="tenantUserId" type="string" required>
+tenantUserId refers to the user ID in the merchant system, not the merchant's ID in the WaaS system.
+</ParamField>
+
+<ParamField path="chainName" type="string" required>
+Name of the blockchain, e.g.: ETH, TRON, ...
+</ParamField>
+
+<ParamField path="symbol" type="string" required>
+Currency symbol, e.g.: USDT, USDC, PHT, ...
+</ParamField>
+
+

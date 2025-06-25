@@ -11,6 +11,335 @@
     }
   ],
   "paths": {
+    "/url": {
+      "get": {
+        "description": "New endpoint",
+        "responses": {
+          "200": {
+            "description": "New response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/getUserAddress": {
+      "post": {
+        "tags": ["user-controller"],
+        "summary": "获取用户存币地址",
+        "operationId": "getUserAddress",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台分配的商户身份凭证",
+            "schema": {
+              "type": "string",
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**tenantUserId** (string): 指的是商户系统中的用户ID，而非商户在 WaaS 系统中的ID。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6S7ADtX1i8PqNvJlU0a9T..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["code", "message", "data"],
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**tenantUserId** (string): 指的是商户系统中的用户ID，而非商户在 WaaS 系统中的ID。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....\n\n**address** (string): 地址。",
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
+                    }
+                  }
+                },
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyYKqNrVnqj5RqLAH/mtvrhI6rf235aUvv0gK/rVrpCUKDN46F2PFJ/PAe7H32tzd0iJn4Dn/EKt4TRmqm3rgoFZSbkvEnuzVYS+6ikPDrkgMzgx6Xg7U+y4esvWqMsJzt7x/CllGdJj6Me386qXD1PD558HydR9TteDWl4FqfvACx/6T64BAy/F4f3HqSfoBt9NuUN3s0SdXFVZt2Lq8Nycem0lDWuvacqlOkCMgCcTvmDyDPDG3Kn8Mq1wtiCxikBOlwGoxMDN/yyN30N7EaBA=="
+                    }
+                  },
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "{\"tenantUserId\":\"209638249\",\"chainName\":\"TRON\",\"address\":\"TMe11uojMK7UqCsCdXi2zS2Txyq6HP8SHQ\"}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/order/withdrawWithoutVerify": {
+      "post": {
+        "tags": ["order-controller"],
+        "summary": "提交无需二次确认的提币单",
+        "operationId": "withdrawWithoutVerify",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台分配的商户身份凭证",
+            "schema": {
+              "type": "string",
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**userId** (integer): 商户在WaaS系统中的ID。\n\n**tenantUserId** (string): 指的是商户系统中的用户ID。\n\n**tenantType** (integer): 表示商户的类型，这里规定类型为1。\n\n**callBackId**   (string):  商户需确保该 callBackId 的唯一性。\n\n**symbol** (string): 货币符号，例如：USDT、USDC、PHT.... 。\n\n**chainName** (string): 表示区块链的名称，例如：TRON、ETH...。\n\n**toAddr** (string): 接收方的地址，例如：toAddress123，表示转账目标地址。\n\n**amount** (BigDecimal): 转账的金额，例如：0.5 表示提款金额。",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "MznFksCdDmVmO2y2WkC3cN24a6VYubpGu3KCn3QYdG62JrANxPiw3......"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["code", "message", "data"],
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**tenantUserId** (integer): 表示商户系统中的用户ID。\n\n**id** (string): 商户请求提币时需生成唯一回调ID，WaaS会在响应中返回该ID以供确认。",
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
+                    }
+                  }
+                },
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyYKqNrVnqj5RqLAH/mtvrhI6rf235aUvv0gK/rVrpCUKDN46F2PFJ/PAe7H32tzd0iJn4Dn/EKt4TRmqm3rgoFZSbkvEnuzVYS+6ikPDrkgMzgx6Xg7U+y4esvWqMsJzt7x/CllGdJj6Me386qXD1PD558HydR9TteDWl4FqfvACx/6T64BAy/F4f3HqSfoBt9NuUN3s0SdXFVZt2Lq8Nycem0lDWuvacqlOkCMgCcTvmDyDPDG3Kn8Mq1wtiCxikBOlwGoxMDN/yyN30N7EaBA=="
+                    }
+                  },
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "{\"tenantUserId\":\"tenant123\",\"id\":\"D782243562\"}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/api/order/withdrawRequest": {
+      "post": {
+        "tags": ["order-controller"],
+        "summary": "请求提币订单（需二次确认）",
+        "operationId": "withdrawRequest",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
+          },
+          {
+            "name": "X-API-KEY",
+            "in": "header",
+            "required": true,
+            "description": "平台分配的商户身份凭证",
+            "schema": {
+              "type": "string",
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**userId** (integer): 商户在WaaS系统中的ID。\n\n**tenantUserId** (integer): 表示商户系统中的用户ID。\n\n**tenantType** (integer): 表示商户的类型，这里规定类型为1。\n\n**callBackId**   (string):  商户需确保该 callBackId 的唯一性。WaaS 在收到请求后，将使用该参数主动回调商户，以获取具体的提币单信息。",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "YMMpi1yLhJJbUYEN9IC3VXNXgfSBqKdHfOD4cf6cOlBb75whL9S..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["code", "message", "data"],
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n`tenantUserId` (string): WaaS在响应中返回tenantUserId以供确认。",
+                      "example": "KMMiCBQVBt9WsfiIYACX/9gtyIGBJkSijwuKx4Dr8755EMtpHCE5Vev6YMSDiKyJ....."
+                    }
+                  }
+                },
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "KMMiCBQVBt9WsfiIYACX/9gtyIGBJkSijwuKx4Dr8755EMtpHCE5Vev6YMSDiKyJ....."
+                    }
+                  },
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "{\"tenantUserId\":\"tenant123\"}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
     "/api/deposit/getDepositOrder": {
       "post": {
         "tags": ["deposit-controller"],
@@ -225,39 +554,43 @@
     "/api/deposit/getUserAddressIndependent": {
       "post": {
         "tags": ["deposit-controller"],
-        "summary": "获取用户存款地址接口（含收银台页面）[支持多币种]",
+        "summary": "提获取用户存款地址接口（含收银台页面）[支持多币种]",
         "operationId": "getUserAddressWithCounter",
         "parameters": [
           {
             "name": "Content-Type",
             "in": "header",
             "required": true,
-            "description": "请求内容类型。",
             "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
           },
           {
             "name": "X-API-KEY",
             "in": "header",
             "required": true,
-            "description": "平台分配的 API-KEY。",
+            "description": "平台分配的商户身份凭证",
             "schema": {
               "type": "string",
-              "example": "your-api-key"
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
             }
           }
         ],
         "requestBody": {
-          "description": "获取存款地址的请求参数列表（JSON 数组格式）",
           "required": true,
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/UserAddressIndependentDto"
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n该数据是一个对象列表，每个对象包含以下字段:\n\n**chainName** (string): 链名称，例如：ETH或TRON。\n\n**symbol** (string): 货币符号，例如：USDT、USDC。\n\n**tenantUserId** (string): 商户用户标识。\n\n**depositAmount** (string): 存款金额。\n\n**paymentValidity** (integer): 支付有效时间（秒），不传则不显示倒计时，最小值为5秒。\n\n**orderId** (string): 商户订单号，确保唯一性。\n\n**showDepositNotice** (boolean): 是否展示存币须知，默认为true。\n\n**showExchangeRate** (string): 展示汇率信息，例如：1 USDT = 7.2 CNY。\n\n**showMerchantLogo** (boolean): 是否展示商户LOGO，默认为true。\n\n**language** (string): 语言代码（如：en 为英语, zh_cn 为简体中文, zh_hk 为繁体中文）",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "LZKYO9srWIt8ZZFXV5ac8+BoKTFkAIbV0DwQnXcvall9hT......"
+                  }
                 }
               }
             }
@@ -265,35 +598,47 @@
         },
         "responses": {
           "200": {
-            "description": "成功响应，返回存款地址和支付详情列表",
+            "description": "成功响应",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListUserAddressResponse"
-                },
-                "example": {
-                  "code": 0,
-                  "message": "success",
-                  "data": [
-                    {
-                      "chainName": "ETH",
-                      "symbol": "USDT",
-                      "depositAmount": "2",
-                      "depositAddress": "0xa0e0cfd25f5db034abfd69cd555cb5d8cfe91aea",
-                      "depositUrl": "https://waas-payment-hk.example.com/deposit?data=eyJkYXRhIjpbeyJjaGFpbk..."
+                  "type": "object",
+                  "required": ["code", "message", "data"],
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64编码的RSA加密响应数据，由以下原始参数解密生成:\n\n该数据是一个对象列表，每个对象对应请求中传递的币种信息，包含以下字段:\n\n**chainName** (string): 区块链名称，例如：ETH。\n\n**symbol** (string): 货币符号，例如：USDT。\n\n**depositAmount** (string|null): 存款金额，可能为null。\n\n**depositAddress** (string): 存款地址，例如：0x068cf58e07e58050c1988e788156...\n\n**depositUrl** (string): 存款链接，用户可通过该链接进行存款操作，格式为：https://waas-payment-hk.powersafe-dev.cc/deposit?data=...\n\n注：如果请求中传递了多个币种，则响应将返回多个包含相应数据的对象。",
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
                     }
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "参数错误或存款金额重复",
-            "content": {
-              "application/json": {
-                "example": {
-                  "code": "INVALID_AMOUNT",
-                  "message": "金额格式错误：小数点后最多六位"
+                  }
+                },
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "lnxefvPT30BtcV8W905IU1XBc/ppkcfwIOC2/OwCyPF0F+BHE20elLN5M...."
+                    }
+                  },
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "[{\"chainName\":\"ETH\",\"symbol\":\"USDT\",\"depositAmount\":null,\"depositAddress\":\"0x068cf58e07e58050c1988e788156ba1c4f40e486\",\"depositUrl\":\"https://waas-payment-hk.powersafe-dev.cc/deposit?data=W3siY2hhaW5OYW1lIjoiRVRIIiwic3ltYm9sIjoiVVNEVCIsImRlcG9zaXRBbW91bnQiOm51bGwsInNob3dEZXBvc2l0Tm90aWNlIjp0cnVlLCJzaG93RXhjaGFuZ2VSYXRlIjoiMTIzMjEzIiwic2hvd01lcmNoYW50TG9nbyI6dHJ1ZSwicGF5bWVudFZhbGlkaXR5Ijo2MDAwMDAsIm9yZGVySWQiOiIyMzEyMzEyMzIxMyIsImRlcG9zaXRBZGRyZXNzIjoiMHgwNjhjZjU4ZTA3ZTU4MDUwYzE5ODhlNzg4MTU2YmExYzRmNDBlNDg2IiwiZXhwaXJhdGlvbkRhdGUiOjE3NTExMTcyMTM4MDAsImxhbmd1YWdlIjoiZW4ifV0=\"}]"
+                    }
+                  }
                 }
               }
             }
@@ -313,145 +658,90 @@
     "/api/user/getUserDailyStatistics": {
       "post": {
         "tags": ["user-controller"],
-        "summary": "获取用户每日统计",
+        "summary": "获取商户每日统计",
         "operationId": "getUserDailyStatistics",
         "parameters": [
           {
             "name": "Content-Type",
             "in": "header",
             "required": true,
-            "description": "请求内容类型",
             "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
           },
           {
             "name": "X-API-KEY",
             "in": "header",
             "required": true,
-            "description": "平台方分配的 API-KEY",
+            "description": "平台分配的商户身份凭证",
             "schema": {
               "type": "string",
-              "example": "your-api-key"
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
             }
           }
         ],
         "requestBody": {
-          "description": "每日统计请求参数（JSON 格式）",
           "required": true,
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/UserDailyStatisticsDto"
-              },
-              "example": {
-                "userId": 1308734,
-                "jobDate": "2023-10-25"
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**jobDate** (Date): 统计日期。\n\n**userId** (int):  商户在 WaaS 系统中的ID。",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "QqXI+lzQny4+QfWD+JAFcl1aq65Nj1kbfbQXmtjRO..."
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "成功响应，返回每日统计结果。",
+            "description": "成功响应",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": ["code", "message", "data"],
                   "properties": {
                     "code": {
                       "type": "integer",
-                      "description": "状态码（0：成功，1：失败）"
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
                     },
                     "message": {
                       "type": "string",
-                      "description": "返回的消息"
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
                     },
                     "data": {
-                      "type": "object",
-                      "description": "每日统计结果",
-                      "properties": {
-                        "jobDay": {
-                          "type": "string",
-                          "format": "date",
-                          "description": "数据统计的日期（例如：2023-10-01）"
-                        },
-                        "totalDepositAmount": {
-                          "type": "number",
-                          "format": "decimal",
-                          "description": "当日用户充值总金额"
-                        },
-                        "totalDepositCount": {
-                          "type": "integer",
-                          "description": "当日充值总笔数（例如：100笔）"
-                        },
-                        "totalDepositUserCount": {
-                          "type": "integer",
-                          "description": "当日进行充值的用户数（例如：50个用户）"
-                        },
-                        "totalWithdrawAmount": {
-                          "type": "number",
-                          "format": "decimal",
-                          "description": "当日用户提现总金额"
-                        },
-                        "totalWithdrawCount": {
-                          "type": "integer",
-                          "description": "当日提现总笔数（例如：80笔）"
-                        },
-                        "totalWithdrawUserCount": {
-                          "type": "integer",
-                          "description": "当日进行提现的用户数（例如：40个用户）"
-                        },
-                        "pendingCollectionAmount": {
-                          "type": "number",
-                          "format": "decimal",
-                          "description": "系统中待归集的总金额"
-                        },
-                        "collectionCount": {
-                          "type": "integer",
-                          "description": "当日完成的归集操作笔数（例如：10笔）"
-                        },
-                        "pendingCollectionAddressCount": {
-                          "type": "integer",
-                          "description": "当前待归集的地址数量（例如：5个地址）"
-                        },
-                        "coldWalletBalance": {
-                          "type": "number",
-                          "format": "decimal",
-                          "description": "冷钱包的余额"
-                        },
-                        "hotWalletBalance": {
-                          "type": "number",
-                          "format": "decimal",
-                          "description": "热钱包的余额"
-                        },
-                        "additionalTransferHotWallet": {
-                          "type": "number",
-                          "format": "decimal",
-                          "description": "当日热钱包额外转入的金额"
-                        }
-                      }
+                      "type": "string",
+                      "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**jobDay** (string): 数据统计的日期（例如：2023-10-01）。\n\n**totalDepositAmount** (number):  当日用户充值总金额。\n\n**totalDepositCount** (integer): 当日充值总笔数（例如：100笔）\n\n**totalDepositUserCount** (integer): 当日进行充值的用户数（例如：50个用户）。\n\n**totalWithdrawAmount** (number): 当日用户提现总金额。\n\n**totalWithdrawCount** (integer): 当日提现总笔数（例如：80笔）。\n\n**totalWithdrawUserCount** (integer): 当日进行提现的用户数（例如：40个用户）。\n\n**pendingCollectionAmount** (number): 系统中待归集的总金额。\n\n**collectionCount** (integer): 当日完成的归集操作笔数（例如：10笔）。\n\n**pendingCollectionAddressCount** (integer): 当前待归集的地址数量（例如：5个地址）。\n\n**coldWalletBalance** (number): 冷钱包的余额。\n\n**hotWalletBalance** (number): 热钱包的余额。\n\n**additionalTransferHotWallet** (number): 当日热钱包额外转入的金额。",
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
                     }
                   }
                 },
-                "example": {
-                  "code": 0,
-                  "message": "",
-                  "data": {
-                    "jobDay": "2023-10-01",
-                    "totalDepositAmount": 100000.50,
-                    "totalDepositCount": 100,
-                    "totalDepositUserCount": 50,
-                    "totalWithdrawAmount": 80000.75,
-                    "totalWithdrawCount": 80,
-                    "totalWithdrawUserCount": 40,
-                    "pendingCollectionAmount": 5000.25,
-                    "collectionCount": 10,
-                    "pendingCollectionAddressCount": 5,
-                    "coldWalletBalance": 200000.00,
-                    "hotWalletBalance": 150000.00,
-                    "additionalTransferHotWallet": 1000.00
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "crstZOC2AC3L/WViSSe8MJNEdwt9DiL1iq2nZX3My7XzfAWaOZhFf0Uy1e3tMkhWnNxOUgItczCOQwo2UTJ...."
+                    }
+                  },
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "[{\"jobDay\":1750348800000,\"totalDepositAmount\":1.0001,\"totalDepositCount\":1,\"totalDepositUserCount\":1,\"totalWithdrawAmount\":0.906,\"totalWithdrawCount\":1,\"totalWithdrawUserCount\":1,\"pendingCollectionAmount\":11.6507,\"collectionCount\":1,\"pendingCollectionAddressCount\":4,\"coldWalletBalance\":27.5701,\"hotWalletBalance\":23.081616,\"additionalTransferHotWallet\":0.0,\"tenantId\":1308679,\"riskDepositCount\":0,\"riskDepositAmount\":0.0}]"
+                    }
                   }
                 }
               }
@@ -561,73 +851,84 @@
             "name": "Content-Type",
             "in": "header",
             "required": true,
-            "description": "请求内容类型",
             "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
           },
           {
             "name": "X-API-KEY",
             "in": "header",
             "required": true,
-            "description": "平台方分配的 API-KEY",
+            "description": "平台分配的商户身份凭证",
             "schema": {
               "type": "string",
-              "example": "your-api-key"
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
             }
           }
         ],
         "requestBody": {
-          "description": "提币单状态请求参数（JSON 格式）。",
           "required": true,
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/GetWithdrawOrderRequest"
-              },
-              "example": {
-                "callBackId": "12345",
-                "userId": 1,
-                "tenantUserId": "tenant123",
-                "tenantType": 1,
-                "amount": 0.5,
-                "symbol": "TRX",
-                "chainName": "TRON",
-                "txId": "tx12345",
-                "fromAddr": "fromAddress123",
-                "toAddr": "toAddress123",
-                "tag": ""
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**callBackId** (string): 商户可以通过 callBackId（需确保其唯一性）查询订单状态。",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6S7ADtX1i8PqNvJlU0a9T..."
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "成功返回提币单状态。",
+            "description": "成功响应",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetWithdrawOrderResponse"
+                  "type": "object",
+                  "required": ["code", "message", "data"],
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**clientOrderId** (string): 商户提交的需查询的提币订单ID。\n\n**orderState** (string):  订单状态，0：初始化、1：审核中 2：进行中、3：完成、\n4：撤销、5：人工处理、6：失败\n\n",
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
+                    }
+                  }
                 },
-                "example": {
-                  "code": 0,
-                  "data": {
-                    "orderId": null,
-                    "symbol": "USDT",
-                    "baseCurrency": null,
-                    "amount": 5,
-                    "fiatAmount": null,
-                    "executedAmount": null,
-                    "executedFiatAmount": null,
-                    "price": null,
-                    "fee": null,
-                    "feeSymbol": null,
-                    "orderType": null,
-                    "orderState": 3,
-                    "clientOrderId": "client_order_123"
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "gwgguizKfpnzkvgotgLZD126qlI69oicjKhaVuyCaa4ZPYYxhDUIu2...."
+                    }
                   },
-                  "message": ""
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "{\"symbol\":\"USDT\",\"amount\":1.000000000000,\"orderState\":3,\"clientOrderId\":\"250619639710001\"}"
+                    }
+                  }
                 }
               }
             }
@@ -743,287 +1044,8 @@
           }
         }
       }
-    },
-    "/api/user/getUserAddress": {
-      "post": {
-        "tags": ["user-controller"],
-        "summary": "获取用户存币地址",
-        "operationId": "getUserAddress",
-        "parameters": [
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "description": "请求内容类型",
-            "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
-          },
-          {
-            "name": "X-API-KEY",
-            "in": "header",
-            "required": true,
-            "description": "平台方分配的 API-KEY",
-            "schema": {
-              "type": "string",
-              "example": "your-api-key"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "用户参数（JSON 格式）用于获取存币地址的请求。若用户不存在，会自动注册。",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDTO"
-              },
-              "example": {
-                "chainName": "TRON",
-                "symbol": "USDT",
-                "tenantUserId": "tenant123",
-                "env": "",
-                "userId": 1318758,
-                "tenantType": 1
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "成功返回用户存币地址。",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "状态码"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "tenantUserId": {
-                          "type": "string",
-                          "description": "商户用户标识"
-                        },
-                        "chainName": {
-                          "type": "string",
-                          "description": "链名称"
-                        },
-                        "address": {
-                          "type": "string",
-                          "description": "钱包地址"
-                        },
-                        "tag": {
-                          "type": "string",
-                          "description": "标签（可选）"
-                        },
-                        "state": {
-                          "type": "integer",
-                          "description": "地址状态（0：在用，1：不用）"
-                        },
-                        "riskScore": {
-                          "type": "integer",
-                          "description": "地址风险评分"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "返回消息"
-                    }
-                  }
-                },
-                "example": {
-                  "code": 0,
-                  "data": {
-                    "tenantUserId": "tenant123",
-                    "chainName": "TRON",
-                    "address": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-                    "tag": "",
-                    "state": 1,
-                    "riskScore": 85
-                  },
-                  "message": ""
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "403": {
-            "$ref": "#/components/responses/ForbiddenError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      }
-    },
-    "/api/order/withdrawRequest": {
-      "post": {
-        "tags": ["order-controller"],
-        "summary": "请求提币订单（需二次确认）",
-        "operationId": "withdrawRequest",
-        "parameters": [
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "description": "请求内容类型",
-            "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
-          },
-          {
-            "name": "X-API-KEY",
-            "in": "header",
-            "required": true,
-            "description": "平台方分配的 API-KEY",
-            "schema": {
-              "type": "string",
-              "example": "your-api-key"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "提币订单请求参数（JSON 格式）。",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WithdrawRequestDto"
-              },
-              "example": {
-                "callBackId": "D782243635",
-                "userId": 1,
-                "tenantUserId": "tenant123",
-                "tenantType": 1,
-                "amount": 0.5,
-                "symbol": "TRX",
-                "chainName": "TRON",
-                "toAddr": "toAddress123",
-                "tag": ""
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "成功返回提币订单结果。",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WithdrawResponse"
-                },
-                "example": {
-                  "code": 0,
-                  "data": {
-                    "id": "order12345",
-                    "tenantUserId": "tenant123"
-                  },
-                  "message": ""
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "403": {
-            "$ref": "#/components/responses/ForbiddenError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      }
-    },
-    "/api/order/withdrawWithoutVerify": {
-      "post": {
-        "tags": ["order-controller"],
-        "summary": "提交无需二次确认的提币单",
-        "operationId": "withdrawWithoutVerify",
-        "parameters": [
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "description": "请求内容类型",
-            "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
-          },
-          {
-            "name": "X-API-KEY",
-            "in": "header",
-            "required": true,
-            "description": "平台方分配的 API-KEY",
-            "schema": {
-              "type": "string",
-              "example": "your-api-key"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "提币订单请求参数（JSON 格式）。",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WithdrawRequestWithoutVerifyDto"
-              },
-              "example": {
-                "callBackId": "D782243635",
-                "userId": 1,
-                "tenantUserId": "tenant123",
-                "tenantType": 1,
-                "amount": 0.5,
-                "symbol": "TRX",
-                "chainName": "TRON",
-                "toAddr": "toAddress123",
-                "tag": ""
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "成功返回提币订单结果。",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WithdrawResponse"
-                },
-                "example": {
-                  "code": 0,
-                  "data": {
-                    "id": "order12345",
-                    "tenantUserId": "tenant123"
-                  },
-                  "message": ""
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "403": {
-            "$ref": "#/components/responses/ForbiddenError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      }
     }
+
   },
 
   "components": {
@@ -1439,36 +1461,6 @@
             "description": "返回的消息"
           }
         }
-      },
-      "UserDTO": {
-        "type": "object",
-        "properties": {
-          "chainName": {
-            "type": "string",
-            "description": "链名称"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "货币符号"
-          },
-          "tenantUserId": {
-            "type": "string",
-            "description": "商户用户标识"
-          },
-          "env": {
-            "type": "string",
-            "description": "环境标识"
-          },
-          "userId": {
-            "type": "integer",
-            "description": "商户 ID"
-          },
-          "tenantType": {
-            "type": "integer",
-            "description": "商户类型"
-          }
-        },
-        "required": ["chainName", "symbol", "tenantUserId", "userId", "tenantType"]
       },
       "WithdrawRequestWithoutVerifyDto": {
         "type": "object",

@@ -1,0 +1,50 @@
+---
+title: "核心机制"
+description: ""
+---
+
+
+为保障交易安全，WaaS系统采用非对称RSA加密机制保护API通信。每个接入商户将获得由WaaS生成的RSA密钥对（1024位），其中公钥由商户用于数据加解密，私钥由WaaS系统保管用于服务端加解密。
+
+<Info>
+  <div className="info-item">
+    <Icon icon="key" size={15} className="icon" />
+    <span> 公钥获取</span>
+  </div>
+  WaaS系统通过邮件将Base64编码的RSA公钥发送给商户。(建议商户使用AES二次加密存储公钥!!!)
+</Info>
+
+<Info>
+  <div className="info-item">
+    <Icon icon="lock" size={15} className="icon" />
+    <span> 私钥保管</span>
+  </div>
+  私钥由WaaS系统安全存储，不会在任何情况下提供给商户。
+</Info>
+
+<Info>
+  <div className="info-item">
+    <Icon icon="shield" size={15} className="icon" />
+    <span> 密钥类型</span>
+  </div>
+  1024位RSA密钥，采用RSA/ECB/PKCS1Padding加密模式（标准PKCS#1 v1.5填充方案）。
+</Info>
+
+<Info>
+  <div className="info-item">
+    <Icon icon="arrows-rotate" size={15} className="icon" />
+    <span> 密钥更新</span>
+  </div>
+  如需更新密钥，需联系WaaS技术支持重新生成。
+</Info>
+
+
+
+<Steps>
+  <Step title="请求流程">
+    商户用公钥加密请求 → WaaS用私钥解密处理
+  </Step>
+  <Step title="响应流程">
+    WaaS用私钥加密响应 → 商户用公钥解密结果
+  </Step>
+</Steps>

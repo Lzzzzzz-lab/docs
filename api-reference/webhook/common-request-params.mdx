@@ -1,0 +1,74 @@
+---
+title: '公共请求参数'
+description: ''
+---
+
+所有回调类型均包含以下基础参数，这些参数提供了请求的基本上下文信息和标识能力。
+
+
+<ParamField path="requestUUID" type="string" required>
+  全局唯一的请求标识符
+
+  **作用：**
+  - 作为请求的唯一标识
+  - 用于请求追踪和日志记录
+</ParamField>
+
+<ParamField path="tenantUserId" type="string" required>
+  商户用户ID
+
+  **重要说明：**
+  tenantUserId 指的是商户系统中的用户ID，而非商户在 WaaS 系统中的ID。
+
+</ParamField>
+
+<ParamField path="trackingId" type="string" required>
+  业务事件的持久化标识符，trackingId 是 WaaS 系统为每个业务事件（如一笔提币请求）创建的**永久性标识符**，在业务事件的整个生命周期内保持不变。
+
+  **核心特性**
+  1. **业务事件锚点**
+     唯一标识一个业务事件（如一笔提币订单），从创建到结束的所有回调都共享相同的 trackingId
+
+  2. **重试识别器**
+     当回调失败需要重试时：
+     ✅ trackingId 保持不变
+     ❌ requestUUID 会更新为新值
+
+  3. **响应关联键**
+     商户必须在响应中原样返回，用于 WaaS 确认回调所属的具体业务事件
+</ParamField>
+
+
+<ParamField path="type" type="integer" required>
+  回调类型标识
+
+  **枚举值：**
+  | 类型值 | 枚举名称                   |
+  |--------|----------------------------|
+  | 1      | NOTIFY_DEPOSITED           |
+  | 2      | NOTIFY_REQUEST_WITHDRAW    |
+  | 3      | NOTIFY_WITHDRAW            |
+  | 4      | NOTIFY_ADDRESS             |
+  | 5      | NOTIFY_INVALID_ADDRESS     |
+  | 6      | NOTIFY_NOT_ENOUGH_MONEY    |
+  | 7      | NOTIFY_NOT_ENOUGH_HOT_MONEY|
+
+  [查看详细的回调类型说明 →](/api-reference/webhook/callback_enumeration_type)
+</ParamField>
+
+<ParamField path="business" type="int" required>
+  租户类型标识
+
+  **当前版本说明：**
+  该字段作为保留参数，当前版本没有业务逻辑作用。保留该字段是为未来可能的扩展需求提供支持。
+
+  **预期用途：**
+  - 区分不同业务线的处理逻辑
+  - 特殊费率或规则应用标识
+  - 多租户系统中的租户标识
+
+  **最佳实践：**
+  虽然当前没有业务逻辑作用，但仍需在请求处理中保留和记录该字段，避免未来扩展时出现兼容性问题。
+
+  **示例值：** `0`
+</ParamField>

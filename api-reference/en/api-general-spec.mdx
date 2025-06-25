@@ -1,0 +1,198 @@
+---
+title: 'API General Instructions'
+description: ''
+---
+
+### Wallet Address Format Convention
+
+<div className="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+  <div className="flex items-start">
+    <div className="mr-3 mt-1">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 极1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+      </svg>
+    </div>
+    <div>
+      <div className="font-semibold text-gray-800 mb-2">Blockchain Address Format Specifications</div>
+      <div className="space-y-3">
+        {/* TRON Format */}
+        <div>
+          <div className="flex items-center">
+            <div className="bg-blue-600 text-white text-xs font-medium px-2 py-0.5 rounded mr-2">
+              TRON
+            </div>
+            <div className="text-sm text-gray-700">
+              Letters are <span className="font-bold">case-sensitive</span>
+            </div>
+          </div>
+          <div className="mt-1 space-y-1">
+            <div className="text-xs text-gray-500 bg-gray-100 p-1.5 rounded font-mono">
+              Correct: <span className="text-green-600 font-medium">TCrQkITtuMZfXqY5a2eXgVqC8CjQkFvJET</span>
+            </div>
+            <div className="text-xs text-gray-500 bg-gray-100 p-1.5 rounded font-mono border border-red-100">
+              <span className="text-red-500">Incorrect:</span> TCrQk<span className="text-red-500">i</span>ttuMZfXqY5a2eXgVqC8CjQkFvJET <span className="text-red-500 text-xs">(i should be lowercase)</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ETH Format */}
+        <div>
+          <div className="flex items-center">
+            <div className="bg-purple-600 text-white text-xs font-medium px-2 py-0.5 rounded mr-2">
+              ETH
+            </div>
+            <div className="text-sm text-gray-700">
+              Use <span className="font-bold">lowercase letters</span>
+            </div>
+          </div>
+          <div className="mt-1 space-y-1">
+            <div className="text-xs text-gray-500 bg-gray-100 p-1.5 rounded font-mono">
+              Correct: <span className="text-green-600 font-medium">0x742d35cc6634c0532925a3b844bc454e4438f44e</span>
+            </div>
+            <div className="text-xs text-gray-500 bg-gray-100 p-1.5 rounded font-mono border border-red-100">
+              <span className="text-red-500">Incorrect:</span> 0x742d35cc6634c0532925a3b<span className="text-red-500 uppercase">844BC454E4438F44E</span> <span className="text-red-500 text-xs">(no uppercase letters)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Bottom Note */}
+  <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-500">
+    Note: Different blockchains have varying address format requirements. When submitting addresses, ensure they fully comply with the corresponding chain's specifications (including case sensitivity). The system strictly validates formats, and incorrect formats will cause requests to be rejected.
+  </div>
+</div>
+
+### API Request Header
+
+The following request header parameters must be provided when calling the API:
+
+<table class="min-w-full divide-y divide-gray-300 border border-gray-300 rounded-lg text-sm w-[95%] max-w-3xl mx-auto">
+  <thead>
+    <tr>
+      <th scope="col" class="px-6 py-3 text-left font-bold text-gray-900 tracking-wide whitespace-nowrap text-base">
+        Request Header
+      </th>
+      <th scope="col" class="px-6 py-3 text-left font-bold text-gray-900 tracking-wide text-base">
+       Value
+      </th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <tr class="hover:bg-blue-50 transition-colors">
+      <td class="pl-6 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap">
+        Content-Type
+      </td>
+      <td class="pl-6 pr-3 py-3 text-gray-700">
+        application/x-www-form-urlencoded
+      </td>
+    </tr>
+    <tr class="hover:bg-blue-50 transition-colors">
+      <td class="pl-6 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap">
+        X-API-KEY
+      </td>
+      <td class="pl-6 pr-3 py-3 text-gray-700">
+        Unique API key assigned by the platform (example: 54bf2683-a3c8-41e2-3a4c-62315cp1386v)
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### API Request Specification
+
+<div className="space-y-5">
+  {/* Core Requirements */}
+  <div className="flex bg-gray-50 rounded-lg p-4 items-start border border-gray-200">
+    <div className="mr-4">
+      <div className="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <div className="text-sm text-gray-600 space-y-2">
+        <div className="flex items-center">
+          <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+          Request format: <span className="ml-1 font-medium text-gray-800">x-www-form-urlencoded</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+          Unique parameter: <span className="ml-1 font-medium text-gray-800">data</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+          data value: <span className="ml-1 font-medium text-gray-800">Encrypted business data string</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Postman Configuration */}
+  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="border-b p-3 bg-gray-50">
+      <span className="font-semibold text-gray-800">Postman Configuration Reference</span>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-[max-content_1fr] gap-4 p-4">
+      <div className="flex items-center">
+        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mr-3">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#047857">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+        </div>
+        <span className="text-sm font-medium text-gray-700">URL</span>
+      </div>
+      <div>
+        <div className="mt-1 text-sm font-medium break-all">
+          https://waas2-out-api.powersafe-rel.cc/api/v1/api/xxxx/xxxx
+        </div>
+      </div>
+
+      <div className="flex items-center">
+        <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center mr-3">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#b45309">
+            <path d="M12 15v-2m0-8v4m8 4a8 8 0 11-16 0 8 8 0 0116 0z"/>
+          </svg>
+        </div>
+        <span className="text-sm font-medium text-gray-700">Headers</span>
+      </div>
+      <div>
+        <div className="flex items-center mb-1">
+          <span className="text-sm text-gray-600 w-32">Content-Type</span>
+          <div className="bg-amber-50 px-2 py-1 rounded text-sm">application/x-www-form-urlencoded</div>
+        </div>
+        <div className="flex items-center">
+          <span className="text-sm text-gray-600 w-32">X-API-KEY</span>
+          <div className="bg-amber-50 px-2 py-1 rounded text-sm">53af2797-3eca-4412-b0cc-15273afe2d3e</div>
+        </div>
+      </div>
+
+      <div className="flex items-center">
+        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#4f46e5">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+        </div>
+        <span className="text-sm font-medium text-gray-700">Body</span>
+      </div>
+      <div>
+        <div className="grid grid-cols-[80px_1fr] mt-2 text-sm">
+          <div className="font-medium py-1">Key</div>
+          <div className="font-medium py-1">Value</div>
+          <div className="  rounded-l">data</div>
+          <div className=" rounded-r truncate">dF5Qwoi/nGC6TKKC4WdZ4YzjjvSh5WwZIDFTpc4nEWrSSDjWJ...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+#### Success Response Example
+```json
+{
+  "message": "",
+  "code": 0,
+  "data": "IQTgJfQwYcy0HMSPYrr20YS/fJuuB4CgooLXEGaoM57hsRQSYdiupfI5BNQRM=...."
+}
