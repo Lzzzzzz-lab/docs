@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://waasapi.url/api/v1/"
+      "url": "https://waas2-out-api.powersafe-rel.cc/api/v1/"
     }
   ],
   "paths": {
