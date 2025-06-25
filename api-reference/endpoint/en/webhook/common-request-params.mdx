@@ -1,0 +1,74 @@
+---
+title: 'Public Request Parameters'
+description: ''
+---
+
+All callback types include the following basic parameters, which provide fundamental context information and identification capabilities for the request.
+
+
+<ParamField path="requestUUID" type="string" required>
+  Globally unique request identifier
+
+  **Function:**
+  - Serves as the unique identifier for the request
+  - Used for request tracking and log recording
+</ParamField>
+
+<ParamField path="tenantUserId" type="string" required>
+  Merchant User ID
+
+  **Important Note:**
+  tenantUserId refers to the user ID in the merchant's system, not the merchant's ID in the WaaS system.
+
+</ParamField>
+
+<ParamField path="trackingId" type="string" required>
+  Persistent identifier for business events, trackingId is a **permanent identifier** created by the WaaS system for each business event (such as a withdrawal request), remaining unchanged throughout the entire lifecycle of the business event.
+
+  **Core Characteristics**
+  1. **Business Event Anchor**
+     Uniquely identifies a business event (such as a withdrawal order), with all callbacks from creation to completion sharing the same trackingId
+
+  2. **Retry Identifier**
+     When a callback fails and needs to be retried:
+     ✅ trackingId remains unchanged
+     ❌ requestUUID will be updated to a new value
+
+  3. **Response Correlation Key**
+     Merchant must return unchanged in response, used by WaaS to confirm the specific business event to which the callback belongs
+</ParamField>
+
+
+<ParamField path="type" type="integer" required>
+  Callback type identifier
+
+  **Enumeration Values:**
+  | Value | Enumeration Name              |
+  |-------|--------------------------------|
+  | 1     | NOTIFY_DEPOSITED           |
+  | 2     | NOTIFY_REQUEST_WITHDRAW    |
+  | 3     | NOTIFY_WITHDRAW            |
+  | 4     | NOTIFY_ADDRESS             |
+  | 5     | NOTIFY_INVALID_ADDRESS     |
+  | 6     | NOTIFY_NOT_ENOUGH_MONEY    |
+  | 7     | NOTIFY_NOT_ENOUGH_HOT_MONEY|
+
+  [View detailed callback type explanation →](/api-reference/webhook/callback_enumeration_type)
+</ParamField>
+
+<ParamField path="business" type="int" required>
+  Tenant type identifier
+
+  **Current Version Description:**
+  This field is a reserved parameter with no business logic function in the current version. It is reserved to support possible future expansion needs.
+
+  **Intended Use:**
+  - Distinguish processing logic for different business lines
+  - Identify special rates or rule applications
+  - Tenant identification in multi-tenant systems
+
+  **Best Practice:**
+  Although currently without business logic function, it should still be preserved and recorded in request processing to avoid compatibility issues in future expansions.
+
+  **Example Value:** `0`
+</ParamField>

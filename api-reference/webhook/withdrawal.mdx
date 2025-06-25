@@ -1,0 +1,142 @@
+---
+title: '提币通知回调'
+---
+
+`NOTIFY_WITHDRAW` (type=3)
+
+当用户通过WaaS完成提币操作后，WaaS会通过此回调通知您提币操作的详细信息，商户需要在响应中确认是否接受此回调。
+
+### 请求参数
+WaaS发送的请求是经过**RSA加密的Base64字符串**，商户需要使用公钥解密后才能获取以下业务参数：
+
+<ResponseField name="提币回调请求参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="type" type="Integer" required="是" example="3">
+回调类型，提币回调=3
+</ResponseField>
+
+<ResponseField name="txId" type="String" required="是" example="598433d2fe70a2e944bbda8b517cca36e0cf7cfe49642b569e73cf1a64">
+区块链交易Hash
+</ResponseField>
+
+<ResponseField name="chainName" type="String" required="是" example="ETH">
+链名称，如TRON、ETH、BSC....
+</ResponseField>
+
+<ResponseField name="symbol" type="String" required="是" example="TRON">
+代币符号，比如：USDT、USDC、PHT...
+</ResponseField>
+
+<ResponseField name="amount" type="BigDecimal" required="是" example="2.500000000000">
+实际提款金额
+</ResponseField>
+
+<ResponseField name="fromAddress" type="String" required="是" example="TBmNNTP84QSRW8Dvb1aCBk7GmxQnNS5rAb">
+提款来源地址
+</ResponseField>
+
+<ResponseField name="toAddress" type="String" required="是" example="TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchno">
+提款目标地址
+</ResponseField>
+
+<ResponseField name="callBackId" type="String" required="是" example="250624392590001">
+商户在请求提币时携带的callBackId。注：商户需保证其唯一性
+</ResponseField>
+
+<ResponseField name="newAddress" type="string" required="是" example="TYLdkix4wqk1wLXbqbxrrY1oi1mHEM6uwP">
+新地址，type为4时代替toAddress
+</ResponseField>
+
+</Expandable>
+
+</ResponseField>
+
+### 响应参数
+商户处理完回调后，需返回 JSON 格式的响应体。其中 `data` 字段需返回 **RSA加密的Base64字符串**（使用 WaaS 提供的公钥加密），其余字段为明文：
+
+<ResponseField name="提币回调响应参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="apiKey" type="String" required="是" example="88c47568-8d24-4983-9b4c-y1ec8b939e9b">
+商户API密钥
+</ResponseField>
+
+<ResponseField name="data" type="String" required="是" example="BDn6Liv5Z4TJ9vjfdRiuq1gaQJuODth3zlC4...">
+加密的业务数据，比如：BDn6Liv5Z4TJ9vjfd(具体参考右侧响应示例)
+   由以下原始业务参数加密生成：
+
+   **type** (Integer) : 回调类型
+
+   **callBackId** ：商户需同样返回 callBackId 帮助 WaaS 二次确认。
+
+   **trackingId** (String) : 业务事件标识符
+
+   **txId** (String) : 区块链交易Hash
+
+   **chainName** (String) : 区块链名称
+
+   **symbol** (String) : 代币符号
+
+   **amount** (Integer) : 存款金额
+
+   **fromAddress** (String) : 存款来源地址
+
+   **toAddress** (String) : 存款目标地址
+
+   **requestUUID** (String) : 请求的唯一标识符号，商户在响应中需要同样返回相同的requestUUID以帮助 WaaS 确认
+
+   **tenantUserId** (String) : 发起存款的用户ID(在商户系统中，并非WaaS系统中)
+</ResponseField>
+
+<ResponseField name="errCode" type="Integer" required="是" example="0">
+全局处理状态码：
+`0`=成功，非`0`=失败
+</ResponseField>
+
+<ResponseField name="message" type="String" required="是" example="">
+错误详情（失败时必填）：
+- 成功时可返回空字符串
+- 失败时需描述具体错误
+</ResponseField>
+
+</Expandable>
+
+</ResponseField>
+
+---
+
+<RequestExample>
+````mdx 加密前原始业务请求参数
+{
+  "tenantUserId": "1945",
+  "requestUUID": "00f2faf7-b705-4d65-9d82-0b6e372b92e4",
+  "txId": "598433d2fe70a2e944bbda8b517cca36e0cf7cfe49642b569e73cf1a641148cb",
+  "type": 3,
+  "chainName": "TRON",
+  "symbol": "USDT",
+  "amount": "2.500000000000",
+  "fromAddress": "TBmNNTP84QSRW8Dvb1aCBk7GmxQnNS5rAb",
+  "toAddress": "TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchnK",
+  "business": 0,
+  "callBackId": "250624392590001",
+  "newAddress": "TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchnK",
+  "trackingId": "102003"
+}
+````
+</RequestExample>
+
+
+<ResponseExample>
+````mdx 解密后的响应参数结构
+{
+  "apiKey": "88c47568-8d24-4983-9b4c-y1ec8b939e9b",
+  "data": "{\"type\":3,\"callBackId\":\"250624392590001\",\"trackingId\":\"102003\",\"txId\":\"598433d2fe70a2e944bbda8b517cca36e0cf7cfe49642b569e73cf1a641148cb\",\"chainName\":\"TRON\",\"symbol\":\"USDT\",\"amount\":\"2.500000000000\",\"fromAddress\":\"TBmNNTP84QSRW8Dvb1aCBk7GmxQnNS5rAb\",\"toAddress\":\"TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchnK\",\"requestUUID\":\"00f2faf7-b705-4d65-9d82-0b6e372b92e4\",\"tenantUserId\":\"1945\"}",
+  "errCode": 0,
+  "message": ""
+}
+````
+</ResponseExample>
+

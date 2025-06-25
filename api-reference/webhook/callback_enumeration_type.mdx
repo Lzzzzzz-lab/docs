@@ -1,0 +1,113 @@
+---
+title: '回调枚举类型说明'
+description: ''
+---
+
+### 回调事件的枚举值及其业务含义
+<div className="overflow-x-auto">
+  <table className="min-w-full divide-y divide-gray-300 border border-gray-300 rounded-lg shadow-sm">
+    <thead className="bg-gray-50">
+      <tr>
+        {/* 所有表头单元格添加统一的样式 - 字体更大、加粗 */}
+        <th scope="col" className="px-6 py-4 text-left text-base font-bold text-gray-900 tracking-wider whitespace-nowrap">
+          枚举类型
+        </th>
+        {/* 针对枚举值列增加最小宽度，防止换行 */}
+        <th scope="col" className="px-6 py-4 text-left text-base font-bold text-gray-900 tracking-wider whitespace-nowrap min-w-[120px]">
+          枚举值
+        </th>
+        <th scope="col" className="px-6 py-4 text-left text-base font-bold text-gray-900 tracking-wider">
+          说明
+        </th>
+      </tr>
+    </thead>
+    <tbody className="bg-white divide-y divide-gray-200">
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_UNKNOWN</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">0</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          商户无需处理这种通知类型，不需要做任何响应。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_DEPOSITED</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">1</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          WaaS通知商户有成功的存币单。商户需要根据存币单解析参数并进行响应。
+          商户负责在区块链上进行二次校验，并根据校验向WaaS返回响应结果。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_REQUEST_WITHDRAW</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">2</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          商户需解析提币单并将该单的详细信息响应给WaaS。仅用于商户提供的提币二次确认接口，
+          此接口虽与Webhook回调接口共用同一套请求和响应的参数模板，但接口URL是独立的。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_WITHDRAW</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">3</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          WaaS通知商户提币单成功。商户需要根据提币单解析参数并进行响应。
+          商户负责在区块链上进行二次校验，并根据校验向WaaS返回响应结果。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_ADDRESS</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">4</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          用户地址更换的通知。商户需解析参数中包含的新地址（new address），
+          并在系统中更新用户地址信息。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_INVALID_ADDRESS</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">5</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          提币失败（地址无效）。此情况下，此笔提币单以失败终结，商户可放心将冻结的资金解冻还给客户。
+          其它需要终结提币单并退回资金的情况也会借用此回调枚举，并非一定是地址错误。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_NOT_ENOUGH_MONEY</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">6</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          提币暂时失败（余额不足）。商户需根据提币单解析参数并进行响应。
+          补充余额后该提币单仍可以成功。
+        </td>
+      </tr>
+
+      <tr>
+        <td className="px-6 py-4 whitespace-nowrap font-mono text-gray-900">NOTIFY_NOT_ENOUGH_HOT_MONEY</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">7</span>
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700">
+          提币暂时失败（gas不足）。商户需根据提币单解析参数并进行响应。
+          补充热钱包余额后该提币单仍可以成功。
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

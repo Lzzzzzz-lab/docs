@@ -1,0 +1,108 @@
+---
+title: '提币失败通知回调'
+---
+
+`NOTIFY_INVALID_ADDRESS` (type=5)
+
+当提币操作因地址无效或其他原因失败时，WaaS会通过此回调通知商户：**该提币操作已完全终止，可以安全解冻用户资金**
+
+### 核心说明
+1. **操作终结**：此提币操作不会重试或完成
+2. **资金安全**：商户可以解除用户的资金冻结
+3. **失败原因**：
+   - 地址无效（格式错误或黑名单地址）
+   - 目标链不支持该资产
+   - 其他无法完成提币的技术限制
+
+
+### 请求参数
+请求是经过**RSA加密的Base64字符串**，商户需解密获取业务参数：
+
+<ResponseField name="提币失败请求参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="callBackId" type="String" required="是" example="D846735969">
+商户需确保该 callBackId 的唯一性。WaaS 将携带该参数主动回调商户，以通知商户哪一笔提币订单失败。
+</ResponseField>
+
+<ResponseField name="toAddress" type="String" required="是" example="TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchn2">
+触发失败的目标提币地址
+</ResponseField>
+
+
+</Expandable>
+</ResponseField>
+
+### 响应参数
+商户处理完回调后，需返回 JSON 格式的响应体。其中 `data` 字段需返回 **RSA加密的Base64字符串**（使用 WaaS 提供的公钥加密），其余字段为明文：
+
+<ResponseField name="提币回调响应参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="apiKey" type="String" required="是" example="88c47568-8d24-4983-9b4c-y1ec8b939e9b">
+商户API密钥
+</ResponseField>
+
+<ResponseField name="data" type="String" required="是" example="BDn6Liv5Z4TJ9vjfdRiuq1gaQJuODth3zlC4...">
+加密的业务数据，比如：BDn6Liv5Z4TJ9vjfd(具体参考右侧响应示例)
+   由以下原始业务参数加密生成：
+
+   **tenantUserId** (String) : 发起存款的用户ID(在商户系统中，并非WaaS系统中)
+
+   **callBackId** ：商户需同样返回 callBackId 帮助 WaaS 二次确认
+
+   **trackingId** (String) : 业务事件标识符
+
+   **type** (String) : 回调类型
+
+   **requestUUID** (String) : 请求的唯一标识符号，商户在响应中需要同样返回相同的requestUUID以帮助 WaaS 确认
+
+
+</ResponseField>
+
+<ResponseField name="errCode" type="Integer" required="是" example="0">
+全局处理状态码：
+`0`=成功，非`0`=失败
+</ResponseField>
+
+<ResponseField name="message" type="String" required="是" example="">
+错误详情（失败时必填）：
+- 成功时可返回空字符串
+- 失败时需描述具体错误
+</ResponseField>
+
+</Expandable>
+
+</ResponseField>
+
+
+---
+
+<RequestExample>
+````mdx 解密后原始请求
+{
+  "business": 0,
+  "requestUUID": "47b8d46c-12c9-4d64-98a0-ad1fbb6d0c29",
+  "tenantUserId": "ryan_test_3",
+  "callBackId": "D846735969",
+  "type": 5,
+  "toAddress": "TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchn2",
+  "trackingId": "102007"
+}
+````
+</RequestExample>
+
+
+<ResponseExample>
+````mdx 解密后的响应参数结构
+{
+  "apiKey": "88c47568-8d24-4983-9b4c-y1ec8b939e9b",
+  "data": "{\"tenantUserId\":\"ryan_test_3\",\"callBackId\":\"D846735969\",\"trackingId\":\"102007\",\"requestUUID\":\"47b8d46c-12c9-4d64-98a0-ad1fbb6d0c29\",\"type\":5}"
+  "errCode": 0,
+  "message": ""
+}
+````
+</ResponseExample>
+

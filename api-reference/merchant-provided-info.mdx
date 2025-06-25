@@ -1,5 +1,5 @@
 ---
-title: '商户准备资料'
+title: '接入准备'
 description: '商户在接入 WaaS 系统时，需要提供以下信息：'
 ---
 
@@ -15,14 +15,8 @@ description: '商户在接入 WaaS 系统时，需要提供以下信息：'
   **说明：**
   WaaS 在特定事件发生时会向商户提供的回调 URL 发送通知，告知操作结果或状态变化。商户需按规则实现回调接口，确保及时接收并处理通知。
 
-  **具体功能**
-  - 通知存币订单生成。
-  - 在提币执行前，询问提币订单的详细信息。
-  - 通知用户更换钱包地址的情况。
-  - 通知提币订单的执行结果。
+  **详情请参阅：**[Webhook 回调](/api-reference/webhook/webhook-callback)
 
-  **详情请参阅：**
-  - [Webhook 回调](/api-reference/webhook/webhook-callback)
 
 - **3、提现请求地址（可选）：**
   提现请求地址的用途取决于是否启用二次确认机制：
@@ -31,8 +25,7 @@ description: '商户在接入 WaaS 系统时，需要提供以下信息：'
 
   二次确认机制可根据商户需求启用，通过分离提币请求与信息确认，增强通信安全性，防止数据篡改和非法操作。
 
-  **详情请参阅：**
-  - [提现二次确认回调](/api-reference/webhook/withdraw-confirmation-callback)
+  **详情请参阅：**[提现二次确认回调](/api-reference/webhook/withdraw-confirmation-callback)
 
 - **4、IP 白名单：**
-  商户需提供服务器的固定 IP 地址，用于添加到 IP 白名单中。只有在 IP 白名单中的地址才能登录 WaaS 后台管理系统，确保系统安全性。
+ 商户需提供服务器的固定 IP 地址，用于添加到 IP 白名单中。只有在 IP 白名单中的地址才能够访问 API 接口，以确保系统的安全性。

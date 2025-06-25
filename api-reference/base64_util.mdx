@@ -1,0 +1,115 @@
+---
+title: "Base64Util"
+description: "用于二进制数据与Base64字符串之间的转换工具类"
+---
+
+## 概述
+
+`Base64Util` 是加密通信中的核心编解码工具，主要功能是实现二进制数据与Base64文本之间的相互转换。在API通信中，Base64编码用于确保加密后的二进制数据能够安全地通过HTTP协议传输。
+
+## 代码实例
+<CodeGroup>
+
+  ```java Base64Util.java
+import java.util.Base64;
+
+public class Base64Util {
+    /**
+        * 将字节数组编码为Base64字符串
+        *
+        * @param bytes 原始二进制数据
+        * @return Base64编码后的字符串
+        *
+        * 使用场景：将加密后的二进制数据转换为可安全传输的文本格式，
+        *          适用于HTTP请求参数封装。
+        */
+        public static String encodeByte(byte[] bytes) {
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        /**
+        * 将Base64字符串解码为字节数组
+        *
+        * @param str Base64编码的字符串
+        * @return 解码后的原始二进制数据
+        *
+        * 使用场景：将API响应中的Base64数据转换为二进制，
+        *          为后续解密操作做准备。
+        */
+        public static byte[] decodeString(String str) {
+            return Base64.getDecoder().decode(str);
+        }
+    }
+  ```
+
+  ```javascript Base64Util.js
+class Base64Util {
+    /**
+    * 将Uint8Array类型字节数组编码为Base64字符串
+    * @param {Uint8Array} bytes 原始二进制数据
+    * @returns {string} Base64编码后的字符串
+    */
+        static encodeByte(bytes) {
+            const CHUNK_SIZE = 0x8000; // 32KB分块处理（避免栈溢出）
+            let output = '';
+
+            for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+            const chunk = bytes.subarray(i, i + CHUNK_SIZE);
+            output += String.fromCharCode.apply(null, chunk);
+            }
+            return btoa(output);
+        }
+
+        /**
+        * 将Base64字符串解码为Uint8Array字节数组
+        * @param {string} str Base64编码的字符串
+        * @returns {Uint8Array} 解码后的原始二进制数据
+        */
+        static decodeString(str) {
+            const raw = atob(str);
+            const result = new Uint8Array(raw.length);
+
+            for (let i = 0; i < raw.length; i++) {
+            result[i] = raw.charCodeAt(i);
+            }
+            return result;
+        }
+    }
+
+  ```
+
+  ```python Base64Util.py
+import base64
+
+class Base64Util:
+    # Base64 编码/解码工具类
+
+    @staticmethod
+    def encodeByte(data: bytes) -> str:
+        # 将字节数据编码为Base64字符串
+        # 参数: data - 原始二进制数据 (bytes类型)
+        # 返回: Base64编码后的字符串
+        # 使用场景: 将加密后的二进制数据转换为可安全传输的文本格式
+        return base64.b64encode(data).decode('utf-8')
+
+    @staticmethod
+    def decodeString(encoded_str: str) -> bytes:
+        # 将Base64字符串解码为字节数据
+        # 参数: encoded_str - Base64编码的字符串
+        # 返回: 解码后的原始二进制数据 (bytes类型)
+        # 使用场景: 将API响应中的Base64数据转换为二进制
+        return base64.b64decode(encoded_str.encode('utf-8'))
+
+# 使用示例
+if __name__ == "__main__":
+    # 编码示例
+    binary_data = b"Hello Base64!"
+    encoded = Base64Util.encodeByte(binary_data)
+    print(f"编码结果: {encoded}")
+
+    # 解码示例
+    decoded = Base64Util.decodeString(encoded)
+    print(f"解码结果: {decoded}")
+    print(f"验证一致性: {binary_data == decoded}")
+  ```
+
+</CodeGroup>

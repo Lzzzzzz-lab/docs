@@ -1,0 +1,32 @@
+---
+title: "解密后数据结构示例"
+description: ""
+---
+
+解密后的业务请求参数(经过反序列化)包含以下字段：
+
+<ResponseExample>
+````mdx 业务请求参数解密示例
+{
+  "tenantUserId": "tenant_001",
+  "chainName": "ETH",
+  "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+}
+````
+</ResponseExample>
+
+
+<ResponseField name="tenantUserId" type="String" required={false}>
+商户系统中的用户唯一标识，与请求中的 tenantUserId 完全一致
+</ResponseField>
+
+<ResponseField name="chainName" type="String" required={false}>
+区块链名称，与请求中的 chainName 保持一致
+</ResponseField>
+
+<ResponseField name="address" type="String" required={false}>
+用户在该区块链上的钱包地址
+</ResponseField>
+
+
+

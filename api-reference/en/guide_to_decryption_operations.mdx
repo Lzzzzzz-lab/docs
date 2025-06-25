@@ -1,0 +1,183 @@
+---
+title: "Decryption Operation Guide"
+description: "WaaS API Response Data Decryption Operation Guide"
+---
+
+### c. Decryption Operation Guide
+
+This guide details how to decrypt encrypted response data obtained from WaaS APIs.
+
+#### i. Decryption Process Step-by-Step Explanation
+
+The following are the steps for decryption operations:
+
+1. Obtain <span className="text-blue-600 font-semibold"> encrypted data </span> from the API response
+2. Perform <span className="text-blue-600 font-semibold"> Base64 decoding </span> of the data
+3. Decrypt using the <span className="text-blue-600 font-semibold"> RSA public key </span>
+4. Parse the decrypted result into the <span className="text-blue-600 font-semibold"> business object </span>
+
+#### ii. Decryption Code Examples
+
+<CodeGroup>
+  ```java DecryptionExample.java
+  class DecryptionExample {
+      public static void main(String[] args) {
+          try {
+              // ===================== 1. Get API response =====================
+              // Send API request and get response
+              APIResult response = restTemplate.postForObject(
+                  "https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress",
+                  httpEntity,
+                  APIResult.class
+              );
+
+              // Extract encrypted data (ensure response format matches API)
+              String encryptedData = response.getData();
+
+              // ===================== 2. Base64 decoding =====================
+              // Decode using Base64 utility class (implementation reference utility classes)
+              byte[] decodedBytes = Base64Util.decodeString(encryptedData);
+
+              // ===================== 3. RSA public key decryption =====================
+              // Use the same public key as for requests
+              String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+              // Perform RSA decryption
+              byte[] decryptedBytes = RSAUtils.decryptByPublicKey(
+                  decodedBytes,
+                  publicKey
+              );
+
+              // ===================== 4. Parse business object =====================
+              // Convert decrypted JSON data to business object
+              AddressVO address = JsonUtils.fromJson(
+                  new String(decryptedBytes, StandardCharsets.UTF_8),
+                  AddressVO.class
+              );
+
+              // ===================== 5. Use decrypted data =====================
+              System.out.println("Parsed address information:");
+              System.out.println("Merchant user ID: " + address.getTenantUserId());
+              System.out.println("Chain name: " + address.getChainName());
+              System.out.println("Wallet address: " + address.getAddress());
+              System.out.println("Tag: " + address.getTag());
+              System.out.println("State: " + address.getState());
+              System.out.println("Risk score: " + address.getRiskScore());
+
+          } catch (Exception e) {
+              System.err.println("\nError occurred during decryption: " + e.getMessage());
+              e.printStackTrace();
+          }
+      }
+  }
+  ```
+
+  ```javascript EncryptionExample.js
+async function main() {
+  try {
+      // ===================== 1. Simulate getting API response =====================
+      // Assume request was sent and response received
+      const response = await axios.post(
+          'https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress',
+          { /* Request body */ },
+          { headers: { 'X-API-KEY': 'MERCHANT_123456' } }
+      );
+
+      // Get encrypted data (assume response structure is { data: "encrypted data", ... })
+      const encryptedData = response.data.data;
+
+      // ===================== 2. Base64 decoding =====================
+      const decodedBytes = Base64Util.decodeString(encryptedData);
+
+      // ===================== 3. RSA public key decryption =====================
+      const publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+      // Decrypt data
+      const decryptedBytes = await RSAUtils.decryptByPublicKey(
+          decodedBytes.buffer,
+          publicKey
+      );
+
+      // Convert to string
+      const decryptedText = new TextDecoder().decode(decryptedBytes);
+
+      // ===================== 4. Parse business object =====================
+      // Deserialize to AddressVO instance using JsonUtils
+      const address = JsonUtils.fromJson(decryptedText, AddressVO);
+
+      // ===================== 5. Use decrypted data =====================
+      console.log("Parsed address information:");
+      console.log("Merchant user ID: " + address.getTenantUserId());
+      console.log("Chain name: " + address.getChainName());
+      console.log("Wallet address: " + address.getAddress());
+      console.log("Tag: " + address.getTag());
+      console.log("State: " + address.getState());
+      console.log("Risk score: " + address.getRiskScore());
+
+  } catch (error) {
+      console.error("\nError occurred during decryption: " + error.message);
+      console.error(error.stack);
+  }
+}
+
+// Execute main function
+main();
+  ```
+
+  ```python EncryptionExample.py
+import requests
+from JsonUtils import JsonUtils
+from RSAUtils import RSAUtils
+from Base64Util import Base64Util
+
+def main():
+  try:
+      # ===================== 1. Simulate getting API response =====================
+      # Assume request was sent and response received
+      response = requests.post(
+          'https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress',
+          data={},
+          headers={'X-API-KEY': 'MERCHANT_123456'}
+      )
+
+      # Parse JSON response and get encrypted data
+      response_data = response.json()
+      encrypted_data = response_data['data']
+
+      # ===================== 2. Base64 decoding =====================
+      decoded_bytes = Base64Util.decode_string(encrypted_data)
+
+      # ===================== 3. RSA public key decryption =====================
+      public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+      decrypted_bytes = RSAUtils.decrypt_by_public_key(
+          decoded_bytes,
+          public_key
+      )
+
+      # Convert to string
+      decrypted_text = decrypted_bytes.decode('utf-8')
+
+      # ===================== 4. Parse business object =====================
+      # Deserialize to AddressVO instance using JsonUtils
+      address_data = JsonUtils.from_json(decrypted_text)
+      address = AddressVO(address_data)
+
+      # ===================== 5. Use decrypted data =====================
+      print("\nParsed address information:")
+      print("Merchant user ID:", address.get_tenant_user_id())
+      print("Chain name:", address.get_chain_name())
+      print("Wallet address:", address.get_address())
+      print("Tag:", address.get_tag())
+      print("State:", address.get_state())
+      print("Risk score:", address.get_risk_score())
+
+  except Exception as e:
+      print("\nError occurred during decryption:", str(e))
+      import traceback
+      traceback.print_exc()
+
+if __name__ == "__main__":
+  main();
+  ```
+
+</CodeGroup>

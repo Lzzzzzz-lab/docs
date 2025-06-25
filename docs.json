@@ -14,12 +14,44 @@
         "language": "cn",
         "groups": [
           {
-            "group": "概述",
+            "group": "介绍",
+            "pages": [
+              "api-reference/uu_wallet_introduction",
+              "api-reference/deposit-modes-overview",
+              "api-reference/supported-tokens",
+              "api-reference/risk-reference"
+            ]
+          },
+          {
+            "group": "接入指南",
             "pages": [
               "api-reference/merchant-provided-info",
-              "api-reference/deposit-modes-overview",
-              "api-reference/introduction",
-              "api-reference/uu_wallet_introduction"
+              "api-reference/overview_of_core_mechanisms",
+              "api-reference/api-general-spec",
+              {
+                "group": "请求示例",
+                "pages": [
+                  "api-reference/base_url",
+                  "api-reference/parameters_before_encryption",
+                  "api-reference/guide_to_encryption_operations"
+                ]
+              },
+              {
+                "group": "响应示例",
+                "pages": [
+                  "api-reference/guide_to_decryption_operations",
+                  "api-reference/decrypted_data_structure"
+                ]
+              },
+              {
+                "group": "核心工具类",
+                "pages": [
+                  "api-reference/base64_util",
+                  "api-reference/rsa_utils",
+                  "api-reference/json_utils"
+                ]
+              },
+              "api-reference/question_answer"
             ]
           },
           {
@@ -28,7 +60,6 @@
               "system-flow/funds-flow-cn",
               "system-flow/deposit-flow-cn",
               "system-flow/withdrawal-flow-cn",
-              "system-flow/checkout-flow-cn",
               "system-flow/aggregation-flow-cn",
               "system-flow/risk-notification-flow-cn"
             ]
@@ -37,15 +68,16 @@
             "group": "收银台",
             "pages": [
               "api-reference/checkout-page",
-              "api-reference/endpoint/getPreDepositInfo",
+              "api-reference/endpoint/getUserAddressIndependent",
               "api-reference/endpoint/getUserAddressWithCounter",
-              "api-reference/endpoint/getUserAddressIndependent"
+              "api-reference/endpoint/getPreDepositInfo"
             ]
           },
           {
             "group": "API 列表",
             "pages": [
               "api-reference/endpoint/getUserAddress",
+              "api-reference/endpoint/getDepositOrder",
               "api-reference/endpoint/speedUp",
               "api-reference/endpoint/withdrawWithoutVerify",
               "api-reference/endpoint/withdrawRequest",
@@ -54,35 +86,23 @@
             ]
           },
           {
-            "group": "商户需提供的回调接口",
+            "group": "Webhook",
             "pages": [
-              "api-reference/webhook/webhook-callback",
-              "api-reference/webhook/withdraw-confirmation-callback"
-            ]
-          },
-          {
-            "group": "收银台",
-            "pages": [
-
+              "api-reference/webhook/callback_overview",
+              "api-reference/webhook/preparation_before_access",
+              "api-reference/webhook/merchant_processing_example",
+              "api-reference/webhook/callback_enumeration_type",
+              "api-reference/webhook/common-request-params",
               {
-                "group": "页面配置",
+                "group": "Webhook API",
                 "pages": [
-                  "api-reference/checkout-page"
-                ]
-              },
-
-              {
-                "group": "地址接口",
-                "pages": [
-                  "api-reference/endpoint/getUserAddressWithCounter",
-                  "api-reference/endpoint/getUserAddressIndependent"
-                ]
-              },
-
-              {
-                "group": "预存接口",
-                "pages": [
-                  "api-reference/endpoint/getPreDepositInfo"
+                  "api-reference/webhook/deposit",
+                  "api-reference/webhook/withdrawal",
+                  "api-reference/webhook/withdrawal_second",
+                  "api-reference/webhook/withdrawal_failed",
+                  "api-reference/webhook/Insufficient_balance",
+                  "api-reference/webhook/insufficient_gas",
+                  "api-reference/webhook/address_change"
                 ]
               }
             ]
@@ -93,21 +113,53 @@
         "language": "en",
         "groups": [
           {
-            "group": "Overview",
+            "group": "Introduction",
             "pages": [
-              "api-reference/en/merchant-provided-info",
+              "api-reference/en/uu_wallet_introduction",
               "api-reference/en/deposit-modes-overview",
-              "api-reference/en/introduction"
+              "api-reference/en/supported-tokens",
+              "api-reference/en/risk-reference"
 
             ]
           },
           {
-            "group": "System Flow Chart",
+            "group": "Integration Guide",
+            "pages": [
+              "api-reference/en/merchant-provided-info",
+              "api-reference/en/overview_of_core_mechanisms",
+              "api-reference/en/api-general-spec",
+              {
+                "group": "Request Examples",
+                "pages": [
+                  "api-reference/en/base_url",
+                  "api-reference/en/parameters_before_encryption",
+                  "api-reference/en/guide_to_encryption_operations"
+                ]
+              },
+              {
+                "group": "Response Examples",
+                "pages": [
+                  "api-reference/en/guide_to_decryption_operations",
+                  "api-reference/en/decrypted_data_structure"
+                ]
+              },
+              {
+                "group": "Core Utility Classes",
+                "pages": [
+                  "api-reference/en/base64_util",
+                  "api-reference/en/rsa_utils",
+                  "api-reference/en/json_utils"
+                ]
+              },
+              "api-reference/en/question_answer"
+            ]
+          },
+          {
+            "group": "System Flowchart",
             "pages": [
               "system-flow/funds-flow-en",
               "system-flow/deposit-flow-en",
               "system-flow/withdrawal-flow-en",
-              "system-flow/checkout-flow-en",
               "system-flow/aggregation-flow-en",
               "system-flow/risk-notification-flow-en"
             ]
@@ -116,15 +168,16 @@
             "group": "Checkout",
             "pages": [
               "api-reference/en/checkout-page",
-              "api-reference/endpoint/en/getPreDepositInfo",
-              "api-reference/endpoint/en/getUserAddressWithCounter",
-              "api-reference/endpoint/en/getUserAddressIndependent"
+              "api-reference/en/endpoint/getUserAddressIndependent",
+              "api-reference/en/endpoint/getUserAddressWithCounter",
+              "api-reference/en/endpoint/getPreDepositInfo"
             ]
           },
           {
-            "group": "List of API Endpoints",
+            "group": "API List",
             "pages": [
               "api-reference/endpoint/en/getUserAddress",
+              "api-reference/endpoint/en/getDepositOrder",
               "api-reference/endpoint/en/speedUp",
               "api-reference/endpoint/en/withdrawWithoutVerify",
               "api-reference/endpoint/en/withdrawRequest",
@@ -133,10 +186,25 @@
             ]
           },
           {
-            "group": "Merchant Callback API",
+            "group": "Webhook",
             "pages": [
-              "api-reference/endpoint/en/webhook/webhook-callback",
-              "api-reference/endpoint/en/webhook/withdraw-confirmation-callback"
+              "api-reference/endpoint/en/webhook/callback_overview",
+              "api-reference/endpoint/en/webhook/preparation_before_access",
+              "api-reference/endpoint/en/webhook/merchant_processing_example",
+              "api-reference/endpoint/en/webhook/callback_enumeration_type",
+              "api-reference/endpoint/en/webhook/common-request-params",
+              {
+                "group": "Webhook API",
+                "pages": [
+                  "api-reference/endpoint/en/webhook/deposit",
+                  "api-reference/endpoint/en/webhook/withdrawal",
+                  "api-reference/endpoint/en/webhook/withdrawal_second",
+                  "api-reference/endpoint/en/webhook/withdrawal_failed",
+                  "api-reference/endpoint/en/webhook/Insufficient_balance",
+                  "api-reference/endpoint/en/webhook/insufficient_gas",
+                  "api-reference/endpoint/en/webhook/address_change"
+                ]
+              }
             ]
           }
         ]

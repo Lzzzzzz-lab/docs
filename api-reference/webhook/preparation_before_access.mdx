@@ -1,0 +1,173 @@
+---
+title: '回调接入准备说明'
+description: '商户处理WaaS回调请求的技术规范'
+---
+
+### 1. WaaS回调处理流程
+<div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+  <div className="font-bold mb-3 text-orange-800">回调请求处理流程：</div>
+
+  <div className="mb-3 p-3 bg-orange-100 rounded-lg">
+    <div className="font-semibold">⚠️ 这是WaaS系统向商户回调URL发起的请求流程</div>
+    <div className="text-sm mt-1">商户需要按照以下流程处理从WaaS收到的回调请求</div>
+  </div>
+
+  <div className="grid grid-cols-3 gap-4 mb-4">
+
+    <div className="bg-white p-3 rounded border">
+      <div className="font-semibold text-center text-orange-600 mb-2">回调数据加密</div>
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <div className="bg-gray-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">1</div>
+          <div className="text-sm">WaaS准备JSON业务数据</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-gray-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">2</div>
+          <div className="text-sm">WaaS使用商户私钥RSA加密</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-gray-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">3</div>
+          <div className="text-sm">Base64编码用于传输</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div className="bg-white p-3 rounded border">
+      <div className="font-semibold text-center text-blue-600 mb-2">回调请求验证</div>
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">A</div>
+          <div className="text-sm">WaaS在请求头携带X-API-KEY</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">B</div>
+          <div className="text-sm">商户校验API KEY有效性</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">C</div>
+          <div className="text-sm">验证失败返回401 Unauthorized</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white p-3 rounded border border-green-200">
+      <div className="font-semibold text-center text-green-600 mb-2">商户解密回调数据</div>
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <div className="bg-green-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">α</div>
+          <div className="text-sm">从原始输入流读取回调数据</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-green-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">β</div>
+          <div className="text-sm">Base64解码得到加密数据</div>
+        </div>
+        <div className="flex items-center">
+          <div className="bg-green-100 w-6 h-6 rounded-full flex items-center justify-center mr-2">γ</div>
+          <div className="text-sm">商户使用公钥RSA解密</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="bg-blue-50 p-3 rounded border border-blue-200">
+    <div className="font-semibold">WaaS回调请求示例：</div>
+    <div className="text-xs mt-2 bg-gray-800 text-gray-100 p-3 rounded">
+      <span className="text-gray-400">// WaaS发送到商户回调URL的请求</span><br/>
+      POST /<span className="text-blue-300">your-callback-endpoint</span> HTTP/1.1<br/>
+      <span className="text-blue-300">Host: your-merchant-domain.com</span><br/>
+      <span className="text-blue-300">Content-Type: application/x-www-form-urlencoded</span><br/>
+      <span className="text-green-300">X-API-KEY: merchant_api_key_12345</span><br/>
+      <br/>
+      <span className="text-yellow-200">ew0KICAib3JkZXJJZCI6ICIxMjM0NTY3ODk...</span>
+    </div>
+  </div>
+</div>
+
+### 2. 商户处理回调的要点
+<div className="grid grid-cols-2 gap-6 mt-5">
+  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+    <div className="font-semibold mb-3">回调API Key验证：</div>
+    <div className="mb-2 text-sm text-blue-700">处理来自WaaS的回调请求时：</div>
+    <ul className="list-disc pl-5 space-y-1 text-sm">
+      <li>从HTTP头<code>X-API-KEY</code>获取WaaS提供的密钥</li>
+      <li>验证密钥是否有效且在有效期内</li>
+      <li>验证失败返回<code>401 Unauthorized</code></li>
+    </ul>
+    <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
+      注：该API Key与商户调用WaaS API时使用的密钥不同
+    </div>
+  </div>
+
+  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+    <div className="font-semibold mb-3">回调数据解密规范：</div>
+    <div className="mb-2 text-sm text-green-700">处理WaaS回调数据需注意：</div>
+    <ul className="list-disc pl-5 space-y-1 text-sm">
+      <li>必须使用<code>HttpServletRequest</code>原始输入流读取</li>
+      <li>Base64解码获取加密字节数据</li>
+      <li>使用商户私钥进行RSA解密</li>
+    </ul>
+    <div className="mt-3 p-2 bg-green-100 rounded text-xs">
+      常见错误：误用<code>request.getParameter("data")</code>会返回null
+    </div>
+  </div>
+</div>
+
+<div className="mt-4 p-3 bg-gray-100 rounded border">
+  <div className="font-semibold text-gray-700">回调处理说明：</div>
+  <p className="text-sm mt-1">
+    WaaS系统向商户配置的回调URL发送事件通知，商户需要正确处理这些回调请求。
+    加解密流程与商户调用WaaS API时相同，主要区别在于回调数据读取方式。
+  </p>
+</div>
+
+#### 3. 回调幂等性处理
+<div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+  <div className="font-bold mb-3">回调幂等性要求：</div>
+
+  <div className="mb-3 p-3 bg-purple-100 rounded-lg">
+    <div className="font-semibold">WaaS可能重发相同事件回调</div>
+    <div className="text-sm">商户需保证相同事件只处理一次</div>
+  </div>
+
+  <div className="overflow-x-auto">
+    <table className="w-full border-collapse">
+      <thead>
+        <tr className="bg-purple-100">
+          <th className="border p-2">回调类型</th>
+          <th className="border p-2">幂等键组成</th>
+          <th className="border p-2">说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className="border p-2 font-semibold">存款回调</td>
+          <td className="border p-2">(txid, chain, symbol, toAddress)组合哈希</td>
+          <td className="border p-2 text-sm">解决包装合约重复存款问题</td>
+        </tr>
+        <tr>
+          <td className="border p-2 font-semibold">提款回调</td>
+          <td className="border p-2">txid</td>
+          <td className="border p-2 text-sm">WaaS控制的全局唯一交易ID</td>
+        </tr>
+        <tr>
+          <td className="border p-2 font-semibold">其他回调</td>
+          <td className="border p-2">(type, trackingId, callBackId....)</td>
+          <td className="border p-2 text-sm">所有回调类型均需实现幂等</td>
+        </tr>
+      </tbody>
+    </table>
+    <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-600">
+      WaaS提示：切勿使用每次不同的requestUUID作为幂等键
+    </div>
+  </div>
+
+  <div className="mt-4 p-3 bg-white rounded border">
+    <div className="font-semibold mb-2">回调处理原则：</div>
+    <ul className="list-disc pl-5 space-y-1">
+      <li>存储已处理回调事件的唯一标识</li>
+      <li>对重复回调直接返回成功状态(不重复业务处理)</li>
+      <li>当回调处理失败时(仅当errCode=0时，WaaS才认为回调成功)，WaaS将重试回调</li>
+    </ul>
+  </div>
+</div>

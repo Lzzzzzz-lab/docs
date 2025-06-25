@@ -1,0 +1,41 @@
+---
+title: "Frequently Asked Questions"
+description: ""
+---
+
+<AccordionGroup>
+  <Accordion title="1. Why use 1024-bit RSA instead of longer keys?">
+    - Based on a balance between performance and security, 1024-bit RSA provides sufficient security while ensuring API response speed. Contact support for upgrades if higher security is required.
+  </Accordion>
+
+  <Accordion title="2. What to do if the public key is lost?">
+    - Contact WaaS technical support to regenerate the key pair.
+  </Accordion>
+
+  <Accordion title="3. How to handle decryption failure?" defaultOpen={true}>
+    - Verify response status: Check the code value. If not 0, no decryption is needed; handle business errors directly.
+
+    - Validate data format: Ensure data is a valid Base64 string (combination of letters/numbers/+//=).
+
+    - Verify public key consistency: Confirm the same public key is used as for request encryption (distinguish between test/production environments).
+
+    - Check public key handling: Must first decode the Base64-encoded public key string into a byte array before using it for decryption. Do not use the Base64 string directly for decryption.
+  </Accordion>
+
+  <Accordion title="4. Why am I getting (Data must not be longer than 128 bytes;) error?" defaultOpen={true}>
+    - This error occurs when attempting to decrypt data exceeding 128 bytes. To avoid this, use chunked decryption. Refer to the code examples in the RSA utility class.
+  </Accordion>
+
+  <Accordion title="5. Why am I getting (message: &quot;Decryption failed&quot;,code:1005, data:null) error?">
+    Usually caused by:
+
+    - 🚫 Merchant used incorrect RSA public key for encryption (inconsistent with the public key provided by WaaS).
+
+    - 🔄 Merchant failed to properly Base64 decode the public key provided by WaaS before use (note: WaaS provides Base64-encoded public keys that require decoding before use).
+
+    - 💾 Issues during request data serialization (e.g., contains non-UTF-8 characters or incorrect JSON format).
+
+    - 🧩 Mismatched padding mode or algorithm during encryption (WaaS uses RSA/ECB/PKCS1Padding).
+  </Accordion>
+
+</AccordionGroup>

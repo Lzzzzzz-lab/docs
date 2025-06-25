@@ -1,0 +1,113 @@
+---
+title: '地址变更通知回调'
+---
+
+`NOTIFY_ADDRESS` (type=4)
+
+当在WaaS中更换了用户的存款地址时，系统会通过此回调通知商户地址变更信息。商户需要立即在自身系统中更新该用户的存款地址，**确保用户后续存款使用最新的有效地址**。
+
+> **系统行为说明**：WaaS在以下情况可能变更用户存款地址：
+> - 安全策略要求（如定期轮换地址）
+> - 技术架构调整（如迁移到新地址池）
+> - 风险管理需要（如旧地址被标记风险）
+
+### 请求参数
+WaaS发送的请求是经过**RSA加密的Base64字符串**，商户需使用公钥解密后获取业务参数：
+
+<ResponseField name="地址变更请求参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="chainName" type="String" required="是" example="TRON">
+区块链名称，比如ETH、TRON、BSC....
+</ResponseField>
+
+<ResponseField name="symbol" type="String" required="是" example="USDT">
+代币符号，USDT、USDC、PHT....
+</ResponseField>
+
+<ResponseField name="newAddress" type="String" required="是" example="TGVJZLgz88XPYwkQECMRocSgHtKQT7VQZd">
+**用户的新存款地址**（核心变更数据），TGVJZLgz88XPYwkQECMRo....
+</ResponseField>
+
+<ResponseField name="toAddress" type="String" required="否" example="TGVJZLgz88XPYwkQECMRocSgHtKQT7VQZd">
+兼容字段（与newAddress值相同）
+</ResponseField>
+
+</Expandable>
+</ResponseField>
+
+### 响应参数
+响应中`data`字段需返回 **RSA加密的Base64字符串**（使用WaaS公钥加密）：
+
+<ResponseField name="地址变更响应参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="apiKey" type="String" required="是" example="88c47568-8d24-4983-9b4c-y1ec8b939e9b">
+商户API密钥，WaaS会通过其校验响应的有效性
+</ResponseField>
+
+<ResponseField name="data" type="String" required="是" example="Lm56FdG...">
+加密的业务数据，比如：M828vsP1Z5caDkEkpBfDSY8vgFqxcs0GfRP3x8RzCyGj...(明文可参考右侧示例)
+
+由以下原始业务参数加密生成：
+
+**type** (Integer) : 回调类型
+
+**chainName** (String) : 区块链名称
+
+**symbol** (String) : 代币符号
+
+**toAddress** (String) : 商户需要返回更换后的地址
+
+**requestUUID** (String) : 请求的唯一标识符号，商户在响应中需要同样返回相同的requestUUID以帮助 WaaS 确认
+
+**tenantUserId** (String) : 更换地址的用户ID(商户系统中)
+
+
+</ResponseField>
+
+<ResponseField name="errCode" type="Integer" required="是" example="0">
+全局处理状态码：
+`0`=成功，非`0`=失败
+</ResponseField>
+
+<ResponseField name="message" type="String" required="是" example="">
+错误详情（失败时必填）：
+- 成功时可返回空字符串
+- 失败时需描述具体错误
+</ResponseField>
+
+</Expandable>
+</ResponseField>
+
+---
+
+<RequestExample>
+````mdx 解密后原始请求
+{
+  "requestUUID": "f47d9353-d35b-437b-94ed-a0994794d688",
+  "tenantUserId": "2020",
+  "chainName": "TRON",
+  "symbol": "USDT",
+  "business": 0,
+  "type": 4,
+  "toAddress": "TGVJZLgz88XPYwkQECMRocSgHtKQT7VQZd",
+  "newAddress": "TGVJZLgz88XPYwkQECMRocSgHtKQT7VQZd",
+  "trackingId": null //在该回调类型中，trackingId为null
+}
+````
+</RequestExample>
+
+
+<ResponseExample>
+````mdx 解密后的响应参数结构
+{
+  "apiKey": "88c47568-8d24-4983-9b4c-y1ec8b939e9b",
+  "data": "{\"type\":4,\"chainName\":\"TRON\",\"symbol\":\"USDT\",\"toAddress\":\"TGVJZLgz88XPYwkQECMRocSgHtKQT7VQZd\",\"requestUUID\":\"f47d9353-d35b-437b-94ed-a0994794d688\",\"tenantUserId\":\"2020\"}",
+  "errCode": 0,
+  "message": ""
+}
+````
+</ResponseExample>

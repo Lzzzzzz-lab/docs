@@ -1,0 +1,33 @@
+---
+title: "加密前请求参数"
+description: ""
+---
+
+
+具体格式请参考每个接口的业务请求参数格式定义，示例参考：
+
+### 请求参数说明
+<RequestExample>
+````mdx 加密前原始业务请求参数
+{
+  "tenantUserId": "tenant_001",
+  "chainName": "ETH",
+  "symbol": "USDT"
+}
+````
+</RequestExample>
+
+
+<ParamField path="tenantUserId" type="string" required>
+  tenantUserId 指的是商户系统中的用户ID，而非商户在 WaaS 系统中的ID。
+</ParamField>
+
+<ParamField path="chainName" type="string" required>
+  链的名称，比如：ETH、TRON....
+</ParamField>
+
+<ParamField path="symbol" type="string" required>
+  货币符号，比如：USDT、USDC、PHT.....
+</ParamField>
+
+

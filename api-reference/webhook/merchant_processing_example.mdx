@@ -1,0 +1,53 @@
+---
+title: '回调数据解密实现'
+description: ''
+---
+
+#### 核心处理代码(使用商户公钥解密WaaS回调数据的正确方式)
+
+```java
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Base64;
+
+public APIResult handleFormData(HttpServletRequest request) {
+    try {
+        // 1. 从请求输入流读取原始加密数据
+        StringBuilder encryptedBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(request.getInputStream())
+        )) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                encryptedBuilder.append(line);
+            }
+        }
+        String base64Encrypted = encryptedBuilder.toString();
+
+        // 2. Base64解码获取加密字节数据
+        byte[] encryptedBytes = Base64.decodeString(base64Encrypted);
+
+        // 3. 获取商户公钥（示例中硬编码，实际应从安全来源获取）
+        String merchantPublicKey = "-----BEGIN PUBLIC KEY-----\n"
+            + "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKcQ3Z+7wZ3nP1gX2tRl\n"
+            + "Y7t6mGjRk1p0lK1q7e2k8X8jfQ1zW6qZ3d1VkKJyDkF2aE8m0J3bGxO2BQ7S7n5x7\n"
+            + "d9XlJf6gKjq7cQb3t7pYjzQ0N8sQa4i5dLZzX9YyKt0P7o9UYxQ5yWz3mIj0hGpFq\n"
+            + "yVg2GXv8sZ1F7Gd5jC5s0e3kZdJj3JkLwIDAQAB\n"
+            + "-----END PUBLIC KEY-----";
+
+        // 4. 使用商户公钥解密数据
+        byte[] decryptedBytes = RSAUtils.decryptByPublicKey(
+            encryptedBytes,
+            merchantPublicKey
+        );
+
+        // 5. 将解密后的数据转换为字符串
+        String jsonData = new String(decryptedBytes);
+
+        // 6. 返回解密结果
+        return APIResult.newSuccessResult(jsonData);
+    } catch (Exception e) {
+        return APIResult.newErrorResult("DECRYPT_FAILED");
+    }
+}

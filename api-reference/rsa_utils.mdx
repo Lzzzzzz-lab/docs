@@ -1,0 +1,320 @@
+---
+title: "RSAUtils"
+description: "用于RSA公钥加密和解密的工具类"
+---
+
+## 概述
+
+`RSAUtils` 是实现RSA公钥加密和解密的工具类，采用非对称加密算法保障数据传输安全。在API通信中，用于对敏感业务数据进行加密传输，以及解密服务器返回的加密数据。
+
+
+## 代码实例
+<CodeGroup>
+
+  ```java Base64Util.java
+import javax.crypto.Cipher;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.spec.X509EncodedKeySpec;
+
+/**
+ * RSA公钥加解密工具类
+ * <p>
+ * 提供基于公钥的非对称加密解密功能，
+ * 适用于API通信中的数据加密传输。
+ */
+public class RSAUtils {
+    // RSA加密最大块大小（单位：字节）
+    private static final int MAX_ENCRYPT_BLOCK = 117;
+
+    /**
+     * 使用公钥加密数据
+     *
+     * @param data 原始二进制数据
+     * @param publicKey Base64编码的公钥字符串
+     * @return 加密后的二进制数据
+     *
+     * 使用场景：在发送API请求前，加密业务数据。
+     * 自动处理大数据的分段加密（117字节/块）。
+     *
+     * 示例：
+     * byte[] encrypted = RSAUtils.encryptByPublicKey(
+     *     jsonData.getBytes(),
+     *     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+     * );
+     */
+    public static byte[] encryptByPublicKey(byte[] data, String publicKey) throws Exception {
+        // 1. Base64解码公钥
+        byte[] keyBytes = Base64Util.decodeString(publicKey);
+
+        // 2. 生成公钥对象
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        Key publicK = keyFactory.generatePublic(
+            new X509EncodedKeySpec(keyBytes)
+        );
+
+        // 3. 创建并初始化加密器
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, publicK);
+
+        // 4. 分段加密处理大数据
+        int inputLen = data.length;
+        int offset = 0;
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+
+        while (inputLen - offset > 0) {
+            int blockSize = Math.min(inputLen - offset, MAX_ENCRYPT_BLOCK);
+            byte[] encryptedBlock = cipher.doFinal(data, offset, blockSize);
+            out.write(encryptedBlock, 0, encryptedBlock.length);
+            offset += blockSize;
+        }
+
+        return out.toByteArray();
+    }
+
+    /**
+     * 使用公钥解密数据
+     *
+     * @param encryptedData 加密后的二进制数据
+     * @param publicKey Base64编码的公钥字符串
+     * @return 解密后的原始二进制数据
+     *
+     * 使用场景：解密API返回的加密数据。
+     * 适用于小数据块的一次性解密操作。
+     *
+     * 示例：
+     * byte[] decrypted = RSAUtils.decryptByPublicKey(
+     *     encryptedBytes,
+     *     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+     * );
+     */
+    public static byte[] decryptByPublicKey(byte[] encryptedData, String publicKey) throws Exception {
+        // 1. Base64解码公钥
+        byte[] keyBytes = Base64Util.decodeString(publicKey);
+
+        // 2. 生成公钥对象
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        Key publicK = keyFactory.generatePublic(
+            new X509EncodedKeySpec(keyBytes)
+        );
+
+        // 3. 创建并初始化解密器
+        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, publicK);
+
+        // 4. 一次性解密（适合小数据）
+        return cipher.doFinal(encryptedData);
+    }
+}
+  ```
+
+  ```javascript RSAUtils.js
+// 依赖之前实现的 Base64Util
+const crypto = subtl;
+
+export class RSAUtils {
+    // RSA加密最大块大小（单位：字节）
+    static MAX_ENCRYPT_BLOCK = 117;
+
+    /**
+     * 使用公钥加密数据
+     * @param {ArrayBuffer} data 原始二进制数据
+     * @param {string} publicKey Base64编码的公钥字符串
+     * @returns {Promise<ArrayBuffer>} 加密后的二进制数据
+     *
+     * 使用场景：在发送API请求前，加密业务数据
+     * 自动处理大数据的分段加密（117字节/块）
+     */
+    static async encryptByPublicKey(data, publicKey) {
+        // 1. Base64解码公钥
+        const keyBytes = Base64Util.decodeString(publicKey);
+
+        // 2. 导入公钥
+        const publicKeyObj = await crypto.subtle.importKey(
+            "spki",
+            keyBytes,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            true,
+            ["encrypt"]
+        );
+
+        // 3. 分段加密处理大数据
+        const blockSize = RSAUtils.MAX_ENCRYPT_BLOCK;
+        const result = new Uint8Array(data.byteLength + 256);
+        let offset = 0;
+        let totalEncrypted = 0;
+
+        while (offset < data.byteLength) {
+            const block = data.slice(offset, Math.min(offset + blockSize, data.byteLength));
+            const encryptedBlock = await crypto.subtle.encrypt(
+                { name: "RSA-OAEP" },
+                publicKeyObj,
+                block
+            );
+
+            result.set(new Uint8Array(encryptedBlock), totalEncrypted);
+            totalEncrypted += encryptedBlock.byteLength;
+            offset += block.byteLength;
+        }
+
+        return result.slice(0, totalEncrypted).buffer;
+    }
+
+    /**
+     * 使用公钥解密数据
+     * @param {ArrayBuffer} encryptedData 加密后的二进制数据
+     * @param {string} publicKey Base64编码的公钥字符串
+     * @returns {Promise<ArrayBuffer>} 解密后的原始二进制数据
+     *
+     * 使用场景：解密API返回的加密数据
+     * 适用于小数据块的一次性解密操作
+     */
+    static async decryptByPublicKey(encryptedData, publicKey) {
+        // 1. Base64解码公钥
+        const keyBytes = Base64Util.decodeString(publicKey);
+
+        // 2. 导入公钥
+        const publicKeyObj = await crypto.subtle.importKey(
+            "spki",
+            keyBytes,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            true,
+            ["decrypt"]
+        );
+
+        // 3. 一次性解密
+        return crypto.subtle.decrypt(
+            { name: "RSA-OAEP" },
+            publicKeyObj,
+            encryptedData
+        );
+    }
+}
+
+// 使用示例
+(async () => {
+    // 模拟一个公钥字符串
+    const publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+    // 待加密数据
+    const data = new TextEncoder().encode("敏感数据12345");
+
+    try {
+        // 加密
+        const encrypted = await RSAUtils.encryptByPublicKey(data.buffer, publicKey);
+        console.log("加密结果:", new Uint8Array(encrypted));
+
+        // 解密
+        const decrypted = await RSAUtils.decryptByPublicKey(encrypted, publicKey);
+        console.log("解密结果:", new TextDecoder().decode(decrypted));
+    } catch (e) {
+        console.error("RSA操作失败:", e);
+    }
+})();
+  ```
+
+  ```python RSAUtils.py
+import base64
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.backends import default_backend
+
+class RSAUtils:
+    # RSA加密最大块大小（单位：字节）
+    MAX_ENCRYPT_BLOCK = 117
+
+    @staticmethod
+    def encrypt_by_public_key(data: bytes, public_key_str: str) -> bytes:
+        """
+        使用公钥加密数据
+        @param data: 原始二进制数据
+        @param public_key_str: Base64编码的公钥字符串
+        @return: 加密后的二进制数据
+
+        使用场景：在发送API请求前，加密业务数据
+        自动处理大数据的分段加密（117字节/块）
+        """
+        # 1. Base64解码公钥
+        public_key_der = base64.b64decode(public_key_str)
+
+        # 2. 加载公钥对象
+        public_key = serialization.load_der_public_key(
+            public_key_der,
+            backend=default_backend()
+        )
+
+        # 3. 分段加密
+        offset = 0
+        encrypted_chunks = []
+        while offset < len(data):
+            block = data[offset:offset + RSAUtils.MAX_ENCRYPT_BLOCK]
+            encrypted_chunk = public_key.encrypt(
+                block,
+                padding.OAEP(
+                    mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                    algorithm=hashes.SHA256(),
+                    label=None
+                )
+            )
+            encrypted_chunks.append(encrypted_chunk)
+            offset += len(block)
+
+        return b''.join(encrypted_chunks)
+
+    @staticmethod
+    def decrypt_by_public_key(encrypted_data: bytes, public_key_str: str) -> bytes:
+        """
+        使用公钥解密数据
+        @param encrypted_data: 加密后的二进制数据
+        @param public_key_str: Base64编码的公钥字符串
+        @return: 解密后的原始二进制数据
+
+        使用场景：解密API返回的加密数据
+        适用于小数据块的一次性解密操作
+        """
+        # 1. Base64解码公钥
+        public_key_der = base64.b64decode(public_key_str)
+
+        # 2. 加载公钥对象
+        public_key = serialization.load_der_public_key(
+            public_key_der,
+            backend=default_backend()
+        )
+
+        # 3. 一次性解密
+        return public_key.decrypt(
+            encrypted_data,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+
+# 使用示例
+if __name__ == "__main__":
+    # 模拟公钥字符串
+    public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+
+    # 待加密数据
+    data = b"敏感数据12345"
+
+    try:
+        # 加密
+        encrypted = RSAUtils.encrypt_by_public_key(data, public_key)
+        print("加密结果:", base64.b64encode(encrypted).decode())
+
+        # 解密
+        decrypted = RSAUtils.decrypt_by_public_key(encrypted, public_key)
+        print("解密结果:", decrypted.decode())
+    except Exception as e:
+        print("RSA操作失败:", e)
+  ```
+
+</CodeGroup>

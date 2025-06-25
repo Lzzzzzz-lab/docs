@@ -1,0 +1,132 @@
+---
+title: 'WaaS Callback Mechanism Overview'
+description: 'Deep dive into the Webhook callback mechanism of the WaaS platform, including working principles, security implementation, and handling processes for various callback scenarios'
+---
+
+### What is Webhook Callback?
+
+Webhook callback is an **event-driven communication mechanism** where the WaaS platform actively sends notifications to merchant systems when specific events occur, used for **asynchronously informing** operation results or status changes. This mechanism allows merchants to learn blockchain operation results in real-time without actively polling for updates.
+
+### Core Features
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+    <div className="font-bold text-blue-800 mb-2">Two-way Authentication Mechanism</div>
+    <p>Ensures callback source trustworthiness through API-Key mechanism</p>
+  </div>
+
+  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+    <div className="font-bold text-green-800 mb-2">End-to-End Encryption</div>
+    <p>Notification content encrypted with RSA + Base64 encoding</p>
+  </div>
+
+  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+    <div className="font-bold text-purple-800 mb-2">Real-time Push</div>
+    <p>Notifications triggered immediately after event completion, no delay</p>
+  </div>
+
+  <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+    <div className="font-bold text-amber-800 mb-2">Multi-scenario Coverage</div>
+    <p>Supports key scenarios like deposits, withdrawals, address changes</p>
+  </div>
+</div>
+
+### Callback Processing Flow
+
+1. **Event Occurs**: User initiates operations like deposit/withdrawal on WaaS platform
+2. **WaaS Processing**: Platform processes transaction and confirms blockchain status
+3. **Notification Construction**: WaaS generates notification data and performs security processing:
+   - Encrypts with merchant's private key using RSA
+   - Converts encrypted result to Base64 format
+4. **Callback Dispatch**: WaaS sends HTTP POST request to merchant's registered callback URL
+5. **Merchant Processing**:
+   - Base64 decodes received data
+   - RSA decrypts using merchant's public key
+   - Parses JSON-formatted business data
+   - Performs corresponding processing based on business type
+6. **Response Return**: After processing, merchant returns encrypted response data
+
+### Example Scenarios
+
+#### 1. Deposit Notification Flow
+
+<div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-5">
+
+  <div className="grid grid-cols-4 gap-2 mb-3">
+    <div className="bg-white p-2 text-center rounded">1. User Deposit</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">2. Blockchain Confirmation</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">3. WaaS Detection</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">4. Merchant Processing</div>
+  </div>
+
+  <div className="mt-3">
+    <p className="font-medium">Key Steps:</p>
+    <ol className="list-decimal pl-5 mt-1 space-y-1">
+      <li>User deposits cryptocurrency to merchant address</li>
+      <li>Transaction confirmed on blockchain network (typically requires multiple block confirmations)</li>
+      <li>WaaS system detects successful transaction</li>
+      <li>WaaS calls merchant callback URL, sends NOTIFY_DEPOSITED type notification</li>
+      <li>Merchant verifies transaction and updates user account balance</li>
+    </ol>
+  </div>
+</div>
+
+#### 2. Withdrawal Notification Flow (Without Secondary Confirmation)
+
+<div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-5">
+
+  <div className="grid grid-cols-5 gap-2 mb-3">
+    <div className="bg-white p-2 text-center rounded">1. Merchant Initiation</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">2. WaaS Processing</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">3. Blockchain Broadcast</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">4. Transaction Confirmation</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">5. Merchant Processing</div>
+  </div>
+
+  <div className="mt-3">
+    <p className="font-medium">Key Steps:</p>
+    <ol className="list-decimal pl-5 mt-1 space-y-1">
+      <li>Merchant system initiates withdrawal request via API</li>
+      <li>WaaS processes withdrawal request and performs security review</li>
+      <li>WaaS broadcasts withdrawal transaction to blockchain network</li>
+      <li>Transaction confirmed by blockchain network</li>
+      <li>WaaS sends NOTIFY_WITHDRAW notification for successful withdrawal</li>
+      <li>Merchant receives notification and updates order status</li>
+    </ol>
+  </div>
+</div>
+
+#### 3. Withdrawal Flow (With Secondary Confirmation)
+
+<div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+
+<div className="grid grid-cols-5 gap-2 mb-3">
+  <div className="bg-white p-2 text-center rounded">1. Merchant System Initiates Withdrawal</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">2. WaaS Actively Calls Back Merchant</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">3. Merchant Responds With Details</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">4. Execute On-chain Withdrawal</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">5. Notify Merchant of Result</div>
+</div>
+
+  <div className="mt-3">
+    <p className="font-medium">Key Steps:</p>
+    <ol className="list-decimal pl-5 mt-1 space-y-1">
+      <li>Merchant system initiates withdrawal request via API, carrying callbackId</li>
+      <li>After receiving request, WaaS actively calls merchant's callback URL (NOTIFY_REQUEST_WITHDRAW)</li>
+      <li>After receiving request, WaaS returns success response, then actively calls merchant's callback URL (enum type NOTIFY_REQUEST_WITHDRAW, carrying callbackId as parameter)</li>
+      <li>When merchant's callback interface is requested, responds to WaaS with withdrawal details based on callbackId, including: withdrawal amount, target address, currency, chain type...</li>
+      <li>After receiving response, WaaS executes on-chain withdrawal</li>
+      <li>After successful on-chain execution, WaaS calls back merchant again (NOTIFY_WITHDRAW) to notify withdrawal result</li>
+    </ol>
+  </div>
+</div>

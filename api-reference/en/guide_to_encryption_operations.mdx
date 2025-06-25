@@ -1,0 +1,213 @@
+---
+title: "Encryption Operation Guide"
+description: ""
+---
+
+### i. Encryption Process Step-by-Step Explanation
+
+The following are the steps for encryption operations:
+
+1. Prepare <span className="text-blue-600 font-semibold"> business request parameters </span>.(All field definitions refer to the Pre-encryption Request Parameters section)
+2. Serialize into a <span className="text-blue-600 font-semibold"> JSON </span> string.
+3. Encrypt the JSON data using the <span className="text-blue-600 font-semibold"> RSA public key </span> provided by WaaS.
+4. Perform <span className="text-blue-600 font-semibold"> Base64 </span> encoding of the encryption result.
+
+### ii. Encryption Code Examples
+
+The following are code examples for implementing encryption:
+
+<CodeGroup>
+
+    ```java EncryptionExample.java
+    class EncryptionExample {
+        public static void main(String[] args) {
+            try {
+                // ===================== 1. Prepare business parameters =====================
+                Map<String, Object> requestParams = new HashMap<>();
+                requestParams.put("tenantUserId", "tenant_001");
+                requestParams.put("chainName", "ETH");
+                requestParams.put("symbol", "USDT");
+
+                // ===================== 2. JSON serialization =====================
+                // Perform serialization using JSON utility class, implementation can refer to sample code in relevant utility classes
+                String jsonData = JsonUtils.toJson(requestParams);
+
+                // ===================== 3. RSA public key encryption =====================
+                // Use the public key provided by WaaS
+                String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...";
+
+                // Use RSA utility class for encryption, implementation can refer to sample code in relevant utility classes
+                byte[] encryptedData = RSAUtils.encryptByPublicKey(
+                    jsonData.getBytes(StandardCharsets.UTF_8),
+                    publicKey
+                );
+
+                // ===================== 4. Base64 encoding =====================
+                // Perform encoding using Base64 utility class, implementation can refer to sample code in relevant utility classes
+                String base64Data = Base64Util.encodeByte(encryptedData);
+
+                // ===================== 5. Prepare HTTP request =====================
+                // Create HTTP request headers
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("X-API-KEY", "MERCHANT_123456"); // Merchant credentials
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED); // Form format
+
+                // Package request body
+                MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+                body.add("data", base64Data); // Parameter name must be "data"
+
+                // ===================== 6. Send API request =====================
+                // Create and configure RestTemplate
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+
+                // Send request and get response
+                APIResult response = restTemplate.postForObject(
+                    "https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress",
+                    new HttpEntity<>(body, headers),
+                    APIResult.class
+                );
+
+                // Process response, content can refer to response examples
+                System.out.println("\nAPI response result:");
+                System.out.println(response);
+
+            } catch (Exception e) {
+                System.err.println("\nError occurred during processing: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+    ```
+
+  ```javascript EncryptionExample.js
+async function main() {
+    try {
+        // ===================== 1. Prepare business parameters =====================
+        const requestParams = {
+            tenantUserId: "tenant_001",
+            chainName: "ETH",
+            symbol: "USDT"
+        };
+
+        // ===================== 2. JSON serialization =====================
+        const jsonData = JsonUtils.toJson(requestParams);
+
+        // ===================== 3. RSA public key encryption =====================
+        const publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4极GNADCBiQ...";
+
+        // Convert string to Uint8Array
+        const textEncoder = new TextEncoder();
+        const jsonBytes = textEncoder.encode(jsonData);
+
+        // Encrypt using RSAUtils
+        const encryptedData = await RSAUtils.encryptByPublicKey(
+            jsonBytes.buffer,
+            publicKey
+        );
+
+        // ===================== 4. Base64 encoding =====================
+        const base64Data = Base64Util.encodeByte(new Uint8Array(encryptedData));
+
+        // ===================== 5. Prepare HTTP request =====================
+        const headers = {
+            'X-API-KEY': 'MERCHANT_123456',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+
+        const params = new URLSearchParams();
+        params.append('data', base64Data);
+
+        // ===================== 6. Send API request =====================
+        const response = await axios.post(
+            'https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress',
+            params.toString(),
+            { headers }
+        );
+
+        // ===================== 7. Process response result =====================
+        console.log('\nAPI response result:');
+        console.log(response.data);
+
+    } catch (error) {
+        console.error('\nError occurred during processing:');
+        console.error(error.message);
+        console.error(error.stack);
+    }
+}
+
+// Execute main function
+main();
+  ```
+
+  ```python EncryptionExample.py
+import requests
+from urllib.parse import urlencode
+from JsonUtils import JsonUtils
+from RSAUtils import RSAUtils
+from Base64Util import Base64Util
+
+def main():
+  try:
+      # ===================== 1. Prepare business parameters =====================
+      request_params = {
+          "tenantUserId": "tenant_001",
+          "chainName": "ETH",
+          "symbol": "USDT"
+      }
+
+      # ===================== 2. JSON serialization =====================
+      json_data = JsonUtils.to_json(request_params)
+
+      # ===================== 3. RSA public key encryption =====================
+      public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."
+
+      # JSON data in Python is a string, needs to be converted to bytes
+      json_bytes = json_data.encode('utf-8')
+
+      # Encrypt using RSAUtils
+      encrypted_data = RSAUtils.encrypt_by_public_key(
+          json_bytes,
+          public_key
+      )
+
+      # ===================== 4. Base64 encoding =====================
+      base64_data = Base64Util.encode_byte(encrypted_data)
+
+      # ===================== 5. Prepare HTTP request =====================
+      headers = {
+          'X-API-KEY': 'MERCHANT_123456',
+          'Content-Type': 'application/x-www-form-urlencoded'
+      }
+
+      payload = {'data': base64_data}
+
+      # ===================== 6. Send API request =====================
+      response = requests.post(
+          'https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress',
+          data=urlencode(payload),
+          headers=headers
+      )
+
+      # ===================== 7. Process response result =====================
+      # Ensure API returned valid response
+      response.raise_for_status()
+
+      # Parse JSON response (assume returned format is JSON)
+      api_result = response.json()
+
+      print('\nAPI response result:')
+      print(api_result)
+
+  except Exception as e:
+      print('\nError occurred during processing:')
+      print(str(e))
+      import traceback
+      traceback.print_exc()
+
+if __name__ == "__main__":
+  main()
+  ```
+
+</CodeGroup>
+

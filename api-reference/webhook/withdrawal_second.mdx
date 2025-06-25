@@ -1,0 +1,100 @@
+---
+title: '提币二次确认回调'
+---
+
+`NOTIFY_REQUEST_WITHDRAW` (type=2)
+
+当用户发起提币申请(需要二次确认)时，WaaS会通过此接口请求商户进行二次确认并需要商户在响应中返回具体的提币信息，这将决定WaaS是否执行该提币操作。
+
+#### ⚠️ 特殊要求
+1. **独立URL**：需单独配置此类型回调URL
+
+### 请求参数
+WaaS发送的请求是 **RSA加密的Base64字符串**，商户需使用公钥解密：
+
+<ResponseField name="提币二次确认请求参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="callBackId" type="String" required="是" example="D611657466">
+商户需确保该 callBackId 的唯一性。WaaS 将携带该参数主动回调商户，以获取具体的提币单信息。
+</ResponseField>
+
+
+</Expandable>
+</ResponseField>
+
+### 响应参数
+商户处理完回调后，需返回 JSON 格式的响应体。其中 `data` 字段需返回 **RSA加密的Base64字符串**（使用 WaaS 提供的公钥加密），其余字段为明文：
+
+<ResponseField name="提币回调响应参数" type="object">
+
+<Expandable title="查看完整参数列表">
+
+<ResponseField name="apiKey" type="String" required="是" example="88c47568-8d24-4983-9b4c-y1ec8b939e9b">
+商户API密钥
+</ResponseField>
+
+<ResponseField name="data" type="String" required="是" example="BDn6Liv5Z4TJ9vjfdRiuq1gaQJuODth3zlC4...">
+加密的业务数据，比如：BDn6Liv5Z4TJ9vjfd(具体参考右侧响应示例)
+
+   由以下原始业务参数加密生成：
+
+   **tenantUserId** (String) : 发起存款的用户ID(在商户系统中，并非WaaS系统中)
+
+   **callBackId** ：商户需同样返回 callBackId 帮助 WaaS 二次确认
+
+   **address** ： 提款目标地址
+
+   **chainName** (String) : 区块链名称
+
+   **symbol** (String) : 代币符号
+
+   **amount** (Integer) : 提款金额
+
+   **type** (String) : 回调类型
+
+   **requestUUID** (String) : 请求的唯一标识符号，商户在响应中需要同样返回相同的requestUUID以帮助 WaaS 确认
+</ResponseField>
+
+<ResponseField name="errCode" type="Integer" required="是" example="0">
+全局处理状态码：
+`0`=成功，非`0`=失败
+</ResponseField>
+
+<ResponseField name="message" type="String" required="是" example="">
+错误详情（失败时必填）：
+- 成功时可返回空字符串
+- 失败时需描述具体错误
+</ResponseField>
+
+</Expandable>
+
+</ResponseField>
+
+---
+
+<RequestExample>
+````mdx 加密前原始请求
+{
+  "business": 0,
+  "requestUUID": "f56d2814-7a8f-4dcf-9008-990c1be6e13e",
+  "tenantUserId": "bbxuzbc",
+  "callBackId": "D611657466",
+  "type": 2,
+  "trackingId": "102004"
+}
+````
+</RequestExample>
+
+
+<ResponseExample>
+````mdx
+{
+  "apiKey": "88c47568-8d24-4983-9b4c-y1ec8b939e9b",
+  "data": "{\"tenantUserId\":\"ryan_test_2\",\"callBackId\":\"D682988196\",\"address\":\"TGDHyoMpgDQj4DmoZdwJP2FSkSG4DEchnK\",\"chainName\":\"TRON\",\"symbol\":\"USDT\",\"amount\":\"3.3\",\"type\":2}"
+  "errCode": 0,
+  "message": ""
+}
+````
+</ResponseExample>

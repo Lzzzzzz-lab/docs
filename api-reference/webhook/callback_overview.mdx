@@ -1,0 +1,134 @@
+---
+title: 'WaaS 回调机制总览'
+description: '深入了解 WaaS 平台的 Webhook 回调机制，包括工作原理、安全实现和各类回调场景处理流程'
+---
+
+### 什么是 Webhook 回调？
+
+Webhook 回调是一种**事件驱动的通信机制**，当特定事件发生时，WaaS 平台会主动向商户系统发送通知，用于**异步告知**操作结果或状态变化。这种机制让商户能够实时获知区块链操作的结果，无需主动轮询查询。
+
+### 核心特点
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+    <div className="font-bold text-blue-800 mb-2">双向认证机制</div>
+    <p>通过 API-Key 机制确保回调来源可信</p>
+  </div>
+
+  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+    <div className="font-bold text-green-800 mb-2">端到端加密</div>
+    <p>通知内容使用 RSA 加密 + Base64 编码</p>
+  </div>
+
+  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+    <div className="font-bold text-purple-800 mb-2">实时推送</div>
+    <p>事件完成后立即触发通知，无延迟</p>
+  </div>
+
+  <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+    <div className="font-bold text-amber-800 mb-2">多场景覆盖</div>
+    <p>支持存币、提币、地址更换等关键场景</p>
+  </div>
+</div>
+
+### 回调处理流程
+
+1. **事件发生**：用户在 WaaS 平台发起存币、提币等操作
+2. **WaaS处理**：平台处理交易并确认区块链状态
+3. **通知构建**：WaaS 生成通知数据并进行安全处理：
+   - 使用商户私钥进行 RSA 加密
+   - 将加密结果转换为 Base64 格式
+4. **回调发送**：WaaS 向商户注册的回调 URL 发送 HTTP POST 请求
+5. **商户处理**：
+   - Base64 解码接收到的数据
+   - 使用商户公钥进行 RSA 解密
+   - 解析 JSON 格式的业务数据
+   - 根据业务类型进行相应处理
+6. **响应返回**：商户处理完成后，返回加密的响应数据
+
+### 示例场景
+
+#### 1. 存币通知流程
+
+<div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-5">
+
+  <div className="grid grid-cols-4 gap-2 mb-3">
+    <div className="bg-white p-2 text-center rounded">1. 用户存币</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">2. 区块链确认</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">3. WaaS检测</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">4. 商户处理</div>
+  </div>
+
+  <div className="mt-3">
+    <p className="font-medium">关键步骤：</p>
+    <ol className="list-decimal pl-5 mt-1 space-y-1">
+      <li>用户向商户地址存入加密货币</li>
+      <li>交易在区块链网络完成确认（通常需要多个区块确认）</li>
+      <li>WaaS 系统检测到成功交易</li>
+      <li>WaaS 调用商户回调 URL，发送 NOTIFY_DEPOSITED 类型通知</li>
+      <li>商户验证交易并更新用户账户余额</li>
+    </ol>
+  </div>
+</div>
+
+#### 2. 提币通知流程（无二次确认）
+
+<div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-5">
+
+  <div className="grid grid-cols-5 gap-2 mb-3">
+    <div className="bg-white p-2 text-center rounded">1. 商户发起</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">2. WaaS处理</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">3. 区块链广播</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">4. 交易确认</div>
+    <div className="text-center self-center">→</div>
+    <div className="bg-white p-2 text-center rounded">5. 商户处理</div>
+  </div>
+
+  <div className="mt-3">
+    <p className="font-medium">关键步骤：</p>
+    <ol className="list-decimal pl-5 mt-1 space-y-1">
+      <li>商户系统通过 API 发起提币请求</li>
+      <li>WaaS 处理提币请求并进行安全审查</li>
+      <li>WaaS 向区块链网络广播提币交易</li>
+      <li>交易被区块链网络确认</li>
+      <li>WaaS 发送 NOTIFY_WITHDRAW 通知提币成功</li>
+      <li>商户接收通知并更新订单状态</li>
+    </ol>
+  </div>
+</div>
+
+#### 3. 提币流程（带二次确认）
+
+<div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+
+<div className="grid grid-cols-5 gap-2 mb-3">
+  <div className="bg-white p-2 text-center rounded">1. 商户系统发起提币申请</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">2. WaaS接收后主动回调商户</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">3. 商户响应提币具体详情信息</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">4. 执行提币上链</div>
+  <div className="text-center self-center">→</div>
+  <div className="bg-white p-2 text-center rounded">5. 结果通知商户</div>
+</div>
+
+  <div className="mt-3">
+    <p className="font-medium">关键步骤：</p>
+    <ol className="list-decimal pl-5 mt-1 space-y-1">
+      <li>商户系统通过 API 发起提币请求，携带callbackId</li>
+      <li>接收到请求后，WaaS会主动回调商户提供的回调URL（NOTIFY_REQUEST_WITHDRAW）</li>
+      <li>接收到请求后，WaaS返回一个成功的响应，然后WaaS主动调用商户提供的回调URL（枚举类型为NOTIFY_REQUEST_WITHDRAW，携带callbackId作为参数）</li>
+      <li>商户的回调接口被请求后，根据callbackId向WaaS响应返回提币的具体信息，包括：提币金额、目标地址、币种、链类型…</li>
+      <li>WaaS在收到响应后，将执行提币上链。</li>
+      <li>上链成功后，WaaS会再次回调商户（NOTIFY_WITHDRAW），通知其提币结果。 </li>
+    </ol>
+  </div>
+</div>
+
+
