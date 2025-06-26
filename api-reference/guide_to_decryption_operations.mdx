@@ -60,9 +60,6 @@ description: "WaaS API 响应数据的解密操作指南"
               System.out.println("商户用户ID: " + address.getTenantUserId());
               System.out.println("链名称: " + address.getChainName());
               System.out.println("钱包地址: " + address.getAddress());
-              System.out.println("标签: " + address.getTag());
-              System.out.println("状态: " + address.getState());
-              System.out.println("风险评分: " + address.getRiskScore());
 
           } catch (Exception e) {
               System.err.println("\n解密过程中发生错误: " + e.getMessage());
@@ -110,9 +107,6 @@ async function main() {
         console.log("商户用户ID: " + address.getTenantUserId());
         console.log("链名称: " + address.getChainName());
         console.log("钱包地址: " + address.getAddress());
-        console.log("标签: " + address.getTag());
-        console.log("状态: " + address.getState());
-        console.log("风险评分: " + address.getRiskScore());
 
     } catch (error) {
         console.error("\n解密过程中发生错误: " + error.message);
@@ -167,9 +161,6 @@ def main():
         print("商户用户ID:", address.get_tenant_user_id())
         print("链名称:", address.get_chain_name())
         print("钱包地址:", address.get_address())
-        print("标签:", address.get_tag())
-        print("状态:", address.get_state())
-        print("风险评分:", address.get_risk_score())
 
     except Exception as e:
         print("\n解密过程中发生错误:", str(e))
