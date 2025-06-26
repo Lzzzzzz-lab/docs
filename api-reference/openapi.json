@@ -49,7 +49,7 @@
                     "type": "string",
                     "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**tenantUserId** (string): 指的是商户系统中的用户ID，而非商户在 WaaS 系统中的ID。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....",
                     "pattern": "^[A-Za-z0-9+/]+={0,2}$",
-                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6S7ADtX1i8PqNvJlU0a9T..."
+                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6T..."
                   }
                 }
               }
@@ -361,7 +361,7 @@
                     "type": "string",
                     "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**txID** (string): 链上交易Hash。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....\n\n**toAddress** (string): 存款目标地址。",
                     "pattern": "^[A-Za-z0-9+/]+={0,2}$",
-                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6S7ADtX1i8PqNvJlU0a9T..."
+                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3a9T..."
                   }
                 }
               }
@@ -840,7 +840,7 @@
                     "type": "string",
                     "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**callBackId** (string): 商户可以通过 callBackId（需确保其唯一性）查询订单状态。",
                     "pattern": "^[A-Za-z0-9+/]+={0,2}$",
-                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6S7ADtX1i8PqNvJlU0a9T..."
+                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWkT..."
                   }
                 }
               }
