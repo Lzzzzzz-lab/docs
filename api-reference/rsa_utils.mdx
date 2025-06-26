@@ -11,7 +11,9 @@ description: "用于RSA公钥加密和解密的工具类"
 ## 代码实例
 <CodeGroup>
 
-  ```java Base64Util.java
+  ```java RSAUtils.java
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 import javax.crypto.Cipher;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -50,7 +52,7 @@ public class RSAUtils {
         // 2. 生成公钥对象
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         Key publicK = keyFactory.generatePublic(
-            new X509EncodedKeySpec(keyBytes)
+                new X509EncodedKeySpec(keyBytes)
         );
 
         // 3. 创建并初始化加密器
@@ -89,21 +91,41 @@ public class RSAUtils {
      * );
      */
     public static byte[] decryptByPublicKey(byte[] encryptedData, String publicKey) throws Exception {
+
+        final int MAX_DECRYPT_BLOCK = 128;
         // 1. Base64解码公钥
         byte[] keyBytes = Base64Util.decodeString(publicKey);
 
         // 2. 生成公钥对象
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         Key publicK = keyFactory.generatePublic(
-            new X509EncodedKeySpec(keyBytes)
+                new X509EncodedKeySpec(keyBytes)
         );
 
         // 3. 创建并初始化解密器
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, publicK);
-
-        // 4. 一次性解密（适合小数据）
-        return cipher.doFinal(encryptedData);
+       // 4. 一次性解密（适合小数据）
+       //return cipher.doFinal(encryptedData);
+        int inputLen = encryptedData.length;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] cache;
+        int i = 0;
+        // 对数据分段解密
+        while (inputLen - offSet > 0) {
+            if (inputLen - offSet > MAX_DECRYPT_BLOCK) {
+                cache = cipher.doFinal(encryptedData, offSet, MAX_DECRYPT_BLOCK);
+            } else {
+                cache = cipher.doFinal(encryptedData, offSet, inputLen - offSet);
+            }
+            out.write(cache, 0, cache.length);
+            i++;
+            offSet = i * MAX_DECRYPT_BLOCK;
+        }
+        byte[] decryptedData = out.toByteArray();
+        out.close();
+        return decryptedData;
     }
 }
   ```

@@ -21,11 +21,18 @@ The following are the steps for decryption operations:
 <CodeGroup>
   ```java DecryptionExample.java
   class DecryptionExample {
+      class AddressVO {
+          private String tenantUserId;
+          private String chainName;
+          private String address;
+
+          // TODO: Add getter and setter methods
+      }
       public static void main(String[] args) {
           try {
               // ===================== 1. Get API response =====================
               // Send API request and get response
-              APIResult response = restTemplate.postForObject(
+              APIResult<String> response = restTemplate.postForObject(
                   "https://waas2-out-api.powersafe-rel.cc/api/v1/api/user/getUserAddress",
                   httpEntity,
                   APIResult.class

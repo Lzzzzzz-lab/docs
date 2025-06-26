@@ -19,6 +19,17 @@ The following are code examples for implementing encryption:
 <CodeGroup>
 
     ```java EncryptionExample.java
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
+import org.springframework.http.converter.FormHttpMessageConverter;
+
     class EncryptionExample {
         public static void main(String[] args) {
             try {
@@ -38,7 +49,7 @@ The following are code examples for implementing encryption:
 
                 // Use RSA utility class for encryption, implementation can refer to sample code in relevant utility classes
                 byte[] encryptedData = RSAUtils.encryptByPublicKey(
-                    jsonData.getBytes(StandardCharsets.UTF_8),
+                    jsonData.getBytes(),
                     publicKey
                 );
 
