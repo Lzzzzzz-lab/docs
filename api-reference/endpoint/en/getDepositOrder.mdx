@@ -5,4 +5,4 @@ openapi: 'POST /api/deposit/getDepositOrder'
 
 ## API Description
 
-The Query Deposit Order Interface is used to query deposit order details based on the provided parameters. It supports querying by **pre-deposit order ID**, **deposit amount**, **blockchain name**, **cryptocurrency symbol**, **transaction ID**, and **destination address**, returning the corresponding deposit order details.
+This interface is used to query deposit order details, requiring all four conditions—txId, chainName, symbol, and toAddress—to be met simultaneously. It will only return a single deposit record that satisfies all conditions. Its main purpose is to help merchants confirm the validity of deposit callbacks and whether they were indeed issued by the WaaS platform, thereby effectively mitigating risks.
