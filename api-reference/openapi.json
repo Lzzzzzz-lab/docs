@@ -11,23 +11,6 @@
     }
   ],
   "paths": {
-    "/url": {
-      "get": {
-        "description": "New endpoint",
-        "responses": {
-          "200": {
-            "description": "New response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "": ""
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/user/getUserAddress": {
       "post": {
         "tags": ["user-controller"],
@@ -350,105 +333,83 @@
             "name": "Content-Type",
             "in": "header",
             "required": true,
-            "description": "请求内容类型。",
             "schema": {
-              "type": "string",
-              "example": "multipart/form-data"
-            }
+              "type": "string"
+            },
+            "description": "必须设置为 application/x-www-form-urlencoded"
           },
           {
             "name": "X-API-KEY",
             "in": "header",
             "required": true,
-            "description": "平台分配的 API-KEY。",
+            "description": "平台分配的商户身份凭证",
             "schema": {
               "type": "string",
-              "example": "your-api-key"
+              "example": "53af2797-3eca-4412-b0cc-15273afe2d3e"
             }
           }
         ],
         "requestBody": {
-          "description": "查询存款订单的请求参数（JSON 格式）。",
           "required": true,
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/GetDepositOrderRequest"
-              },
-              "example": {
-                "preDepositOrderId": "PD123456789",
-                "depositAmount": "100.50",
-                "chainName": "TRON",
-                "symbol": "USDT",
-                "txId": "tx123456789",
-                "toAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm"
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**txID** (string): 链上交易Hash。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....\n\n**toAddress** (string): 存款目标地址。",
+                    "pattern": "^[A-Za-z0-9+/]+={0,2}$",
+                    "example": "U2FsdGVkX1+Jfz0VjXJbZ0tZz8G8v4w3Z2jWk3h6S7ADtX1i8PqNvJlU0a9T..."
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "成功响应，返回存款订单详情。",
+            "description": "成功响应",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": ["code", "message", "data"],
                   "properties": {
                     "code": {
                       "type": "integer",
-                      "description": "状态码（0：成功）。"
+                      "description": "业务状态码（0 = 成功），其他值均表示失败。",
+                      "example": 0
                     },
                     "message": {
                       "type": "string",
-                      "description": "返回消息。"
+                      "description": "正常情况下返回为空，当请求失败时则会返回错误信息。",
+                      "example": ""
                     },
                     "data": {
-                      "type": "object",
-                      "description": "存款订单详情。",
-                      "properties": {
-                        "preDepositOrderId": {
-                          "type": "string",
-                          "description": "预存币单号。"
-                        },
-                        "depositAmount": {
-                          "type": "string",
-                          "description": "存币金额。"
-                        },
-                        "chainName": {
-                          "type": "string",
-                          "description": "链名称，例如 TRON 等。"
-                        },
-                        "symbol": {
-                          "type": "string",
-                          "description": "币种符号，例如 USDT。"
-                        },
-                        "txId": {
-                          "type": "string",
-                          "description": "交易 ID。"
-                        },
-                        "toAddress": {
-                          "type": "string",
-                          "description": "目标地址。"
-                        },
-                        "callbackSuccess": {
-                          "type": "boolean",
-                          "description": "回调是否成功。"
-                        }
-                      }
+                      "type": "string",
+                      "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**txID** (string): 链上交易Hash。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....\n\n**toAddress** (string): 存款目标地址\n\n**depositAmount。** (string): 存款金额。\n\n**callbackSuccess** (string): 回调状态，true：回调成功，false：回调失败。",
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
                     }
                   }
                 },
-                "example": {
-                  "code": 0,
-                  "message": "success",
-                  "data": {
-                    "preDepositOrderId": "PD123456789",
-                    "depositAmount": "100.50",
-                    "chainName": "TRON",
-                    "symbol": "USDT",
-                    "txId": "tx123456789",
-                    "toAddress": "TPXLEfsrochsCB3WiTb7urvnx7wtQZKbFm",
-                    "callbackSuccess": true
+                "examples": {
+                  "encrypted_response_example": {
+                    "summary": "加密响应示例",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyYKqNrVnqj5RqLAH/mtvrhI6rf235aUvv0gK/rVrpCUKDN46F2PFJ/PAe7H32tzd0iJn4Dn/EKt4TRmqm3rgoFZSbkvEnuzVYS+6ikPDrkgMzgx6Xg7U+y4esvWqMsJzt7x/CllGdJj6Me386qXD1PD558HydR9TteDWl4FqfvACx/6T64BAy/F4f3HqSfoBt9NuUN3s0SdXFVZt2Lq8Nycem0lDWuvacqlOkCMgCcTvmDyDPDG3Kn8Mq1wtiCxikBOlwGoxMDN/yyN30N7EaBA=="
+                    }
+                  },
+                  "decrypted_response_example": {
+                    "summary": "解密后的完整响应",
+                    "value": {
+                      "code": 0,
+                      "message": "",
+                      "data": "{\"txId\":\"37e9da49134670ae0aec4d3645a08636f06b1ed0a2a984d8b1e11d019d8d5bc1\",\"chainName\":\"TRON\",\"symbol\":\"TRX\",\"toAddress\":\"TAqNhkKiash2nbL278BD7XogGuET9p7VMC\",\"depositAmount\":1.300000000000,\"callbackSuccess\":true}"
+                    }
                   }
                 }
               }
