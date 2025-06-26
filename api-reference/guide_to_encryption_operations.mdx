@@ -19,7 +19,27 @@ description: ""
 <CodeGroup>
 
     ```java EncryptionExample.java
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
+import org.springframework.http.converter.FormHttpMessageConverter;
+
     class EncryptionExample {
+
+        class AddressVO {
+            private String tenantUserId;
+            private String chainName;
+            private String address;
+
+            // TODO: 补充 getter 和 setter 方法
+            }
+
         public static void main(String[] args) {
             try {
                 // ===================== 1. 准备业务参数 =====================
@@ -38,7 +58,7 @@ description: ""
 
                 // 使用 RSA 工具类进行加密，具体实现可以参考相关工具类中的示例代码。
                 byte[] encryptedData = RSAUtils.encryptByPublicKey(
-                    jsonData.getBytes(StandardCharsets.UTF_8),
+                    jsonData.getBytes(),
                     publicKey
                 );
 
