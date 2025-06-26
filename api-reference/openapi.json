@@ -390,7 +390,7 @@
                     "data": {
                       "type": "string",
                       "description": "Base64编码的RSA加密数据，由以下原始参数加密生成:\n\n**txID** (string): 链上交易Hash。\n\n**chainName** (string):  链的名称，比如：ETH、TRON....\n\n**symbol** (string): 货币符号，比如：USDT、USDC、PHT.....\n\n**toAddress** (string): 存款目标地址\n\n**depositAmount。** (string): 存款金额。\n\n**callbackSuccess** (string): 回调状态，true：回调成功，false：回调失败。",
-                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK6pUkGIv+6FNyY/yyN30N7EaBA==...."
+                      "example": "G+RlQN2lJ4qQtiXJC7Y6rgHm5UI7TqM1fhPQ8CEf2C4e3jHu4yoK=...."
                     }
                   }
                 },
