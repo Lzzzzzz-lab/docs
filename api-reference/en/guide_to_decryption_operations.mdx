@@ -60,9 +60,6 @@ The following are the steps for decryption operations:
               System.out.println("Merchant user ID: " + address.getTenantUserId());
               System.out.println("Chain name: " + address.getChainName());
               System.out.println("Wallet address: " + address.getAddress());
-              System.out.println("Tag: " + address.getTag());
-              System.out.println("State: " + address.getState());
-              System.out.println("Risk score: " + address.getRiskScore());
 
           } catch (Exception e) {
               System.err.println("\nError occurred during decryption: " + e.getMessage());
@@ -110,9 +107,6 @@ async function main() {
       console.log("Merchant user ID: " + address.getTenantUserId());
       console.log("Chain name: " + address.getChainName());
       console.log("Wallet address: " + address.getAddress());
-      console.log("Tag: " + address.getTag());
-      console.log("State: " + address.getState());
-      console.log("Risk score: " + address.getRiskScore());
 
   } catch (error) {
       console.error("\nError occurred during decryption: " + error.message);
@@ -167,9 +161,6 @@ def main():
       print("Merchant user ID:", address.get_tenant_user_id())
       print("Chain name:", address.get_chain_name())
       print("Wallet address:", address.get_address())
-      print("Tag:", address.get_tag())
-      print("State:", address.get_state())
-      print("Risk score:", address.get_risk_score())
 
   except Exception as e:
       print("\nError occurred during decryption:", str(e))
