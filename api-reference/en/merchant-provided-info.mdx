@@ -15,7 +15,7 @@ description: 'Merchants need to provide the following information when integrati
   **Explanation:**
   WaaS will send notifications to the provided callback URL when specific events occur, informing about operation results or status changes. Merchants must implement the callback interface according to the rules to ensure timely receipt and processing of notifications.
 
-  **Details:** [Webhook Callback](/api-reference/webhook/webhook-callback)
+  **Details:** [Webhook Callback](/api-reference/endpoint/en/webhook/callback_overview)
 
 
 - **3. Withdrawal Request Address (Optional):**
@@ -25,7 +25,7 @@ description: 'Merchants need to provide the following information when integrati
 
   The secondary confirmation mechanism can be enabled based on merchant requirements. By separating withdrawal requests from information confirmation, it enhances communication security and prevents data tampering and unauthorized operations.
 
-  **Details:** [Withdrawal Secondary Confirmation Callback](/api-reference/webhook/withdraw-confirmation-callback)
+  **Details:** [Withdrawal Secondary Confirmation Callback](/api-reference/endpoint/en/webhook/withdrawal_second)
 
 - **4. IP Whitelist:**
   Merchants need to provide the fixed IP address of their server for addition to the IP whitelist. Only addresses in the IP whitelist can access the API interfaces, ensuring system security.
